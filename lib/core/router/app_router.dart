@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/orders/presentation/screens/home_screen.dart';
+import '../../features/orders/presentation/screens/order_detail_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -39,14 +40,11 @@ GoRouter appRouter(Ref ref) {
             name: 'order-detail',
             builder: (context, state) {
               final orderId = state.pathParameters['orderId']!;
-              return Scaffold(
-                appBar: AppBar(title: const Text('Order Detail')),
-                body: Center(child: Text('Order ID: $orderId')),
-              );
+              return OrderDetailScreen(orderId: orderId);
             },
           ),
 
-          // Inventory
+          // Inventory (placeholder)
           GoRoute(
             path: 'inventory',
             name: 'inventory',
@@ -54,7 +52,7 @@ GoRouter appRouter(Ref ref) {
                 const Scaffold(body: Center(child: Text('Inventory'))),
           ),
 
-          // Wallet
+          // Wallet (placeholder)
           GoRoute(
             path: 'wallet',
             name: 'wallet',
