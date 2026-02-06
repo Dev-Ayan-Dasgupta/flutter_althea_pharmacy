@@ -1,0 +1,109 @@
+import 'package:flutter/material.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/responsive.dart';
+
+class OrdersHeader extends StatelessWidget {
+  final String userName;
+  final String pharmacyName;
+  final VoidCallback onLogout;
+
+  const OrdersHeader({
+    super.key,
+    required this.userName,
+    required this.pharmacyName,
+    required this.onLogout,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(
+        Responsive.valueWhen(
+          context: context,
+          mobile: 16,
+          tablet: 20,
+          desktop: 24,
+        ),
+      ),
+      decoration: BoxDecoration(
+        gradient: AppColors.primaryGradient,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primaryDark.withValues(alpha: 0.2),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Avatar
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2),
+            ),
+            child: const Icon(Icons.person, color: Colors.white, size: 28),
+          ),
+
+          const SizedBox(width: 16),
+
+          // User Info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  userName,
+                  style: AppTypography.titleLarge(Colors.white),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  pharmacyName,
+                  style: AppTypography.bodyMedium(
+                    Colors.white.withValues(alpha: 0.9),
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+
+          // Notification Icon
+          Container(
+            margin: const EdgeInsets.only(right: 8),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.notifications_outlined),
+              color: Colors.white,
+              onPressed: () {
+                // TODO: Navigate to notifications
+              },
+            ),
+          ),
+
+          // Logout Icon
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.logout),
+              color: Colors.white,
+              onPressed: onLogout,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
