@@ -5,6 +5,7 @@ import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/orders/presentation/screens/home_screen.dart';
 import '../../features/orders/presentation/screens/order_detail_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -44,20 +45,20 @@ GoRouter appRouter(Ref ref) {
             },
           ),
 
-          // Inventory (placeholder)
+          // Inventory
           GoRoute(
             path: 'inventory',
             name: 'inventory',
-            builder: (context, state) =>
-                const Scaffold(body: Center(child: Text('Inventory'))),
+            builder: (context, state) => const InventoryScreen(),
           ),
 
           // Wallet (placeholder)
           GoRoute(
             path: 'wallet',
             name: 'wallet',
-            builder: (context, state) =>
-                const Scaffold(body: Center(child: Text('Wallet'))),
+            builder: (context, state) => const Scaffold(
+              body: Center(child: Text('Wallet Dashboard - Coming Soon')),
+            ),
           ),
         ],
       ),
