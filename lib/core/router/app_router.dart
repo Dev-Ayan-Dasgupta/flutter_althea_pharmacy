@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
@@ -6,6 +5,7 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/orders/presentation/screens/home_screen.dart';
 import '../../features/orders/presentation/screens/order_detail_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
+import '../../features/wallet/presentation/screens/wallet_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -52,13 +52,11 @@ GoRouter appRouter(Ref ref) {
             builder: (context, state) => const InventoryScreen(),
           ),
 
-          // Wallet (placeholder)
+          // Wallet
           GoRoute(
             path: 'wallet',
             name: 'wallet',
-            builder: (context, state) => const Scaffold(
-              body: Center(child: Text('Wallet Dashboard - Coming Soon')),
-            ),
+            builder: (context, state) => const WalletScreen(),
           ),
         ],
       ),

@@ -100,6 +100,21 @@ class OrdersHeader extends StatelessWidget {
             ),
           ),
 
+          // Wallet Icon
+          Container(
+            margin: const EdgeInsets.only(right: 8),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: isDark ? 0.15 : 0.2),
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.account_balance_wallet_outlined),
+              color: Colors.white,
+              tooltip: 'Wallet',
+              onPressed: () => context.go('/home/wallet'),
+            ),
+          ),
+
           // Notification Icon
           Container(
             margin: const EdgeInsets.only(right: 8),
