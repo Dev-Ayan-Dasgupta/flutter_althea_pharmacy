@@ -1,13 +1,16 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/providers/permission_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/extensions.dart';
+import '../../../auth/domain/entities/role_entity.dart';
 import '../../domain/entities/inventory_entity.dart';
 import 'export.dart';
 
-class InventoryItemCard extends StatelessWidget {
+class InventoryItemCard extends ConsumerWidget {
   final InventoryItemEntity item;
   final Function(String id, int newStock)? onStockAdjusted;
   final Function(String id)? onDeleted;
@@ -20,12 +23,18 @@ class InventoryItemCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final canEdit = ref.watch(hasPermissionProvider(Permission.editInventory));
+    final canDelete = ref.watch(
+      hasPermissionProvider(Permission.deleteInventory),
+    );
 
     return InkWell(
-      onTap: () => _showEditDialog(context),
-      onLongPress: () => _showOptionsMenu(context),
+      onTap: canEdit ? () => _showEditDialog(context) : null,
+      onLongPress: (canEdit || canDelete)
+          ? () => _showOptionsMenu(context, ref)
+          : null,
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(
@@ -347,40 +356,61 @@ class InventoryItemCard extends StatelessWidget {
     });
   }
 
-  void _showOptionsMenu(BuildContext context) {
+  void _showOptionsMenu(BuildContext context, WidgetRef ref) {
+    final canEdit = ref.read(hasPermissionProvider(Permission.editInventory));
+    final canAdjust = ref.read(hasPermissionProvider(Permission.adjustStock));
+    final canDelete = ref.read(
+      hasPermissionProvider(Permission.deleteInventory),
+    );
+
     showModalBottomSheet(
       context: context,
       builder: (context) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ListTile(
-              leading: const Icon(Icons.edit),
-              title: const Text('Edit'),
-              onTap: () {
-                Navigator.pop(context);
-                _showEditDialog(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.add),
-              title: const Text('Adjust Stock'),
-              onTap: () {
-                Navigator.pop(context);
-                _showStockAdjustmentDialog(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.delete, color: AppColors.error),
-              title: const Text(
-                'Delete',
-                style: TextStyle(color: AppColors.error),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                item.medicineName,
+                style: AppTypography.titleMedium(
+                  Theme.of(context).textTheme.titleMedium!.color!,
+                ),
               ),
-              onTap: () {
-                Navigator.pop(context);
-                _showDeleteConfirmation(context);
-              },
             ),
+            const Divider(height: 1),
+            if (canEdit)
+              ListTile(
+                leading: const Icon(Icons.edit),
+                title: const Text('Edit Details'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showEditDialog(context);
+                },
+              ),
+            if (canAdjust)
+              ListTile(
+                leading: const Icon(Icons.tune),
+                title: const Text('Adjust Stock'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showStockAdjustmentDialog(context);
+                },
+              ),
+            if (canDelete) ...[
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.delete, color: AppColors.error),
+                title: const Text(
+                  'Delete',
+                  style: TextStyle(color: AppColors.error),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showDeleteConfirmation(context);
+                },
+              ),
+            ],
           ],
         ),
       ),

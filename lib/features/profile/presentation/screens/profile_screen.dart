@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/providers/permission_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/responsive.dart';
+import '../../../auth/domain/entities/role_entity.dart';
 import '../../../orders/presentation/widgets/export.dart';
 import '../providers/profile_provider.dart';
 import '../providers/profile_state.dart';
@@ -44,11 +46,21 @@ class ProfileScreen extends ConsumerWidget {
         ),
       ),
       floatingActionButton: profileState.maybeWhen(
-        loaded: (profile) => FloatingActionButton.extended(
-          onPressed: () => _showEditDialog(context, ref, profile),
-          icon: const Icon(Icons.edit),
-          label: const Text('Edit Profile'),
-          backgroundColor: AppColors.primaryDark,
+        loaded: (profile) => Consumer(
+          builder: (context, ref, child) {
+            final canEdit = ref.watch(
+              hasPermissionProvider(Permission.editProfile),
+            );
+
+            if (!canEdit) return const SizedBox.shrink();
+
+            return FloatingActionButton.extended(
+              onPressed: () => _showEditDialog(context, ref, profile),
+              icon: const Icon(Icons.edit),
+              label: const Text('Edit Profile'),
+              backgroundColor: AppColors.primaryDark,
+            );
+          },
         ),
         orElse: () => null,
       ),

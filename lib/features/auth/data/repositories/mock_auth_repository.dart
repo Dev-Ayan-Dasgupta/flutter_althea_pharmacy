@@ -1,39 +1,52 @@
 import 'package:dartz/dartz.dart';
 import '../../domain/entities/user_entity.dart';
+import '../../domain/entities/role_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
-import '../models/user_model.dart';
 
 class MockAuthRepository implements AuthRepository {
   UserEntity? _currentUser;
 
-  // Mock credentials
-  static const _mockEmail = 'pharmacy@altheacare.com';
-  static const _mockPassword = 'pharmacy123';
-
   @override
-  Future<Either<String, UserEntity>> login({
-    required String email,
-    required String password,
-  }) async {
-    // Simulate network delay
+  Future<Either<String, UserEntity>> login(
+    String email,
+    String password,
+  ) async {
     await Future.delayed(const Duration(seconds: 2));
 
-    // Mock validation
-    if (email == _mockEmail && password == _mockPassword) {
-      final mockUser = UserModel(
-        id: 'pharmacy_001',
-        email: email,
-        name: 'Dr. Rajesh Kumar',
-        pharmacyName: 'MediCare Pharmacy',
-        phoneNumber: '+91 98765 43210',
-        profileImageUrl: null,
+    // Demo credentials with roles
+    if (email == 'admin@pharmacy.com' && password == 'admin123') {
+      _currentUser = const UserEntity(
+        id: 'USER001',
+        email: 'admin@pharmacy.com',
+        name: 'Admin User',
+        pharmacyId: 'PHARM001',
+        pharmacyName: 'HealthCare Pharmacy',
+        role: RoleEntity.admin,
       );
-
-      _currentUser = mockUser.toEntity();
       return Right(_currentUser!);
-    } else {
-      return const Left('Invalid email or password');
+    } else if (email == 'staff@pharmacy.com' && password == 'staff123') {
+      _currentUser = const UserEntity(
+        id: 'USER002',
+        email: 'staff@pharmacy.com',
+        name: 'Staff User',
+        pharmacyId: 'PHARM001',
+        pharmacyName: 'HealthCare Pharmacy',
+        role: RoleEntity.staff,
+      );
+      return Right(_currentUser!);
+    } else if (email == 'demo@pharmacy.com' && password == 'demo123') {
+      _currentUser = const UserEntity(
+        id: 'USER003',
+        email: 'demo@pharmacy.com',
+        name: 'Demo User',
+        pharmacyId: 'PHARM001',
+        pharmacyName: 'HealthCare Pharmacy',
+        role: RoleEntity.admin,
+      );
+      return Right(_currentUser!);
     }
+
+    return const Left('Invalid credentials');
   }
 
   @override
@@ -45,15 +58,39 @@ class MockAuthRepository implements AuthRepository {
 
   @override
   Future<Either<String, UserEntity>> getCurrentUser() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+
     if (_currentUser != null) {
       return Right(_currentUser!);
-    } else {
-      return const Left('No user logged in');
     }
+
+    return const Left('No user logged in');
   }
 
   @override
   Future<bool> isAuthenticated() async {
+    await Future.delayed(const Duration(milliseconds: 300));
     return _currentUser != null;
+  }
+
+  @override
+  Future<Either<String, void>> register(
+    String email,
+    String password,
+    String name,
+  ) async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    // Mock registration - creates staff user by default
+    _currentUser = UserEntity(
+      id: 'USER_${DateTime.now().millisecondsSinceEpoch}',
+      email: email,
+      name: name,
+      pharmacyId: 'PHARM001',
+      pharmacyName: 'HealthCare Pharmacy',
+      role: RoleEntity.staff,
+    );
+
+    return const Right(null);
   }
 }

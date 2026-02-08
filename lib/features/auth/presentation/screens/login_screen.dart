@@ -172,16 +172,30 @@ class LoginScreen extends ConsumerWidget {
       child: Column(
         children: [
           Text(
-            '🔐 Mock Credentials',
+            '🔐 Mock Credentials - Admin',
             style: AppTypography.labelLarge(Colors.white),
           ),
           const SizedBox(height: 8),
           Text(
-            'Email: pharmacy@altheacare.com',
+            'Email: admin@pharmacy.com',
             style: AppTypography.bodySmall(Colors.white.withValues(alpha: 0.9)),
           ),
           Text(
-            'Password: pharmacy123',
+            'Password: admin123',
+            style: AppTypography.bodySmall(Colors.white.withValues(alpha: 0.9)),
+          ),
+          Divider(height: 24, color: Colors.white.withValues(alpha: 0.3)),
+          Text(
+            '🔐 Mock Credentials - Staff',
+            style: AppTypography.labelLarge(Colors.white),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Email: staff@pharmacy.com',
+            style: AppTypography.bodySmall(Colors.white.withValues(alpha: 0.9)),
+          ),
+          Text(
+            'Password: staff123',
             style: AppTypography.bodySmall(Colors.white.withValues(alpha: 0.9)),
           ),
         ],

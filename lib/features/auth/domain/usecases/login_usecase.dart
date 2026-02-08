@@ -24,7 +24,7 @@ class LoginUseCase {
       return const Left('Password must be at least 6 characters');
     }
 
-    return await repository.login(email: email, password: password);
+    return await repository.login(email, password);
   }
 
   bool _isValidEmail(String email) {

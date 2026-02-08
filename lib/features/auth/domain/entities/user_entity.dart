@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'role_entity.dart';
+
 part 'user_entity.freezed.dart';
 
 @freezed
@@ -8,8 +10,9 @@ abstract class UserEntity with _$UserEntity {
     required String id,
     required String email,
     required String name,
+    required String pharmacyId,
     required String pharmacyName,
-    String? phoneNumber,
-    String? profileImageUrl,
+    required RoleEntity role,
+    String? photoUrl,
   }) = _UserEntity;
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/providers/permission_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/responsive.dart';
+import '../../../auth/domain/entities/role_entity.dart';
 import '../../../orders/presentation/widgets/export.dart';
 import '../../domain/entities/inventory_entity.dart';
 import '../providers/inventory_provider.dart';
@@ -115,6 +117,15 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
           ),
         ),
       ),
+      floatingActionButton:
+          ref.watch(hasPermissionProvider(Permission.addInventory))
+          ? FloatingActionButton.extended(
+              onPressed: () => _showAddStockDialog(context),
+              icon: const Icon(Icons.add),
+              label: const Text('Add Medicine'),
+              backgroundColor: AppColors.primaryDark,
+            )
+          : null,
     );
   }
 

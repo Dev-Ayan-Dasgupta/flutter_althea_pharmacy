@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../auth/domain/entities/role_entity.dart';
+import '../../../../core/providers/permission_provider.dart';
 import '../../../auth/presentation/providers/auth_state.dart';
 import '../../../notifications/presentation/providers/notification_provider.dart';
 
@@ -14,6 +16,7 @@ class AppDrawer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final currentRole = ref.watch(currentUserRoleProvider);
 
     return Drawer(
       child: Container(
@@ -22,57 +25,20 @@ class AppDrawer extends ConsumerWidget {
               ? AppColors.primaryGradientSubtleDark
               : AppColors.primaryGradientSubtle,
         ),
-        child: SafeArea(
-          child: Column(
+        child: authState.maybeWhen(
+          authenticated: (user) => Column(
             children: [
               // Header
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  gradient: isDark
-                      ? AppColors.primaryGradientSubtleDark
-                      : AppColors.primaryGradientSubtle,
-                ),
-                child: authState.maybeWhen(
-                  authenticated: (user) => Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.white.withValues(alpha: 0.3),
-                        child: const Icon(
-                          Icons.person,
-                          size: 40,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        user.name,
-                        style: AppTypography.titleLarge(Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        user.pharmacyName,
-                        style: AppTypography.bodyMedium(
-                          Colors.white.withValues(alpha: 0.9),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                  orElse: () => const SizedBox.shrink(),
-                ),
-              ),
+              _buildDrawerHeader(context, user, isDark),
 
               // Menu Items
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding: EdgeInsets.zero,
                   children: [
                     _buildDrawerItem(
                       context,
-                      icon: Icons.home_outlined,
+                      icon: Icons.shopping_bag_outlined,
                       title: 'Orders',
                       onTap: () {
                         context.go('/home');
@@ -80,6 +46,7 @@ class AppDrawer extends ConsumerWidget {
                       },
                       isDark: isDark,
                     ),
+
                     _buildDrawerItem(
                       context,
                       icon: Icons.inventory_2_outlined,
@@ -90,16 +57,23 @@ class AppDrawer extends ConsumerWidget {
                       },
                       isDark: isDark,
                     ),
-                    _buildDrawerItem(
-                      context,
-                      icon: Icons.account_balance_wallet_outlined,
-                      title: 'Wallet',
-                      onTap: () {
-                        context.go('/home/wallet');
-                        Navigator.pop(context);
-                      },
-                      isDark: isDark,
-                    ),
+
+                    // Wallet - Only if has permission
+                    if (ref.watch(hasPermissionProvider(Permission.viewWallet)))
+                      _buildDrawerItem(
+                        context,
+                        icon: Icons.account_balance_wallet_outlined,
+                        title: 'Wallet',
+                        onTap: () {
+                          context.go('/home/wallet');
+                          Navigator.pop(context);
+                        },
+                        isDark: isDark,
+                      ),
+
+                    const Divider(),
+
+                    // Notifications
                     Consumer(
                       builder: (context, ref, child) {
                         final unreadCount = ref
@@ -119,28 +93,35 @@ class AppDrawer extends ConsumerWidget {
                       },
                     ),
 
-                    const Divider(),
+                    // Profile - Only if has permission
+                    if (ref.watch(
+                      hasPermissionProvider(Permission.viewProfile),
+                    ))
+                      _buildDrawerItem(
+                        context,
+                        icon: Icons.person_outline,
+                        title: 'Profile',
+                        onTap: () {
+                          context.go('/home/profile');
+                          Navigator.pop(context);
+                        },
+                        isDark: isDark,
+                      ),
 
-                    _buildDrawerItem(
-                      context,
-                      icon: Icons.person_outline,
-                      title: 'Profile',
-                      onTap: () {
-                        context.go('/home/profile');
-                        Navigator.pop(context);
-                      },
-                      isDark: isDark,
-                    ),
-                    _buildDrawerItem(
-                      context,
-                      icon: Icons.settings_outlined,
-                      title: 'Settings',
-                      onTap: () {
-                        context.go('/home/settings');
-                        Navigator.pop(context);
-                      },
-                      isDark: isDark,
-                    ),
+                    // Settings - Only if has permission
+                    if (ref.watch(
+                      hasPermissionProvider(Permission.viewSettings),
+                    ))
+                      _buildDrawerItem(
+                        context,
+                        icon: Icons.settings_outlined,
+                        title: 'Settings',
+                        onTap: () {
+                          context.go('/home/settings');
+                          Navigator.pop(context);
+                        },
+                        isDark: isDark,
+                      ),
 
                     const Divider(),
 
@@ -165,6 +146,7 @@ class AppDrawer extends ConsumerWidget {
                       },
                       isDark: isDark,
                     ),
+
                     _buildDrawerItem(
                       context,
                       icon: Icons.privacy_tip,
@@ -186,64 +168,106 @@ class AppDrawer extends ConsumerWidget {
                       },
                       isDark: isDark,
                     ),
-
-                    const Divider(),
-
-                    _buildDrawerItem(
-                      context,
-                      icon: Icons.logout,
-                      title: 'Logout',
-                      onTap: () => _showLogoutDialog(context, ref),
-                      isDark: isDark,
-                      isDestructive: true,
-                    ),
                   ],
                 ),
               ),
 
-              // App Version
-              Padding(
+              // Role Badge & Logout
+              Container(
                 padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: isDark
+                          ? AppColors.borderDark
+                          : AppColors.borderLight,
+                    ),
+                  ),
+                ),
                 child: Column(
                   children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? Colors.white.withValues(alpha: 0.1)
-                            : AppColors.primaryDark.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
+                    // Role Badge
+                    if (currentRole != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: currentRole.role == UserRole.admin
+                              ? AppColors.primaryGradient
+                              : AppColors.accentGradient,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              currentRole.role == UserRole.admin
+                                  ? Icons.admin_panel_settings
+                                  : Icons.person,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              currentRole.displayName,
+                              style: AppTypography.labelSmall(Colors.white),
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Icon(
-                        Icons.local_pharmacy,
-                        color: isDark ? Colors.white70 : AppColors.primaryDark,
+                    const SizedBox(height: 12),
+                    ListTile(
+                      leading: const Icon(Icons.logout, color: AppColors.error),
+                      title: Text(
+                        'Logout',
+                        style: AppTypography.bodyMedium(AppColors.error),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'AltheaCare Pharmacy',
-                      style: AppTypography.labelSmall(
-                        isDark
-                            ? AppColors.textTertiaryDark
-                            : AppColors.textTertiaryLight,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Version 1.0.0',
-                      style: AppTypography.caption(
-                        isDark
-                            ? AppColors.textTertiaryDark
-                            : AppColors.textTertiaryLight,
-                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        _showLogoutDialog(context, ref);
+                      },
                     ),
                   ],
                 ),
               ),
             ],
           ),
+          orElse: () => const Center(child: CircularProgressIndicator()),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDrawerHeader(BuildContext context, dynamic user, bool isDark) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
+      decoration: BoxDecoration(gradient: AppColors.primaryGradient),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            radius: 32,
+            backgroundColor: Colors.white.withOpacity(0.2),
+            child: Text(
+              user.name[0].toUpperCase(),
+              style: AppTypography.headlineSmall(Colors.white),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(user.name, style: AppTypography.titleLarge(Colors.white)),
+          const SizedBox(height: 4),
+          Text(
+            user.email,
+            style: AppTypography.bodySmall(Colors.white.withOpacity(0.8)),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            user.pharmacyName,
+            style: AppTypography.bodySmall(Colors.white.withOpacity(0.8)),
+          ),
+        ],
       ),
     );
   }
@@ -255,23 +279,18 @@ class AppDrawer extends ConsumerWidget {
     required VoidCallback onTap,
     required bool isDark,
     String? badge,
-    bool isDestructive = false,
   }) {
     return ListTile(
       leading: Icon(
         icon,
-        color: isDestructive
-            ? AppColors.error
-            : (isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
+        color: isDark
+            ? AppColors.textSecondaryDark
+            : AppColors.textSecondaryLight,
       ),
       title: Text(
         title,
         style: AppTypography.bodyMedium(
-          isDestructive
-              ? AppColors.error
-              : (isDark
-                    ? AppColors.textPrimaryDark
-                    : AppColors.textPrimaryLight),
+          isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
         ),
       ),
       trailing: badge != null
@@ -292,24 +311,8 @@ class AppDrawer extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            Icon(Icons.logout, color: AppColors.error),
-            const SizedBox(width: 12),
-            Text(
-              'Logout',
-              style: AppTypography.titleLarge(
-                Theme.of(context).textTheme.titleLarge!.color!,
-              ),
-            ),
-          ],
-        ),
-        content: Text(
-          'Are you sure you want to logout?',
-          style: AppTypography.bodyMedium(
-            Theme.of(context).textTheme.bodyMedium!.color!,
-          ),
-        ),
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -317,8 +320,7 @@ class AppDrawer extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context); // Close dialog
-              Navigator.pop(context); // Close drawer
+              Navigator.pop(context);
               ref.read(authProvider.notifier).logout();
               context.go('/login');
             },
