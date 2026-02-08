@@ -159,7 +159,7 @@ class ProfileScreen extends ConsumerWidget {
             width: 100,
             height: 100,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white, width: 3),
             ),
@@ -180,7 +180,7 @@ class ProfileScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -288,7 +288,7 @@ class ProfileScreen extends ConsumerWidget {
           Icon(
             Icons.error_outline,
             size: 64,
-            color: AppColors.error.withOpacity(0.5),
+            color: AppColors.error.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           Text(

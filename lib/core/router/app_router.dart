@@ -9,6 +9,7 @@ import '../../features/orders/presentation/screens/home_screen.dart';
 import '../../features/orders/presentation/screens/order_detail_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/wallet/presentation/screens/wallet_screen.dart';
 
 part 'app_router.g.dart';
@@ -111,6 +112,13 @@ GoRouter appRouter(Ref ref) {
         path: 'profile',
         name: 'profile',
         builder: (context, state) => const ProfileScreen(),
+      ),
+
+      // Settings
+      GoRoute(
+        path: 'settings',
+        name: 'settings',
+        builder: (context, state) => const SettingsScreen(),
       ),
     ],
   );
