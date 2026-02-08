@@ -8,6 +8,7 @@ import '../../features/notifications/presentation/screens/notifications_screen.d
 import '../../features/orders/presentation/screens/home_screen.dart';
 import '../../features/orders/presentation/screens/order_detail_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/wallet/presentation/screens/wallet_screen.dart';
 
 part 'app_router.g.dart';
@@ -103,6 +104,13 @@ GoRouter appRouter(Ref ref) {
         path: 'about',
         name: 'about',
         builder: (context, state) => const AboutScreen(),
+      ),
+
+      // Profile
+      GoRoute(
+        path: 'profile',
+        name: 'profile',
+        builder: (context, state) => const ProfileScreen(),
       ),
     ],
   );
