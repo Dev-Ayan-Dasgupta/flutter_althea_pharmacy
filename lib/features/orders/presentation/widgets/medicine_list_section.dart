@@ -32,11 +32,10 @@ class _MedicineCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+        gradient: isDark
+            ? AppColors.cardGradientDark
+            : AppColors.cardGradientLight,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isDark ? AppColors.borderDark : AppColors.borderLight,
-        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

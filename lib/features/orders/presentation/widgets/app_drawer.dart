@@ -27,7 +27,11 @@ class AppDrawer extends ConsumerWidget {
               // Header
               Container(
                 padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(gradient: AppColors.primaryGradient),
+                decoration: BoxDecoration(
+                  gradient: isDark
+                      ? AppColors.primaryGradientSubtleDark
+                      : AppColors.primaryGradientSubtle,
+                ),
                 child: authState.maybeWhen(
                   authenticated: (user) => Column(
                     children: [

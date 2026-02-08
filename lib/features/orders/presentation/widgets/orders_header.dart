@@ -8,12 +8,14 @@ class OrdersHeader extends StatelessWidget {
   final String userName;
   final String pharmacyName;
   final VoidCallback onLogout;
+  final VoidCallback? onSearchPressed;
 
   const OrdersHeader({
     super.key,
     required this.userName,
     required this.pharmacyName,
     required this.onLogout,
+    this.onSearchPressed,
   });
 
   @override
@@ -34,7 +36,8 @@ class OrdersHeader extends StatelessWidget {
         gradient: AppColors.primaryGradient,
         boxShadow: [
           BoxShadow(
-            color: AppColors.primaryDark.withValues(alpha: 0.2),
+            color: (isDark ? AppColors.primaryLight : AppColors.primaryDark)
+                .withValues(alpha: 0.15),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -96,6 +99,16 @@ class OrdersHeader extends StatelessWidget {
 
           // Desktop/Tablet: Show icon buttons
           if (!isMobile) ...[
+            // Add Search Icon
+            _buildIconButton(
+              context,
+              Icons.search,
+              'Search',
+              onSearchPressed ?? () => context.go('/home/orders/search'),
+              isDark,
+            ),
+
+            const SizedBox(width: 8),
             // Inventory Icon
             _buildIconButton(
               context,

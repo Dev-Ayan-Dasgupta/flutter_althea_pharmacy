@@ -135,11 +135,11 @@ class InventoryStatsCards extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: gradient,
+        gradient: gradient, // Keep original gradients for stat cards
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: gradient.colors.first.withValues(alpha: 0.3),
+            color: gradient.colors.first.withValues(alpha: 0.2),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),

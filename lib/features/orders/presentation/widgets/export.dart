@@ -1,3 +1,4 @@
+export './add_inventory_dialog.dart';
 export './app_drawer.dart';
 export './compliance_footer.dart';
 export './customer_info_section.dart';

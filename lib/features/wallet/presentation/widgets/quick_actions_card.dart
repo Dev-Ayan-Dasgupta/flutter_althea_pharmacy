@@ -21,7 +21,9 @@ class QuickActionsCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+        gradient: isDark
+            ? AppColors.cardGradientDark
+            : AppColors.cardGradientLight,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isDark ? AppColors.borderDark : AppColors.borderLight,

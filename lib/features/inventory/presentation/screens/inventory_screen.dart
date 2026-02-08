@@ -20,6 +20,8 @@ class InventoryScreen extends ConsumerStatefulWidget {
 class _InventoryScreenState extends ConsumerState<InventoryScreen> {
   InventoryFilter _currentFilter = InventoryFilter.all;
   String _searchQuery = '';
+  bool _isSearchVisible = false;
+  final _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,21 +32,54 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       drawer: Responsive.isMobile(context) ? const AppDrawer() : null,
       appBar: AppBar(
-        title: Text(
-          'Inventory Management',
-          style: AppTypography.titleLarge(
-            isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
-          ),
-        ),
+        title: _isSearchVisible
+            ? TextField(
+                controller: _searchController,
+                autofocus: true,
+                style: AppTypography.bodyMedium(
+                  isDark
+                      ? AppColors.textPrimaryDark
+                      : AppColors.textPrimaryLight,
+                ),
+                decoration: InputDecoration(
+                  hintText: 'Search medicines...',
+                  border: InputBorder.none,
+                  hintStyle: AppTypography.bodyMedium(
+                    isDark
+                        ? AppColors.textSecondaryDark
+                        : AppColors.textSecondaryLight,
+                  ),
+                ),
+                onChanged: (value) {
+                  setState(() => _searchQuery = value);
+                },
+              )
+            : Text(
+                'Inventory Management',
+                style: AppTypography.titleLarge(
+                  isDark
+                      ? AppColors.textPrimaryDark
+                      : AppColors.textPrimaryLight,
+                ),
+              ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () => _showSearchDialog(context),
+            icon: Icon(_isSearchVisible ? Icons.close : Icons.search),
+            onPressed: () {
+              setState(() {
+                _isSearchVisible = !_isSearchVisible;
+                if (!_isSearchVisible) {
+                  _searchQuery = '';
+                  _searchController.clear();
+                }
+              });
+            },
           ),
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => _showAddStockDialog(context),
-          ),
+          if (!_isSearchVisible)
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () => _showAddStockDialog(context),
+            ),
         ],
       ),
       body: RefreshIndicator(
@@ -82,6 +117,12 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
     );
   }
 
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   Widget _buildInventoryList(
     BuildContext context,
     InventoryState inventoryState,
@@ -98,6 +139,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
         // Filter items based on selected filter
         final filteredItems = _filterItems(items);
 
+        // Apply search query
         // Apply search query
         final searchedItems = _searchQuery.isEmpty
             ? filteredItems
@@ -124,10 +166,16 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
 
         return Padding(
           padding: ResponsivePadding.horizontal(context),
-          child: Responsive(
-            mobile: _buildMobileList(searchedItems),
-            tablet: _buildGridLayout(searchedItems, 2),
-            desktop: _buildGridLayout(searchedItems, 3),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 600) {
+                return _buildMobileList(searchedItems);
+              } else if (constraints.maxWidth < 1200) {
+                return _buildGridLayout(searchedItems, 2);
+              } else {
+                return _buildGridLayout(searchedItems, 3);
+              }
+            },
           ),
         );
       },
@@ -193,53 +241,27 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
   }
 
   Widget _buildGridLayout(List items, int crossAxisCount) {
-    return Wrap(
-      spacing: 16,
-      runSpacing: 16,
-      children: items.map((item) {
-        return SizedBox(
-          width:
-              (MediaQuery.of(context).size.width - (crossAxisCount + 1) * 16) /
-              crossAxisCount,
-          child: InventoryItemCard(item: item),
-        );
-      }).toList(),
-    );
-  }
-
-  void _showSearchDialog(BuildContext context) {
-    showDialog(
+    final screenWidth = MediaQuery.of(context).size.width;
+    final horizontalPadding = Responsive.valueWhen(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'Search Medicines',
-          style: AppTypography.titleLarge(
-            Theme.of(context).textTheme.titleLarge!.color!,
-          ),
-        ),
-        content: TextField(
-          autofocus: true,
-          decoration: const InputDecoration(
-            hintText: 'Enter medicine name...',
-            prefixIcon: Icon(Icons.search),
-          ),
-          onChanged: (value) {
-            setState(() => _searchQuery = value);
-          },
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              setState(() => _searchQuery = '');
-              Navigator.pop(context);
-            },
-            child: const Text('Clear'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Search'),
-          ),
-        ],
+      mobile: 16,
+      tablet: 24,
+      desktop: 32,
+    );
+    final availableWidth = screenWidth - (horizontalPadding * 2);
+    final itemWidth =
+        (availableWidth - (16 * (crossAxisCount - 1))) / crossAxisCount;
+
+    return SingleChildScrollView(
+      child: Wrap(
+        spacing: 16,
+        runSpacing: 16,
+        children: items.map((item) {
+          return SizedBox(
+            width: itemWidth,
+            child: InventoryItemCard(item: item),
+          );
+        }).toList(),
       ),
     );
   }

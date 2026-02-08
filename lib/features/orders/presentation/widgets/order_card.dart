@@ -21,21 +21,16 @@ class OrderCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         decoration: BoxDecoration(
-          gradient: order.isCritical ? AppColors.amberGradient : null,
-          color: order.isCritical
-              ? null
-              : (isDark ? AppColors.surfaceDark : AppColors.surfaceLight),
+          gradient: order.isCritical
+              ? AppColors.amberGradient
+              : (isDark
+                    ? AppColors.cardGradientDark
+                    : AppColors.cardGradientLight),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: order.isCritical
-                ? AppColors.amber
-                : (isDark ? AppColors.borderDark : AppColors.borderLight),
-            width: order.isCritical ? 2 : 1,
-          ),
           boxShadow: order.isCritical
               ? [
                   BoxShadow(
-                    color: AppColors.amber.withValues(alpha: 0.3),
+                    color: AppColors.amber.withValues(alpha: 0.2),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),

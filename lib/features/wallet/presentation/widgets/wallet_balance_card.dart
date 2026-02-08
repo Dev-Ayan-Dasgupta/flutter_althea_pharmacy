@@ -14,11 +14,11 @@ class WalletBalanceCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: AppColors.primaryGradient,
+        gradient: AppColors.primaryGradient, // Keep this for main card
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primaryDark.withValues(alpha: 0.3),
+            color: AppColors.primaryDark.withValues(alpha: 0.2),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),

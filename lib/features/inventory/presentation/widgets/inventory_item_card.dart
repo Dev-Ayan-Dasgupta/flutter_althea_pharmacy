@@ -17,16 +17,14 @@ class InventoryItemCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+        gradient: isDark
+            ? AppColors.cardGradientDark
+            : AppColors.cardGradientLight,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: _getBorderColor(isDark),
-          width: item.needsRestock || item.isExpiringSoon ? 2 : 1,
-        ),
         boxShadow: item.needsRestock || item.isExpiringSoon
             ? [
                 BoxShadow(
-                  color: _getBorderColor(isDark).withValues(alpha: 0.3),
+                  color: _getBorderColor(isDark).withValues(alpha: 0.2),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),

@@ -16,11 +16,10 @@ class CustomerInfoSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+        gradient: isDark
+            ? AppColors.cardGradientDark
+            : AppColors.cardGradientLight,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isDark ? AppColors.borderDark : AppColors.borderLight,
-        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

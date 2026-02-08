@@ -20,7 +20,9 @@ class OrderActionsSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+        gradient: isDark
+            ? AppColors.cardGradientDark
+            : AppColors.cardGradientLight,
         border: Border(
           top: BorderSide(
             color: isDark ? AppColors.borderDark : AppColors.borderLight,
@@ -28,7 +30,7 @@ class OrderActionsSection extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 12,
             offset: const Offset(0, -4),
           ),

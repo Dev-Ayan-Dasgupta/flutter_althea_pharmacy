@@ -238,7 +238,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
         boxShadow: [
           BoxShadow(
             color: (order.isCritical ? AppColors.amber : AppColors.primaryDark)
-                .withValues(alpha: 0.3),
+                .withValues(alpha: 0.2),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),

@@ -23,6 +23,10 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
   late TabController _tabController;
   OrdersFilter _currentFilter = OrdersFilter.all;
 
+  bool _isSearchVisible = false;
+  String _searchQuery = '';
+  final _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +37,7 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
   @override
   void dispose() {
     _tabController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -48,6 +53,7 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
   Widget build(BuildContext context) {
     final ordersState = ref.watch(ordersProvider);
     final authState = ref.watch(authProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -67,18 +73,100 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
                   orElse: () => 'Pharmacy',
                 ),
                 onLogout: () => ref.read(authProvider.notifier).logout(),
+                onSearchPressed: () {
+                  setState(() {
+                    _isSearchVisible = !_isSearchVisible;
+                    if (!_isSearchVisible) {
+                      _searchQuery = '';
+                      _searchController.clear();
+                    }
+                  });
+                },
               ),
 
-              // Tab Bar
-              _buildTabBar(context),
-
-              // Orders List
+              // Main content area with search, tabs, and orders list
               Expanded(
-                child: RefreshIndicator(
-                  onRefresh: () =>
-                      ref.read(ordersProvider.notifier).loadOrders(),
-                  color: AppColors.primaryDark,
-                  child: _buildOrdersList(context, ordersState),
+                child: Column(
+                  children: [
+                    // Search bar (conditional)
+                    if (_isSearchVisible)
+                      Container(
+                        padding: ResponsivePadding.horizontal(context),
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                            color: isDark
+                                ? AppColors.surfaceDark
+                                : AppColors.surfaceLight,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isDark
+                                  ? AppColors.borderDark
+                                  : AppColors.borderLight,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.search,
+                                color: isDark
+                                    ? AppColors.textSecondaryDark
+                                    : AppColors.textSecondaryLight,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: TextField(
+                                  controller: _searchController,
+                                  autofocus: true,
+                                  style: AppTypography.bodyMedium(
+                                    isDark
+                                        ? AppColors.textPrimaryDark
+                                        : AppColors.textPrimaryLight,
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText:
+                                        'Search orders by customer, order #...',
+                                    border: InputBorder.none,
+                                    hintStyle: AppTypography.bodyMedium(
+                                      isDark
+                                          ? AppColors.textSecondaryDark
+                                          : AppColors.textSecondaryLight,
+                                    ),
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() => _searchQuery = value);
+                                  },
+                                ),
+                              ),
+                              if (_searchQuery.isNotEmpty)
+                                IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    setState(() {
+                                      _searchQuery = '';
+                                      _searchController.clear();
+                                    });
+                                  },
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                    // Tab Bar
+                    _buildTabBar(context),
+
+                    // Orders List (THIS WAS MISSING!)
+                    Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () =>
+                            ref.read(ordersProvider.notifier).loadOrders(),
+                        color: AppColors.primaryDark,
+                        child: _buildOrdersList(context, ordersState),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -137,7 +225,18 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
         // Filter orders based on selected tab
         final filteredOrders = _filterOrders(orders);
 
-        if (filteredOrders.isEmpty) {
+        // Apply search query
+        final searchedOrders = _searchQuery.isEmpty
+            ? filteredOrders
+            : filteredOrders.where((order) {
+                final query = _searchQuery.toLowerCase();
+                return order.orderNumber.toLowerCase().contains(query) ||
+                    order.customerName.toLowerCase().contains(query) ||
+                    order.customerPhone.contains(query) ||
+                    order.deliveryAddress.toLowerCase().contains(query);
+              }).toList();
+
+        if (searchedOrders.isEmpty) {
           return EmptyOrdersState(filter: _currentFilter);
         }
 
@@ -157,10 +256,20 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
               desktop: 32,
             ),
           ),
-          child: Responsive(
-            mobile: _buildMobileList(filteredOrders),
-            tablet: _buildGridLayout(filteredOrders, 2),
-            desktop: _buildGridLayout(filteredOrders, 3),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              // Determine layout based on available width
+              if (constraints.maxWidth < 600) {
+                // Mobile: List view
+                return _buildMobileList(searchedOrders);
+              } else if (constraints.maxWidth < 1200) {
+                // Tablet: 2 columns
+                return _buildGridLayout(searchedOrders, 2);
+              } else {
+                // Desktop: 3 columns
+                return _buildGridLayout(searchedOrders, 3);
+              }
+            },
           ),
         );
       },
@@ -222,17 +331,28 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
   }
 
   Widget _buildGridLayout(List orders, int crossAxisCount) {
-    return Wrap(
-      spacing: 16,
-      runSpacing: 16,
-      children: orders.map((order) {
-        return SizedBox(
-          width:
-              (MediaQuery.of(context).size.width - (crossAxisCount + 1) * 16) /
-              crossAxisCount,
-          child: OrderCard(order: order),
-        );
-      }).toList(),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final horizontalPadding = Responsive.valueWhen(
+      context: context,
+      mobile: 16,
+      tablet: 24,
+      desktop: 32,
+    );
+    final availableWidth = screenWidth - (horizontalPadding * 2);
+    final itemWidth =
+        (availableWidth - (16 * (crossAxisCount - 1))) / crossAxisCount;
+
+    return SingleChildScrollView(
+      child: Wrap(
+        spacing: 16,
+        runSpacing: 16,
+        children: orders.map((order) {
+          return SizedBox(
+            width: itemWidth,
+            child: OrderCard(order: order),
+          );
+        }).toList(),
+      ),
     );
   }
 }
