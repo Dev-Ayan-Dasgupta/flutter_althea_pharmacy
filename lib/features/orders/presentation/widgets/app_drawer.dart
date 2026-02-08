@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../auth/presentation/providers/auth_state.dart';
+import '../../../notifications/presentation/providers/notification_provider.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
@@ -99,16 +100,23 @@ class AppDrawer extends ConsumerWidget {
                       },
                       isDark: isDark,
                     ),
-                    _buildDrawerItem(
-                      context,
-                      icon: Icons.notifications_outlined,
-                      title: 'Notifications',
-                      badge: '3',
-                      onTap: () {
-                        context.go('/home/notifications');
-                        Navigator.pop(context);
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final unreadCount = ref
+                            .watch(notificationsProvider.notifier)
+                            .getUnreadCount();
+                        return _buildDrawerItem(
+                          context,
+                          icon: Icons.notifications_outlined,
+                          title: 'Notifications',
+                          badge: unreadCount > 0 ? '$unreadCount' : null,
+                          onTap: () {
+                            context.go('/home/notifications');
+                            Navigator.pop(context);
+                          },
+                          isDark: isDark,
+                        );
                       },
-                      isDark: isDark,
                     ),
 
                     const Divider(),

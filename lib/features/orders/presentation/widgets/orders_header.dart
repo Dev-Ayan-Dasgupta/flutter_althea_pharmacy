@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/responsive.dart';
+import '../../../notifications/presentation/providers/notification_provider.dart';
 
-class OrdersHeader extends StatelessWidget {
+class OrdersHeader extends ConsumerWidget {
   final String userName;
   final String pharmacyName;
   final VoidCallback onLogout;
@@ -19,7 +21,7 @@ class OrdersHeader extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isMobile = Responsive.isMobile(context);
 
@@ -132,14 +134,22 @@ class OrdersHeader extends StatelessWidget {
             const SizedBox(width: 8),
 
             // Notification Icon
-            _buildIconButton(
-              context,
-              Icons.notifications_outlined,
-              'Notifications',
-              () => context.go('/home/notifications'),
-              isDark,
-              badge: 3,
-            ),
+            if (!isMobile)
+              Consumer(
+                builder: (context, ref, child) {
+                  final unreadCount = ref
+                      .watch(notificationsProvider.notifier)
+                      .getUnreadCount();
+                  return _buildIconButton(
+                    context,
+                    Icons.notifications_outlined,
+                    'Notifications',
+                    () => context.go('/home/notifications'),
+                    isDark,
+                    badge: unreadCount,
+                  );
+                },
+              ),
 
             const SizedBox(width: 8),
 

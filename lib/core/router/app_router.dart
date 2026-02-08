@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/orders/presentation/screens/home_screen.dart';
 import '../../features/orders/presentation/screens/order_detail_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
@@ -59,6 +60,13 @@ GoRouter appRouter(Ref ref) {
             builder: (context, state) => const WalletScreen(),
           ),
         ],
+      ),
+
+      // Notifications
+      GoRoute(
+        path: 'notifications',
+        name: 'notifications',
+        builder: (context, state) => const NotificationsScreen(),
       ),
     ],
   );
