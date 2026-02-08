@@ -154,6 +154,28 @@ class AppDrawer extends ConsumerWidget {
                       },
                       isDark: isDark,
                     ),
+
+                    _buildDrawerItem(
+                      context,
+                      icon: Icons.description,
+                      title: 'Terms & Conditions',
+                      onTap: () {
+                        context.go('/home/terms');
+                        Navigator.pop(context);
+                      },
+                      isDark: isDark,
+                    ),
+                    _buildDrawerItem(
+                      context,
+                      icon: Icons.privacy_tip,
+                      title: 'Privacy Policy',
+                      onTap: () {
+                        context.go('/home/privacy');
+                        Navigator.pop(context);
+                      },
+                      isDark: isDark,
+                    ),
+
                     _buildDrawerItem(
                       context,
                       icon: Icons.info_outline,
