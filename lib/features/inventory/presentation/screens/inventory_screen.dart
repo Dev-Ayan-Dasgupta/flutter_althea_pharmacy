@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../orders/presentation/widgets/export.dart';
+import '../../domain/entities/inventory_entity.dart';
 import '../providers/inventory_provider.dart';
 import '../providers/inventory_state.dart';
 import '../widgets/export.dart';
@@ -231,11 +232,32 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
 
   Widget _buildMobileList(List items) {
     return ListView.separated(
-      padding: const EdgeInsets.only(bottom: 16),
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: items.length,
       separatorBuilder: (context, index) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
-        return InventoryItemCard(item: items[index]);
+        return InventoryItemCard(
+          item: items[index],
+          onStockAdjusted: (id, newStock) {
+            ref.read(inventoryProvider.notifier).adjustStock(id, newStock);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Stock adjusted to $newStock units'),
+                backgroundColor: AppColors.success,
+              ),
+            );
+          },
+          onDeleted: (id) {
+            ref.read(inventoryProvider.notifier).deleteItem(id);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Medicine deleted successfully'),
+                backgroundColor: AppColors.success,
+              ),
+            );
+          },
+        );
       },
     );
   }
@@ -259,7 +281,27 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
         children: items.map((item) {
           return SizedBox(
             width: itemWidth,
-            child: InventoryItemCard(item: item),
+            child: InventoryItemCard(
+              item: item,
+              onStockAdjusted: (id, newStock) {
+                ref.read(inventoryProvider.notifier).adjustStock(id, newStock);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Stock adjusted to $newStock units'),
+                    backgroundColor: AppColors.success,
+                  ),
+                );
+              },
+              onDeleted: (id) {
+                ref.read(inventoryProvider.notifier).deleteItem(id);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Medicine deleted successfully'),
+                    backgroundColor: AppColors.success,
+                  ),
+                );
+              },
+            ),
           );
         }).toList(),
       ),
@@ -267,11 +309,23 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
   }
 
   void _showAddStockDialog(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Add Stock feature coming soon!'),
-        duration: Duration(seconds: 2),
+    showDialog(
+      context: context,
+      builder: (context) => AddInventoryDialog(
+        // item: null for add, pass item for edit
       ),
-    );
+    ).then((result) {
+      if (result != null && result is InventoryItemEntity) {
+        ref.read(inventoryProvider.notifier).addOrUpdateItem(result);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Medicine added successfully!'),
+              backgroundColor: AppColors.success,
+            ),
+          );
+        }
+      }
+    });
   }
 }

@@ -77,4 +77,46 @@ class Inventory extends _$Inventory {
       orElse: () => [],
     );
   }
+
+  Future<void> addOrUpdateItem(InventoryItemEntity item) async {
+    final repository = ref.read(inventoryRepositoryProvider);
+    final result = await repository.addInventoryItem(item);
+
+    result.fold(
+      (error) {
+        // Handle error
+      },
+      (_) {
+        loadInventory();
+      },
+    );
+  }
+
+  Future<void> adjustStock(String id, int newStock) async {
+    final repository = ref.read(inventoryRepositoryProvider);
+    final result = await repository.updateStock(id, newStock);
+
+    result.fold(
+      (error) {
+        // Handle error
+      },
+      (_) {
+        loadInventory();
+      },
+    );
+  }
+
+  Future<void> deleteItem(String id) async {
+    final repository = ref.read(inventoryRepositoryProvider);
+    final result = await repository.deleteInventoryItem(id);
+
+    result.fold(
+      (error) {
+        // Handle error
+      },
+      (_) {
+        loadInventory();
+      },
+    );
+  }
 }

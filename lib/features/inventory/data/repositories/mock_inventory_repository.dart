@@ -279,7 +279,19 @@ class MockInventoryRepository implements InventoryRepository {
     await Future.delayed(const Duration(milliseconds: 500));
 
     try {
-      _mockInventory.add(InventoryItemModel.fromEntity(item));
+      final model = InventoryItemModel.fromEntity(item);
+
+      // Check if item exists (for edit)
+      final existingIndex = _mockInventory.indexWhere((i) => i.id == item.id);
+
+      if (existingIndex != -1) {
+        // Update existing
+        _mockInventory[existingIndex] = model;
+      } else {
+        // Add new
+        _mockInventory.add(model);
+      }
+
       return const Right(null);
     } catch (e) {
       return Left('Failed to add item: $e');
@@ -292,5 +304,17 @@ class MockInventoryRepository implements InventoryRepository {
       const Duration(seconds: 10),
       (_) => _mockInventory.map((m) => m.toEntity()).toList(),
     );
+  }
+
+  @override
+  Future<Either<String, void>> deleteInventoryItem(String id) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    try {
+      _mockInventory.removeWhere((item) => item.id == id);
+      return const Right(null);
+    } catch (e) {
+      return Left('Failed to delete item: $e');
+    }
   }
 }
