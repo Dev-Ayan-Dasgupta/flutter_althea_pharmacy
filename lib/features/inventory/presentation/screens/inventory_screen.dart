@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/responsive.dart';
+import '../../../orders/presentation/widgets/export.dart';
 import '../providers/inventory_provider.dart';
 import '../providers/inventory_state.dart';
 import '../widgets/export.dart';
@@ -27,6 +28,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      drawer: Responsive.isMobile(context) ? const AppDrawer() : null,
       appBar: AppBar(
         title: Text(
           'Inventory Management',
@@ -191,18 +193,17 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
   }
 
   Widget _buildGridLayout(List items, int crossAxisCount) {
-    return GridView.builder(
-      padding: const EdgeInsets.only(bottom: 16),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxisCount,
-        childAspectRatio: 0.85,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-      ),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        return InventoryItemCard(item: items[index]);
-      },
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      children: items.map((item) {
+        return SizedBox(
+          width:
+              (MediaQuery.of(context).size.width - (crossAxisCount + 1) * 16) /
+              crossAxisCount,
+          child: InventoryItemCard(item: item),
+        );
+      }).toList(),
     );
   }
 

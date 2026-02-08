@@ -51,6 +51,7 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      drawer: Responsive.isMobile(context) ? const AppDrawer() : null,
       body: SafeArea(
         child: ResponsiveContainer(
           child: Column(
@@ -221,17 +222,17 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
   }
 
   Widget _buildGridLayout(List orders, int crossAxisCount) {
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxisCount,
-        childAspectRatio: 1.1,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-      ),
-      itemCount: orders.length,
-      itemBuilder: (context, index) {
-        return OrderCard(order: orders[index]);
-      },
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      children: orders.map((order) {
+        return SizedBox(
+          width:
+              (MediaQuery.of(context).size.width - (crossAxisCount + 1) * 16) /
+              crossAxisCount,
+          child: OrderCard(order: order),
+        );
+      }).toList(),
     );
   }
 }
