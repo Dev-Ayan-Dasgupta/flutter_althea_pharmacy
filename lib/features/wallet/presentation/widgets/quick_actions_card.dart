@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/providers/permission_provider.dart';
@@ -94,11 +95,7 @@ class QuickActionsCard extends ConsumerWidget {
             child: OutlinedButton.icon(
               onPressed: () {
                 // Navigate to detailed earnings
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Detailed earnings analytics coming soon!'),
-                  ),
-                );
+                context.go('/home/wallet/analytics');
               },
               icon: const Icon(Icons.analytics_outlined),
               label: const Text('View Detailed Analytics'),

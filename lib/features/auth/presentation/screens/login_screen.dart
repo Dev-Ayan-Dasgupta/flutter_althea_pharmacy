@@ -3,10 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../../../core/utils/extensions.dart';
 import '../../../../core/utils/responsive.dart';
 import '../providers/auth_provider.dart';
-import '../providers/auth_state.dart';
 import '../widgets/login_form.dart';
 
 class LoginScreen extends ConsumerWidget {
@@ -14,26 +12,27 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authProvider);
+    final authAsync = ref.watch(authProvider);
 
     // Listen to auth state changes
-    ref.listen<AuthState>(authProvider, (previous, next) {
-      next.maybeWhen(
-        authenticated: (user) {
-          context.go('/home');
+    ref.listen<AsyncValue>(authProvider, (previous, next) {
+      next.when(
+        data: (user) {
+          if (user != null) {
+            context.go('/home');
+          }
         },
-        error: (message) {
-          context.showSnackBar(message, isError: true);
+        loading: () {},
+        error: (error, stack) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.toString()),
+              backgroundColor: AppColors.error,
+            ),
+          );
         },
-        orElse: () {},
       );
     });
-
-    // Check if loading using pattern matching
-    final isLoading = authState.maybeWhen(
-      loading: () => true,
-      orElse: () => false,
-    );
 
     return Scaffold(
       body: Stack(
@@ -66,7 +65,7 @@ class LoginScreen extends ConsumerWidget {
                       children: [
                         _buildHeader(context),
                         const SizedBox(height: 48),
-                        _buildLoginCard(context, isLoading),
+                        _buildLoginCard(context),
                         const SizedBox(height: 24),
                         _buildMockCredentialsInfo(context),
                       ],
@@ -115,7 +114,7 @@ class LoginScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildLoginCard(BuildContext context, bool isLoading) {
+  Widget _buildLoginCard(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.glassLight,
@@ -154,7 +153,7 @@ class LoginScreen extends ConsumerWidget {
               style: AppTypography.bodyMedium(AppColors.textSecondaryLight),
             ),
             const SizedBox(height: 32),
-            LoginForm(isLoading: isLoading),
+            const LoginForm(),
           ],
         ),
       ),

@@ -5,9 +5,7 @@ import '../../../../core/theme/app_typography.dart';
 import '../providers/auth_provider.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
-  final bool isLoading;
-
-  const LoginForm({super.key, required this.isLoading});
+  const LoginForm({super.key});
 
   @override
   ConsumerState<LoginForm> createState() => _LoginFormState();
@@ -30,15 +28,15 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     if (_formKey.currentState!.validate()) {
       ref
           .read(authProvider.notifier)
-          .login(
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-          );
+          .login(_emailController.text.trim(), _passwordController.text);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final authAsync = ref.watch(authProvider);
+    final isLoading = authAsync.isLoading;
+
     return Form(
       key: _formKey,
       child: Column(
@@ -46,13 +44,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           // Email Field
           TextFormField(
             controller: _emailController,
-            enabled: !widget.isLoading,
+            enabled: !isLoading,
             keyboardType: TextInputType.emailAddress,
             style: AppTypography.bodyLarge(AppColors.textPrimaryLight),
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Email',
               hintText: 'Enter your email',
-              prefixIcon: const Icon(Icons.email_outlined),
+              prefixIcon: Icon(Icons.email_outlined),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -72,7 +70,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           // Password Field
           TextFormField(
             controller: _passwordController,
-            enabled: !widget.isLoading,
+            enabled: !isLoading,
             obscureText: _obscurePassword,
             style: AppTypography.bodyLarge(AppColors.textPrimaryLight),
             decoration: InputDecoration(
@@ -110,14 +108,14 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             width: double.infinity,
             height: 56,
             child: ElevatedButton(
-              onPressed: widget.isLoading ? null : _handleLogin,
+              onPressed: isLoading ? null : _handleLogin,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryDark,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: widget.isLoading
+              child: isLoading
                   ? const SizedBox(
                       width: 24,
                       height: 24,

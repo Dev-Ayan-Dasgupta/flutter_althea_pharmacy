@@ -48,7 +48,7 @@ final class CurrentUserRoleProvider
   }
 }
 
-String _$currentUserRoleHash() => r'482c376a19831445f1ca728f5aa62496424da9ea';
+String _$currentUserRoleHash() => r'88f1842f01761c8ac69363823f891dfca1e9f019';
 
 @ProviderFor(hasPermission)
 const hasPermissionProvider = HasPermissionFamily._();

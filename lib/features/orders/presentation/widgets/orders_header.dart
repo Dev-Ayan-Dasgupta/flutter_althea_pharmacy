@@ -134,26 +134,21 @@ class OrdersHeader extends ConsumerWidget {
             const SizedBox(width: 8),
 
             // Notification Icon
-            if (!isMobile)
-              Consumer(
-                builder: (context, ref, child) {
-                  final unreadCount = ref
-                      .watch(notificationsProvider.notifier)
-                      .getUnreadCount();
-                  return _buildIconButton(
-                    context,
-                    Icons.notifications_outlined,
-                    'Notifications',
-                    () => context.go('/home/notifications'),
-                    isDark,
-                    badge: unreadCount,
-                  );
-                },
-              ),
-
-            const SizedBox(width: 8),
-
-            buildQuickStats(context),
+            Consumer(
+              builder: (context, ref, child) {
+                final unreadCount = ref
+                    .watch(notificationsProvider.notifier)
+                    .getUnreadCount();
+                return _buildIconButton(
+                  context,
+                  Icons.notifications_outlined,
+                  'Notifications',
+                  () => context.go('/home/notifications'),
+                  isDark,
+                  badge: unreadCount,
+                );
+              },
+            ),
 
             const SizedBox(width: 8),
 
@@ -254,56 +249,6 @@ class OrdersHeader extends ConsumerWidget {
             child: const Text('Logout'),
           ),
         ],
-      ),
-    );
-  }
-
-  // Quick stats (optional enhancement)
-  Widget buildQuickStats(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 16),
-      child: Row(
-        children: [
-          _buildStatCard('Active', '3', AppColors.primaryDark, context),
-          const SizedBox(width: 12),
-          _buildStatCard('Delivering', '2', AppColors.accentDark, context),
-          const SizedBox(width: 12),
-          _buildStatCard('Completed', '12', AppColors.success, context),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatCard(
-    String label,
-    String count,
-    Color color,
-    BuildContext context,
-  ) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
-        ),
-        child: Column(
-          children: [
-            Text(count, style: AppTypography.titleLarge(color)),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: AppTypography.caption(
-                isDark
-                    ? AppColors.textSecondaryDark
-                    : AppColors.textSecondaryLight,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

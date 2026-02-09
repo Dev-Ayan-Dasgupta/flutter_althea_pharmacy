@@ -5,8 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../../../core/utils/extensions.dart';
-import '../../../../core/utils/responsive.dart';
+import '../../../../core/utils/export.dart';
 import '../../domain/entities/order_entity.dart';
 import '../providers/orders_provider.dart';
 import '../providers/orders_state.dart';
@@ -493,8 +492,14 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen>
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: () => context.go('/home/scan-qr'),
-                    icon: const Icon(Icons.qr_code_scanner),
-                    label: const Text('Scan QR'),
+                    icon: Icon(
+                      PlatformUtils.canScanQR
+                          ? Icons.qr_code_scanner
+                          : Icons.keyboard,
+                    ),
+                    label: Text(
+                      PlatformUtils.canScanQR ? 'Scan QR' : 'Enter QR',
+                    ),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.primaryDark,
                       side: const BorderSide(color: AppColors.primaryDark),

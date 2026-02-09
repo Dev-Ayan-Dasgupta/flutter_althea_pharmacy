@@ -50,51 +50,10 @@ final class AuthRepositoryProvider
 
 String _$authRepositoryHash() => r'866d07b3c40dd05f83eccba1be13d0f8f6aae65f';
 
-@ProviderFor(loginUseCase)
-const loginUseCaseProvider = LoginUseCaseProvider._();
-
-final class LoginUseCaseProvider
-    extends $FunctionalProvider<LoginUseCase, LoginUseCase, LoginUseCase>
-    with $Provider<LoginUseCase> {
-  const LoginUseCaseProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'loginUseCaseProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$loginUseCaseHash();
-
-  @$internal
-  @override
-  $ProviderElement<LoginUseCase> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  LoginUseCase create(Ref ref) {
-    return loginUseCase(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(LoginUseCase value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<LoginUseCase>(value),
-    );
-  }
-}
-
-String _$loginUseCaseHash() => r'e082833fd1fc26be8c5fac08d612713cb2c18a17';
-
 @ProviderFor(Auth)
 const authProvider = AuthProvider._();
 
-final class AuthProvider extends $NotifierProvider<Auth, AuthState> {
+final class AuthProvider extends $AsyncNotifierProvider<Auth, UserEntity?> {
   const AuthProvider._()
     : super(
         from: null,
@@ -112,30 +71,22 @@ final class AuthProvider extends $NotifierProvider<Auth, AuthState> {
   @$internal
   @override
   Auth create() => Auth();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AuthState value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<AuthState>(value),
-    );
-  }
 }
 
-String _$authHash() => r'c730ef12bf4450ed3660427b611c871b0768a459';
+String _$authHash() => r'354aac8bedaa0e631e91c805873bf62e97af74c4';
 
-abstract class _$Auth extends $Notifier<AuthState> {
-  AuthState build();
+abstract class _$Auth extends $AsyncNotifier<UserEntity?> {
+  FutureOr<UserEntity?> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<AuthState, AuthState>;
+    final ref = this.ref as $Ref<AsyncValue<UserEntity?>, UserEntity?>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AuthState, AuthState>,
-              AuthState,
+              AnyNotifier<AsyncValue<UserEntity?>, UserEntity?>,
+              AsyncValue<UserEntity?>,
               Object?,
               Object?
             >;

@@ -1,6 +1,7 @@
 import 'package:flutter_altheacare_pharmacy/core/theme/app_urls.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../features/analytics/presentation/screens/analytics_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/legal/presentation/screens/export.dart';
@@ -83,7 +84,16 @@ GoRouter appRouter(Ref ref) {
           GoRoute(
             path: 'scan-qr',
             name: 'scan-qr',
-            builder: (context, state) => const QRScannerScreen(),
+            builder: (context, state) {
+              // Check if platform supports camera scanning
+              // if (PlatformUtils.canScanQR) {
+              //   return const QRScannerScreenMobile();
+              // } else {
+              //   return const ManualQRInputScreen();
+              // }
+
+              return const ManualQRInputScreen();
+            },
           ),
 
           // Tracking
@@ -108,63 +118,71 @@ GoRouter appRouter(Ref ref) {
             path: 'wallet',
             name: 'wallet',
             builder: (context, state) => const WalletScreen(),
+            routes: [
+              // Inside wallet routes
+              GoRoute(
+                path: 'analytics',
+                name: 'analytics',
+                builder: (context, state) => const AnalyticsScreen(),
+              ),
+            ],
+          ),
+
+          // Notifications
+          GoRoute(
+            path: 'notifications',
+            name: 'notifications',
+            builder: (context, state) => const NotificationsScreen(),
+          ),
+
+          // Terms & Conditions
+          GoRoute(
+            path: 'terms',
+            name: 'terms',
+            builder: (context, state) => const WebViewScreen(
+              title: 'Terms & Conditions',
+              url: AppUrls.termsAndConditions,
+            ),
+          ),
+
+          // Privacy Policy
+          GoRoute(
+            path: 'privacy',
+            name: 'privacy',
+            builder: (context, state) => const WebViewScreen(
+              title: 'Privacy Policy',
+              url: AppUrls.privacyPolicy,
+            ),
+          ),
+
+          // FAQ
+          GoRoute(
+            path: 'faq',
+            name: 'faq',
+            builder: (context, state) => const FAQScreen(),
+          ),
+
+          // About
+          GoRoute(
+            path: 'about',
+            name: 'about',
+            builder: (context, state) => const AboutScreen(),
+          ),
+
+          // Profile
+          GoRoute(
+            path: 'profile',
+            name: 'profile',
+            builder: (context, state) => const ProfileScreen(),
+          ),
+
+          // Settings
+          GoRoute(
+            path: 'settings',
+            name: 'settings',
+            builder: (context, state) => const SettingsScreen(),
           ),
         ],
-      ),
-
-      // Notifications
-      GoRoute(
-        path: 'notifications',
-        name: 'notifications',
-        builder: (context, state) => const NotificationsScreen(),
-      ),
-
-      // Terms & Conditions
-      GoRoute(
-        path: 'terms',
-        name: 'terms',
-        builder: (context, state) => const WebViewScreen(
-          title: 'Terms & Conditions',
-          url: AppUrls.termsAndConditions,
-        ),
-      ),
-
-      // Privacy Policy
-      GoRoute(
-        path: 'privacy',
-        name: 'privacy',
-        builder: (context, state) => const WebViewScreen(
-          title: 'Privacy Policy',
-          url: AppUrls.privacyPolicy,
-        ),
-      ),
-
-      // FAQ
-      GoRoute(
-        path: 'faq',
-        name: 'faq',
-        builder: (context, state) => const FAQScreen(),
-      ),
-
-      // About
-      GoRoute(
-        path: 'about',
-        name: 'about',
-        builder: (context, state) => const AboutScreen(),
-      ),
-
-      // Profile
-      GoRoute(
-        path: 'profile',
-        name: 'profile',
-        builder: (context, state) => const ProfileScreen(),
-      ),
-
-      // Settings
-      GoRoute(
-        path: 'settings',
-        name: 'settings',
-        builder: (context, state) => const SettingsScreen(),
       ),
     ],
   );

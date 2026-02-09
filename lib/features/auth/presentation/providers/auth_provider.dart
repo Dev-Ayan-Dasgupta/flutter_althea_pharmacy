@@ -1,61 +1,64 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../domain/repositories/auth_repository.dart';
-import '../../domain/usecases/login_usecase.dart';
 import '../../data/repositories/mock_auth_repository.dart';
-import 'auth_state.dart';
+import '../../domain/entities/user_entity.dart';
+import '../../domain/repositories/auth_repository.dart';
 
 part 'auth_provider.g.dart';
 
-// Repository provider
 @riverpod
 AuthRepository authRepository(Ref ref) {
   return MockAuthRepository();
 }
 
-// Login use case provider
-@riverpod
-LoginUseCase loginUseCase(Ref ref) {
-  return LoginUseCase(ref.watch(authRepositoryProvider));
-}
-
-// Auth state provider
 @riverpod
 class Auth extends _$Auth {
   @override
-  AuthState build() {
-    return const AuthState.initial();
+  Future<UserEntity?> build() async {
+    // This properly handles async in build
+    return await _checkAuthStatus();
   }
 
-  Future<void> login({required String email, required String password}) async {
-    state = const AuthState.loading();
+  Future<UserEntity?> _checkAuthStatus() async {
+    try {
+      final repository = ref.read(authRepositoryProvider);
+      final result = await repository.getCurrentUser();
 
-    final useCase = ref.read(loginUseCaseProvider);
-    final result = await useCase(email: email, password: password);
+      // Handle Either type
+      return result.fold(
+        (error) => null, // Left side (error) returns null
+        (user) => user, // Right side (success) returns user
+      );
+    } catch (e) {
+      return null;
+    }
+  }
 
-    result.fold(
-      (error) => state = AuthState.error(error),
-      (user) => state = AuthState.authenticated(user),
-    );
+  Future<void> login(String email, String password) async {
+    state = const AsyncValue.loading();
+
+    state = await AsyncValue.guard(() async {
+      final repository = ref.read(authRepositoryProvider);
+      final result = await repository.login(email, password);
+
+      // Handle Either type
+      return result.fold(
+        (error) => throw Exception(error), // Left side (error) throws
+        (user) => user, // Right side (success) returns user
+      );
+    });
   }
 
   Future<void> logout() async {
-    final repository = ref.read(authRepositoryProvider);
-    await repository.logout();
-    state = const AuthState.unauthenticated();
-  }
+    state = const AsyncValue.loading();
 
-  Future<void> checkAuthStatus() async {
-    final repository = ref.read(authRepositoryProvider);
-    final isAuth = await repository.isAuthenticated();
+    state = await AsyncValue.guard(() async {
+      final repository = ref.read(authRepositoryProvider);
+      final result = await repository.logout();
 
-    if (isAuth) {
-      final result = await repository.getCurrentUser();
-      result.fold(
-        (_) => state = const AuthState.unauthenticated(),
-        (user) => state = AuthState.authenticated(user),
-      );
-    } else {
-      state = const AuthState.unauthenticated();
-    }
+      // Handle Either type
+      result.fold((error) => throw Exception(error), (_) => null);
+
+      return null;
+    });
   }
 }

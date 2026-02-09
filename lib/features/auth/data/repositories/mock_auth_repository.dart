@@ -1,96 +1,98 @@
 import 'package:dartz/dartz.dart';
-import '../../domain/entities/user_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../domain/entities/role_entity.dart';
+import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 class MockAuthRepository implements AuthRepository {
-  UserEntity? _currentUser;
+  static const String _keyIsLoggedIn = 'is_logged_in';
+  static const String _keyUserId = 'user_id';
+  static const String _keyUserName = 'user_name';
+  static const String _keyUserEmail = 'user_email';
+  static const String _keyPharmacyName = 'pharmacy_name';
 
   @override
   Future<Either<String, UserEntity>> login(
     String email,
     String password,
   ) async {
-    await Future.delayed(const Duration(seconds: 2));
+    try {
+      // Simulate network delay
+      await Future.delayed(const Duration(milliseconds: 500));
 
-    // Demo credentials with roles
-    if (email == 'admin@pharmacy.com' && password == 'admin123') {
-      _currentUser = const UserEntity(
-        id: 'USER001',
-        email: 'admin@pharmacy.com',
-        name: 'Admin User',
-        pharmacyId: 'PHARM001',
-        pharmacyName: 'HealthCare Pharmacy',
+      // Simple validation
+      if (email.isEmpty || password.isEmpty) {
+        return left('Email and password are required');
+      }
+
+      if (password.length < 6) {
+        return left('Password must be at least 6 characters');
+      }
+
+      // Mock user data
+      final user = UserEntity(
+        id: 'user_123',
+        name: 'Dr. John Doe',
+        email: email,
+        pharmacyName: 'HealthPlus Pharmacy',
         role: RoleEntity.admin,
+        pharmacyId: 'pharmacy_123',
       );
-      return Right(_currentUser!);
-    } else if (email == 'staff@pharmacy.com' && password == 'staff123') {
-      _currentUser = const UserEntity(
-        id: 'USER002',
-        email: 'staff@pharmacy.com',
-        name: 'Staff User',
-        pharmacyId: 'PHARM001',
-        pharmacyName: 'HealthCare Pharmacy',
-        role: RoleEntity.staff,
-      );
-      return Right(_currentUser!);
-    } else if (email == 'demo@pharmacy.com' && password == 'demo123') {
-      _currentUser = const UserEntity(
-        id: 'USER003',
-        email: 'demo@pharmacy.com',
-        name: 'Demo User',
-        pharmacyId: 'PHARM001',
-        pharmacyName: 'HealthCare Pharmacy',
-        role: RoleEntity.admin,
-      );
-      return Right(_currentUser!);
+
+      // Save login state
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_keyIsLoggedIn, true);
+      await prefs.setString(_keyUserId, user.id);
+      await prefs.setString(_keyUserName, user.name);
+      await prefs.setString(_keyUserEmail, user.email);
+      await prefs.setString(_keyPharmacyName, user.pharmacyName);
+
+      return right(user);
+    } catch (e) {
+      return left('Login failed: ${e.toString()}');
     }
-
-    return const Left('Invalid credentials');
   }
 
   @override
   Future<Either<String, void>> logout() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    _currentUser = null;
-    return const Right(null);
-  }
+    try {
+      // Simulate network delay
+      await Future.delayed(const Duration(milliseconds: 300));
 
-  @override
-  Future<Either<String, UserEntity>> getCurrentUser() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
 
-    if (_currentUser != null) {
-      return Right(_currentUser!);
+      return right(null);
+    } catch (e) {
+      return left('Logout failed: ${e.toString()}');
     }
-
-    return const Left('No user logged in');
   }
 
   @override
-  Future<bool> isAuthenticated() async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    return _currentUser != null;
-  }
+  Future<Either<String, UserEntity?>> getCurrentUser() async {
+    try {
+      // Reduce delay for faster startup
+      await Future.delayed(const Duration(milliseconds: 300));
 
-  @override
-  Future<Either<String, void>> register(
-    String email,
-    String password,
-    String name,
-  ) async {
-    await Future.delayed(const Duration(seconds: 2));
+      final prefs = await SharedPreferences.getInstance();
+      final isLoggedIn = prefs.getBool(_keyIsLoggedIn) ?? false;
 
-    // Mock registration - creates staff user by default
-    _currentUser = UserEntity(
-      id: 'USER_${DateTime.now().millisecondsSinceEpoch}',
-      email: email,
-      name: name,
-      pharmacyId: 'PHARM001',
-      pharmacyName: 'HealthCare Pharmacy',
-      role: RoleEntity.staff,
-    );
+      if (!isLoggedIn) {
+        return right(null);
+      }
 
-    return const Right(null);
+      final user = UserEntity(
+        id: prefs.getString(_keyUserId) ?? '',
+        name: prefs.getString(_keyUserName) ?? '',
+        email: prefs.getString(_keyUserEmail) ?? '',
+        pharmacyName: prefs.getString(_keyPharmacyName) ?? '',
+        role: RoleEntity.staff,
+        pharmacyId: prefs.getString(_keyUserId) ?? '',
+      );
+
+      return right(user);
+    } catch (e) {
+      return left('Failed to get current user: ${e.toString()}');
+    }
   }
 }

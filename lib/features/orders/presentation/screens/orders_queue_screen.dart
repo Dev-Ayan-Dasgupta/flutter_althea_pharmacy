@@ -3,9 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../../../core/utils/responsive.dart';
+import '../../../../core/utils/export.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
-import '../../../auth/presentation/providers/auth_state.dart';
 import '../../domain/entities/order_entity.dart';
 import '../providers/new_order_notifier.dart';
 import '../providers/orders_provider.dart';
@@ -55,7 +54,7 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
   @override
   Widget build(BuildContext context) {
     final ordersState = ref.watch(ordersProvider);
-    final authState = ref.watch(authProvider);
+    final authAsync = ref.watch(authProvider);
     final newOrder = ref.watch(newOrderProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -71,12 +70,12 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
                 children: [
                   // Header with user info
                   OrdersHeader(
-                    userName: authState.maybeWhen(
-                      authenticated: (user) => user.name,
+                    userName: authAsync.maybeWhen(
+                      data: (user) => user?.name ?? 'Pharmacist',
                       orElse: () => 'Pharmacist',
                     ),
-                    pharmacyName: authState.maybeWhen(
-                      authenticated: (user) => user.pharmacyName,
+                    pharmacyName: authAsync.maybeWhen(
+                      data: (user) => user?.pharmacyName ?? 'Pharmacy',
                       orElse: () => 'Pharmacy',
                     ),
                     onLogout: () => ref.read(authProvider.notifier).logout(),
@@ -219,8 +218,10 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
         onPressed: () {
           context.go('/home/scan-qr');
         },
-        icon: const Icon(Icons.qr_code_scanner),
-        label: const Text('Scan QR'),
+        icon: Icon(
+          PlatformUtils.canScanQR ? Icons.qr_code_scanner : Icons.keyboard,
+        ),
+        label: Text(PlatformUtils.canScanQR ? 'Scan QR' : 'Enter QR'),
         backgroundColor: AppColors.accentDark,
       ),
     );
