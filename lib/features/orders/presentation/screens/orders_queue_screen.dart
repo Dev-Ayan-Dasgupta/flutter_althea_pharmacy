@@ -5,6 +5,8 @@ import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../auth/presentation/providers/auth_state.dart';
+import '../../domain/entities/order_entity.dart';
+import '../providers/new_order_notifier.dart';
 import '../providers/orders_provider.dart';
 import '../providers/orders_state.dart';
 import '../widgets/export.dart';
@@ -53,125 +55,239 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
   Widget build(BuildContext context) {
     final ordersState = ref.watch(ordersProvider);
     final authState = ref.watch(authProvider);
+    final newOrder = ref.watch(newOrderProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       drawer: Responsive.isMobile(context) ? const AppDrawer() : null,
-      body: SafeArea(
-        child: ResponsiveContainer(
-          child: Column(
-            children: [
-              // Header with user info
-              OrdersHeader(
-                userName: authState.maybeWhen(
-                  authenticated: (user) => user.name,
-                  orElse: () => 'Pharmacist',
-                ),
-                pharmacyName: authState.maybeWhen(
-                  authenticated: (user) => user.pharmacyName,
-                  orElse: () => 'Pharmacy',
-                ),
-                onLogout: () => ref.read(authProvider.notifier).logout(),
-                onSearchPressed: () {
-                  setState(() {
-                    _isSearchVisible = !_isSearchVisible;
-                    if (!_isSearchVisible) {
-                      _searchQuery = '';
-                      _searchController.clear();
-                    }
-                  });
-                },
-              ),
+      body: Stack(
+        children: [
+          // Existing content
+          SafeArea(
+            child: ResponsiveContainer(
+              child: Column(
+                children: [
+                  // Header with user info
+                  OrdersHeader(
+                    userName: authState.maybeWhen(
+                      authenticated: (user) => user.name,
+                      orElse: () => 'Pharmacist',
+                    ),
+                    pharmacyName: authState.maybeWhen(
+                      authenticated: (user) => user.pharmacyName,
+                      orElse: () => 'Pharmacy',
+                    ),
+                    onLogout: () => ref.read(authProvider.notifier).logout(),
+                    onSearchPressed: () {
+                      setState(() {
+                        _isSearchVisible = !_isSearchVisible;
+                        if (!_isSearchVisible) {
+                          _searchQuery = '';
+                          _searchController.clear();
+                        }
+                      });
+                    },
+                  ),
 
-              // Main content area with search, tabs, and orders list
-              Expanded(
-                child: Column(
-                  children: [
-                    // Search bar (conditional)
-                    if (_isSearchVisible)
-                      Container(
-                        padding: ResponsivePadding.horizontal(context),
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(vertical: 12),
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? AppColors.surfaceDark
-                                : AppColors.surfaceLight,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: isDark
-                                  ? AppColors.borderDark
-                                  : AppColors.borderLight,
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.search,
-                                color: isDark
-                                    ? AppColors.textSecondaryDark
-                                    : AppColors.textSecondaryLight,
+                  // Main content area with search, tabs, and orders list
+                  Expanded(
+                    child: Column(
+                      children: [
+                        // Search bar (conditional)
+                        if (_isSearchVisible)
+                          Container(
+                            padding: ResponsivePadding.horizontal(context),
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 12),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
                               ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: TextField(
-                                  controller: _searchController,
-                                  autofocus: true,
-                                  style: AppTypography.bodyMedium(
-                                    isDark
-                                        ? AppColors.textPrimaryDark
-                                        : AppColors.textPrimaryLight,
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? AppColors.surfaceDark
+                                    : AppColors.surfaceLight,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: isDark
+                                      ? AppColors.borderDark
+                                      : AppColors.borderLight,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.search,
+                                    color: isDark
+                                        ? AppColors.textSecondaryDark
+                                        : AppColors.textSecondaryLight,
                                   ),
-                                  decoration: InputDecoration(
-                                    hintText:
-                                        'Search orders by customer, order #...',
-                                    border: InputBorder.none,
-                                    hintStyle: AppTypography.bodyMedium(
-                                      isDark
-                                          ? AppColors.textSecondaryDark
-                                          : AppColors.textSecondaryLight,
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _searchController,
+                                      autofocus: true,
+                                      style: AppTypography.bodyMedium(
+                                        isDark
+                                            ? AppColors.textPrimaryDark
+                                            : AppColors.textPrimaryLight,
+                                      ),
+                                      decoration: InputDecoration(
+                                        hintText:
+                                            'Search orders by customer, order #...',
+                                        border: InputBorder.none,
+                                        hintStyle: AppTypography.bodyMedium(
+                                          isDark
+                                              ? AppColors.textSecondaryDark
+                                              : AppColors.textSecondaryLight,
+                                        ),
+                                      ),
+                                      onChanged: (value) {
+                                        setState(() => _searchQuery = value);
+                                      },
                                     ),
                                   ),
-                                  onChanged: (value) {
-                                    setState(() => _searchQuery = value);
-                                  },
-                                ),
+                                  if (_searchQuery.isNotEmpty)
+                                    IconButton(
+                                      icon: const Icon(Icons.clear),
+                                      onPressed: () {
+                                        setState(() {
+                                          _searchQuery = '';
+                                          _searchController.clear();
+                                        });
+                                      },
+                                    ),
+                                ],
                               ),
-                              if (_searchQuery.isNotEmpty)
-                                IconButton(
-                                  icon: const Icon(Icons.clear),
-                                  onPressed: () {
-                                    setState(() {
-                                      _searchQuery = '';
-                                      _searchController.clear();
-                                    });
-                                  },
-                                ),
-                            ],
+                            ),
+                          ),
+
+                        // Tab Bar
+                        _buildTabBar(context),
+
+                        // Orders List
+                        Expanded(
+                          child: RefreshIndicator(
+                            onRefresh: () =>
+                                ref.read(ordersProvider.notifier).loadOrders(),
+                            color: AppColors.primaryDark,
+                            child: _buildOrdersList(context, ordersState),
                           ),
                         ),
-                      ),
-
-                    // Tab Bar
-                    _buildTabBar(context),
-
-                    // Orders List (THIS WAS MISSING!)
-                    Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: () =>
-                            ref.read(ordersProvider.notifier).loadOrders(),
-                        color: AppColors.primaryDark,
-                        child: _buildOrdersList(context, ordersState),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // New Order Banner Overlay
+          if (newOrder != null)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: SafeArea(
+                child: NewOrderBanner(
+                  order: newOrder,
+                  onDismiss: () {
+                    ref.read(newOrderProvider.notifier).dismissNewOrder();
+                  },
+                  onAccept: () {
+                    ref.read(newOrderProvider.notifier).dismissNewOrder();
+                    ref
+                        .read(ordersProvider.notifier)
+                        .acceptOrder(newOrder.id, newOrder.items);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Order accepted! Review items now.'),
+                        backgroundColor: AppColors.success,
+                      ),
+                    );
+                  },
+                  onReject: () {
+                    ref.read(newOrderProvider.notifier).dismissNewOrder();
+                    _showRejectDialog(context, newOrder);
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // Test button - simulate new emergency order
+          final testOrder = OrderEntity(
+            id: 'TEST${DateTime.now().millisecondsSinceEpoch}',
+            orderId: '#TEST${DateTime.now().second}',
+            customerName: 'Emergency Patient',
+            customerPhone: '+91 98765 43210',
+            deliveryAddress: '123 Test Street, Kolkata',
+            distance: 2.5,
+            orderTime: DateTime.now(),
+            status: OrderStatus.pending,
+            priority: OrderPriority.emergency,
+            items: const [],
+            totalAmount: 1250.00,
+          );
+
+          ref.read(newOrderProvider.notifier).showNewOrder(testOrder);
+        },
+        icon: const Icon(Icons.add_alert),
+        label: const Text('Test Banner'),
+        backgroundColor: AppColors.error,
+      ),
+    );
+  }
+
+  // Add this method at the end of the class
+  void _showRejectDialog(BuildContext context, OrderEntity order) {
+    final reasonController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Reject Order'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Please provide a reason for rejection:'),
+            const SizedBox(height: 16),
+            TextField(
+              controller: reasonController,
+              decoration: const InputDecoration(
+                hintText: 'Reason',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 3,
+            ),
+          ],
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (reasonController.text.isNotEmpty) {
+                Navigator.pop(context);
+                ref
+                    .read(ordersProvider.notifier)
+                    .rejectOrder(order.id, reasonController.text);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Order rejected'),
+                    backgroundColor: AppColors.error,
+                  ),
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+            child: const Text('Reject'),
+          ),
+        ],
       ),
     );
   }

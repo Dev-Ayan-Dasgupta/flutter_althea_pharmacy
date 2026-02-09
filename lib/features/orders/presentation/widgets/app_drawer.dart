@@ -249,7 +249,7 @@ class AppDrawer extends ConsumerWidget {
         children: [
           CircleAvatar(
             radius: 32,
-            backgroundColor: Colors.white.withOpacity(0.2),
+            backgroundColor: Colors.white.withValues(alpha: 0.2),
             child: Text(
               user.name[0].toUpperCase(),
               style: AppTypography.headlineSmall(Colors.white),
@@ -260,12 +260,12 @@ class AppDrawer extends ConsumerWidget {
           const SizedBox(height: 4),
           Text(
             user.email,
-            style: AppTypography.bodySmall(Colors.white.withOpacity(0.8)),
+            style: AppTypography.bodySmall(Colors.white.withValues(alpha: 0.8)),
           ),
           const SizedBox(height: 4),
           Text(
             user.pharmacyName,
-            style: AppTypography.bodySmall(Colors.white.withOpacity(0.8)),
+            style: AppTypography.bodySmall(Colors.white.withValues(alpha: 0.8)),
           ),
         ],
       ),

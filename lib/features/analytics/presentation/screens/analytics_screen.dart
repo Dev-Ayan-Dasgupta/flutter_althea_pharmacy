@@ -221,7 +221,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       decoration: BoxDecoration(
         gradient: AppColors.primaryGradientSubtle,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primaryDark.withOpacity(0.3)),
+        border: Border.all(color: AppColors.primaryDark.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -471,7 +471,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
             value: amount / total,
-            backgroundColor: color.withOpacity(0.2),
+            backgroundColor: color.withValues(alpha: 0.2),
             valueColor: AlwaysStoppedAnimation(color),
             minHeight: 8,
           ),
@@ -488,7 +488,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           Icon(
             Icons.error_outline,
             size: 64,
-            color: AppColors.error.withOpacity(0.5),
+            color: AppColors.error.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           Text(

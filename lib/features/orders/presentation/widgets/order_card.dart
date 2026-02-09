@@ -31,7 +31,7 @@ class OrderCard extends StatelessWidget {
           boxShadow: isEmergency
               ? [
                   BoxShadow(
-                    color: AppColors.error.withOpacity(0.3),
+                    color: AppColors.error.withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -77,7 +77,7 @@ class OrderCard extends StatelessWidget {
                         Icons.person_outline,
                         size: 16,
                         color: isEmergency
-                            ? Colors.white.withOpacity(0.9)
+                            ? Colors.white.withValues(alpha: 0.9)
                             : (isDark
                                   ? AppColors.textSecondaryDark
                                   : AppColors.textSecondaryLight),
@@ -88,7 +88,7 @@ class OrderCard extends StatelessWidget {
                           order.customerName,
                           style: AppTypography.bodyMedium(
                             isEmergency
-                                ? Colors.white.withOpacity(0.9)
+                                ? Colors.white.withValues(alpha: 0.9)
                                 : (isDark
                                       ? AppColors.textPrimaryDark
                                       : AppColors.textPrimaryLight),
@@ -108,7 +108,7 @@ class OrderCard extends StatelessWidget {
                         Icons.access_time,
                         size: 16,
                         color: isEmergency
-                            ? Colors.white.withOpacity(0.8)
+                            ? Colors.white.withValues(alpha: 0.8)
                             : (isDark
                                   ? AppColors.textSecondaryDark
                                   : AppColors.textSecondaryLight),
@@ -118,7 +118,7 @@ class OrderCard extends StatelessWidget {
                         order.orderTime.toRelativeTime(),
                         style: AppTypography.bodySmall(
                           isEmergency
-                              ? Colors.white.withOpacity(0.8)
+                              ? Colors.white.withValues(alpha: 0.8)
                               : (isDark
                                     ? AppColors.textSecondaryDark
                                     : AppColors.textSecondaryLight),
@@ -132,7 +132,7 @@ class OrderCard extends StatelessWidget {
                   // Divider
                   Divider(
                     color: isEmergency
-                        ? Colors.white.withOpacity(0.3)
+                        ? Colors.white.withValues(alpha: 0.3)
                         : (isDark
                               ? AppColors.borderDark
                               : AppColors.borderLight),
@@ -151,7 +151,7 @@ class OrderCard extends StatelessWidget {
                               'Items',
                               style: AppTypography.labelSmall(
                                 isEmergency
-                                    ? Colors.white.withOpacity(0.7)
+                                    ? Colors.white.withValues(alpha: 0.7)
                                     : (isDark
                                           ? AppColors.textTertiaryDark
                                           : AppColors.textTertiaryLight),
@@ -179,7 +179,7 @@ class OrderCard extends StatelessWidget {
                               'Amount',
                               style: AppTypography.labelSmall(
                                 isEmergency
-                                    ? Colors.white.withOpacity(0.7)
+                                    ? Colors.white.withValues(alpha: 0.7)
                                     : (isDark
                                           ? AppColors.textTertiaryDark
                                           : AppColors.textTertiaryLight),
@@ -220,7 +220,7 @@ class OrderCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: order.priority == OrderPriority.emergency
-            ? Colors.white.withOpacity(0.2)
+            ? Colors.white.withValues(alpha: 0.2)
             : AppColors.warning,
         borderRadius: BorderRadius.circular(20),
       ),
@@ -251,48 +251,48 @@ class OrderCard extends StatelessWidget {
 
     switch (order.status) {
       case OrderStatus.pending:
-        backgroundColor = AppColors.info.withOpacity(0.15);
+        backgroundColor = AppColors.info.withValues(alpha: 0.15);
         textColor = AppColors.info;
         icon = Icons.new_releases;
         break;
       case OrderStatus.reviewing:
-        backgroundColor = AppColors.warning.withOpacity(0.15);
+        backgroundColor = AppColors.warning.withValues(alpha: 0.15);
         textColor = AppColors.warningDark;
         icon = Icons.fact_check_outlined;
         break;
       case OrderStatus.accepted:
-        backgroundColor = AppColors.success.withOpacity(0.15);
+        backgroundColor = AppColors.success.withValues(alpha: 0.15);
         textColor = AppColors.success;
         icon = Icons.check_circle_outline;
         break;
       case OrderStatus.preparingInvoice:
-        backgroundColor = AppColors.primaryDark.withOpacity(0.15);
+        backgroundColor = AppColors.primaryDark.withValues(alpha: 0.15);
         textColor = AppColors.primaryDark;
         icon = Icons.receipt_long;
         break;
       case OrderStatus.readyForPickup:
-        backgroundColor = AppColors.accentDark.withOpacity(0.15);
+        backgroundColor = AppColors.accentDark.withValues(alpha: 0.15);
         textColor = AppColors.accentDark;
         icon = Icons.qr_code_2;
         break;
       case OrderStatus.pickedUp:
-        backgroundColor = AppColors.warning.withOpacity(0.15);
+        backgroundColor = AppColors.warning.withValues(alpha: 0.15);
         textColor = AppColors.warningDark;
         icon = Icons.inventory_2_outlined;
         break;
       case OrderStatus.outForDelivery:
-        backgroundColor = AppColors.info.withOpacity(0.15);
+        backgroundColor = AppColors.info.withValues(alpha: 0.15);
         textColor = AppColors.info;
         icon = Icons.local_shipping_outlined;
         break;
       case OrderStatus.delivered:
-        backgroundColor = AppColors.success.withOpacity(0.15);
+        backgroundColor = AppColors.success.withValues(alpha: 0.15);
         textColor = AppColors.success;
         icon = Icons.check_circle;
         break;
       case OrderStatus.rejected:
       case OrderStatus.cancelled:
-        backgroundColor = AppColors.error.withOpacity(0.15);
+        backgroundColor = AppColors.error.withValues(alpha: 0.15);
         textColor = AppColors.error;
         icon = Icons.cancel;
         break;
@@ -300,7 +300,7 @@ class OrderCard extends StatelessWidget {
 
     // Override colors for emergency orders
     if (isEmergency) {
-      backgroundColor = Colors.white.withOpacity(0.2);
+      backgroundColor = Colors.white.withValues(alpha: 0.2);
       textColor = Colors.white;
     }
 
@@ -337,7 +337,7 @@ class OrderCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Colors.white.withOpacity(0.3 * (1 - value)),
+                color: Colors.white.withValues(alpha: 0.3 * (1 - value)),
                 width: 2 + (4 * value),
               ),
             ),

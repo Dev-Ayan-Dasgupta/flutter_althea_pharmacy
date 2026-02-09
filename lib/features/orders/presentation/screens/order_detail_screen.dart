@@ -261,7 +261,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
         boxShadow: [
           BoxShadow(
             color: (isEmergency ? AppColors.error : AppColors.primaryDark)
-                .withOpacity(0.3),
+                .withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -285,7 +285,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -314,12 +314,14 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
               Icon(
                 Icons.access_time,
                 size: 16,
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
               ),
               const SizedBox(width: 8),
               Text(
                 'Ordered ${order.orderTime.toRelativeTime()}',
-                style: AppTypography.bodyMedium(Colors.white.withOpacity(0.9)),
+                style: AppTypography.bodyMedium(
+                  Colors.white.withValues(alpha: 0.9),
+                ),
               ),
             ],
           ),
@@ -329,12 +331,14 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
               Icon(
                 Icons.info_outline,
                 size: 16,
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
               ),
               const SizedBox(width: 8),
               Text(
                 'Status: ${order.statusDisplayText}',
-                style: AppTypography.bodyMedium(Colors.white.withOpacity(0.9)),
+                style: AppTypography.bodyMedium(
+                  Colors.white.withValues(alpha: 0.9),
+                ),
               ),
             ],
           ),
@@ -342,7 +346,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -354,7 +358,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                     Text(
                       'Total Amount',
                       style: AppTypography.labelSmall(
-                        Colors.white.withOpacity(0.8),
+                        Colors.white.withValues(alpha: 0.8),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -370,7 +374,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                     Text(
                       'Items',
                       style: AppTypography.labelSmall(
-                        Colors.white.withOpacity(0.8),
+                        Colors.white.withValues(alpha: 0.8),
                       ),
                     ),
                     const SizedBox(height: 4),
