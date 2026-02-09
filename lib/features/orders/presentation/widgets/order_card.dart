@@ -234,6 +234,46 @@ class OrderCard extends StatelessWidget {
                       ),
                     ),
                   ],
+
+                  // Add tracking button for out for delivery orders
+                  if (order.status == OrderStatus.outForDelivery ||
+                      order.status == OrderStatus.pickedUp) ...[
+                    const SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: () => context.go('/home/order/${order.id}/track'),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: AppColors.accentGradient,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.location_on,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Track Delivery',
+                              style: AppTypography.labelSmall(Colors.white),
+                            ),
+                            const SizedBox(width: 4),
+                            const Icon(
+                              Icons.arrow_forward,
+                              size: 14,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

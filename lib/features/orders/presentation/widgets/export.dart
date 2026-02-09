@@ -6,5 +6,6 @@ export './medicine_list_section.dart';
 export './new_order_banner.dart';
 export './order_actions_section.dart';
 export './order_card.dart';
+export './order_status_timeline.dart';
 export './orders_header.dart';
 export './prescription_viewer.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/extensions.dart';
@@ -137,6 +138,11 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
 
           const SizedBox(height: 24),
 
+          // Order Timeline
+          OrderStatusTimeline(order: order),
+
+          const SizedBox(height: 24),
+
           // Prescription Viewer (Collapsible)
           if (order.prescriptionUrl != null) ...[
             _buildSectionHeader(
@@ -167,7 +173,23 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
           const SizedBox(height: 12),
           MedicineListSection(items: order.items),
 
-          const SizedBox(height: 100), // Space for action buttons
+          const SizedBox(height: 12),
+          // Action Buttons (fixed at bottom)
+          if (order.isActive)
+            order.status == OrderStatus.outForDelivery ||
+                    order.status == OrderStatus.pickedUp
+                ? _buildTrackingButton(order)
+                : OrderActionsSection(
+                    order: order,
+                    onUpdateStatus: (newStatus) {
+                      ref
+                          .read(ordersProvider.notifier)
+                          .updateOrderStatus(order.id, newStatus);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+
+          const SizedBox(height: 24),
         ],
       ),
     );
@@ -430,6 +452,50 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
             onPressed: onToggle,
           ),
       ],
+    );
+  }
+
+  Widget _buildTrackingButton(OrderEntity order) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: isDark
+            ? AppColors.cardGradientDark
+            : AppColors.cardGradientLight,
+        border: Border(
+          top: BorderSide(
+            color: isDark ? AppColors.borderDark : AppColors.borderLight,
+          ),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 12,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          width: double.infinity,
+          height: 56,
+          child: ElevatedButton.icon(
+            onPressed: () => context.go('/home/order/${order.id}/track'),
+            icon: const Icon(Icons.location_on),
+            label: const Text('Track Delivery'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.accentDark,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 0,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

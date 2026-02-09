@@ -86,6 +86,16 @@ GoRouter appRouter(Ref ref) {
             builder: (context, state) => const QRScannerScreen(),
           ),
 
+          // Tracking
+          GoRoute(
+            path: 'order/:orderId/track',
+            name: 'track',
+            builder: (context, state) {
+              final orderId = state.pathParameters['orderId']!;
+              return DeliveryTrackingScreen(orderId: orderId);
+            },
+          ),
+
           // Inventory
           GoRoute(
             path: 'inventory',
