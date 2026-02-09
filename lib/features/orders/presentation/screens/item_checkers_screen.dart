@@ -99,7 +99,7 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
         gradient: AppColors.primaryGradient,
         boxShadow: [
           BoxShadow(
-            color: AppColors.primaryDark.withOpacity(0.2),
+            color: AppColors.primaryDark.withValues(alpha: 0.2),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -126,7 +126,7 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
             child: LinearProgressIndicator(
               value: progress,
               minHeight: 8,
-              backgroundColor: Colors.white.withOpacity(0.3),
+              backgroundColor: Colors.white.withValues(alpha: 0.3),
               valueColor: const AlwaysStoppedAnimation(Colors.white),
             ),
           ),
@@ -247,9 +247,11 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.warning.withOpacity(0.1),
+                color: AppColors.warning.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+                border: Border.all(
+                  color: AppColors.warning.withValues(alpha: 0.3),
+                ),
               ),
               child: Row(
                 children: [
@@ -303,7 +305,7 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? color : color.withOpacity(0.1),
+          color: isSelected ? color : color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: color, width: isSelected ? 2 : 1),
         ),
@@ -348,7 +350,7 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 12,
             offset: const Offset(0, -4),
           ),
@@ -422,7 +424,7 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.15),
+            color: color.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: color),
           ),
@@ -577,7 +579,15 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
           backgroundColor: AppColors.success,
         ),
       );
-      context.go('/home');
+      // Navigate to invoice screen
+      context.go('/home/order/${widget.orderId}/invoice');
+    } else if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to update order. Please try again.'),
+          backgroundColor: AppColors.error,
+        ),
+      );
     }
   }
 }

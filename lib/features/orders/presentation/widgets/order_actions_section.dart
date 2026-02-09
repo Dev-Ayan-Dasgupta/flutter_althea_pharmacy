@@ -256,7 +256,12 @@ class OrderActionsSection extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              onUpdateStatus(nextStatus);
+              if (nextStatus == OrderStatus.preparingInvoice) {
+                // Navigate to invoice screen instead of just updating status
+                context.go('/home/order/${order.id}/invoice');
+              } else {
+                onUpdateStatus(nextStatus);
+              }
             },
             child: const Text('Confirm'),
           ),
