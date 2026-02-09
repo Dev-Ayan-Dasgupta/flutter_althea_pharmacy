@@ -217,26 +217,11 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Test button - simulate new emergency order
-          final testOrder = OrderEntity(
-            id: 'TEST${DateTime.now().millisecondsSinceEpoch}',
-            orderId: '#TEST${DateTime.now().second}',
-            customerName: 'Emergency Patient',
-            customerPhone: '+91 98765 43210',
-            deliveryAddress: '123 Test Street, Kolkata',
-            distance: 2.5,
-            orderTime: DateTime.now(),
-            status: OrderStatus.pending,
-            priority: OrderPriority.emergency,
-            items: const [],
-            totalAmount: 1250.00,
-          );
-
-          ref.read(newOrderProvider.notifier).showNewOrder(testOrder);
+          context.go('/home/scan-qr');
         },
-        icon: const Icon(Icons.add_alert),
-        label: const Text('Test Banner'),
-        backgroundColor: AppColors.error,
+        icon: const Icon(Icons.qr_code_scanner),
+        label: const Text('Scan QR'),
+        backgroundColor: AppColors.accentDark,
       ),
     );
   }

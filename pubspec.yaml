@@ -25,6 +25,7 @@ dependencies:
   path_provider: ^2.1.5
   pdf: ^3.11.3
   printing: ^5.14.2
+  qr_code_scanner: ^1.0.1
   qr_flutter: ^4.1.0
   riverpod_annotation: ^3.0.3
   shimmer: ^3.0.0

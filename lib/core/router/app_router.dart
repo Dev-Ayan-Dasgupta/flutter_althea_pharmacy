@@ -5,10 +5,7 @@ import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/legal/presentation/screens/export.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
-import '../../features/orders/presentation/screens/home_screen.dart';
-import '../../features/orders/presentation/screens/invoice_screen.dart';
-import '../../features/orders/presentation/screens/item_checkers_screen.dart';
-import '../../features/orders/presentation/screens/order_detail_screen.dart';
+import '../../features/orders/presentation/screens/export.dart';
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
@@ -70,6 +67,23 @@ GoRouter appRouter(Ref ref) {
               final orderId = state.pathParameters['orderId']!;
               return InvoiceScreen(orderId: orderId);
             },
+          ),
+
+          // QR Code
+          GoRoute(
+            path: 'order/:orderId/qr-code',
+            name: 'qr-code',
+            builder: (context, state) {
+              final orderId = state.pathParameters['orderId']!;
+              return QRCodeScreen(orderId: orderId);
+            },
+          ),
+
+          // Scan QR Code
+          GoRoute(
+            path: 'scan-qr',
+            name: 'scan-qr',
+            builder: (context, state) => const QRScannerScreen(),
           ),
 
           // Inventory
