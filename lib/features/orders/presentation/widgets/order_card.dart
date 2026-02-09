@@ -204,6 +204,36 @@ class OrderCard extends StatelessWidget {
 
                   // Status Badge
                   _buildStatusBadge(isEmergency, isDark),
+
+                  // Add after status badge
+                  if (order.status == OrderStatus.pending) ...[
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: AppColors.successGradient,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.touch_app,
+                            size: 16,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Tap to check items',
+                            style: AppTypography.labelSmall(Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

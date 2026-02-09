@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/responsive.dart';
@@ -196,9 +197,8 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
                   },
                   onAccept: () {
                     ref.read(newOrderProvider.notifier).dismissNewOrder();
-                    ref
-                        .read(ordersProvider.notifier)
-                        .acceptOrder(newOrder.id, newOrder.items);
+                    // Navigate to item checker
+                    context.go('/home/order/${newOrder.id}/check-items');
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Order accepted! Review items now.'),
@@ -346,7 +346,7 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
             ? filteredOrders
             : filteredOrders.where((order) {
                 final query = _searchQuery.toLowerCase();
-                return order.orderNumber.toLowerCase().contains(query) ||
+                return order.orderId.toLowerCase().contains(query) ||
                     order.customerName.toLowerCase().contains(query) ||
                     order.customerPhone.contains(query) ||
                     order.deliveryAddress.toLowerCase().contains(query);

@@ -257,11 +257,15 @@ class _NewOrderBannerState extends State<NewOrderBanner>
                             child: ElevatedButton.icon(
                               onPressed: () {
                                 _controller.reverse().then((_) {
-                                  widget.onAccept();
+                                  widget.onDismiss();
+                                  // Navigate to item checker instead of just accepting
+                                  context.go(
+                                    '/home/order/${widget.order.id}/check-items',
+                                  );
                                 });
                               },
                               icon: const Icon(Icons.check_circle),
-                              label: const Text('Accept'),
+                              label: const Text('Accept & Check'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.success,
                                 foregroundColor: Colors.white,

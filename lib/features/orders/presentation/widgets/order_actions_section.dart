@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../domain/entities/order_entity.dart';
@@ -151,7 +152,7 @@ class OrderActionsSection extends StatelessWidget {
           ),
         ),
         content: Text(
-          'Proceed to review items and check availability?',
+          'Proceed to check item availability?',
           style: AppTypography.bodyMedium(
             Theme.of(context).textTheme.bodyMedium!.color!,
           ),
@@ -164,10 +165,11 @@ class OrderActionsSection extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              onUpdateStatus(OrderStatus.reviewing);
+              // Navigate to item checker
+              context.go('/home/order/${order.id}/check-items');
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.success),
-            child: const Text('Start Review'),
+            child: const Text('Check Items'),
           ),
         ],
       ),

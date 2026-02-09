@@ -6,6 +6,7 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/legal/presentation/screens/export.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/orders/presentation/screens/home_screen.dart';
+import '../../features/orders/presentation/screens/item_checkers_screen.dart';
 import '../../features/orders/presentation/screens/order_detail_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
@@ -47,6 +48,16 @@ GoRouter appRouter(Ref ref) {
             builder: (context, state) {
               final orderId = state.pathParameters['orderId']!;
               return OrderDetailScreen(orderId: orderId);
+            },
+          ),
+
+          // Item Checker
+          GoRoute(
+            path: 'order/:orderId/check-items',
+            name: 'check-items',
+            builder: (context, state) {
+              final orderId = state.pathParameters['orderId']!;
+              return ItemCheckerScreen(orderId: orderId);
             },
           ),
 
