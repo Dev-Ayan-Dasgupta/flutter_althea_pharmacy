@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrderModel {
 
- String get id; String get orderNumber; String get customerName; String get customerPhone; String get deliveryAddress; DateTime get orderTime; String get status; String get priority; double get totalAmount; int get itemCount; List<MedicineItemModel> get medicines; String? get prescriptionImageUrl; String? get deliveryBoyName; String? get deliveryBoyPhone; DateTime? get estimatedDeliveryTime; String? get specialInstructions;
+ String get id; String get orderId; String get customerName; String get customerPhone; String get deliveryAddress; double get distance; DateTime get orderTime; String get status; String get priority; List<OrderItemModel> get items; double get totalAmount; String? get prescriptionUrl; String? get notes; String? get rejectionReason; String? get invoiceUrl; String? get qrCode; String? get deliveryPartnerId; String? get deliveryPartnerName; String? get deliveryPartnerPhone; double? get deliveryPartnerLat; double? get deliveryPartnerLng; DateTime? get acceptedAt; DateTime? get readyAt; DateTime? get pickedUpAt; DateTime? get deliveredAt;
 /// Create a copy of OrderModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $OrderModelCopyWith<OrderModel> get copyWith => _$OrderModelCopyWithImpl<OrderMo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderModel&&(identical(other.id, id) || other.id == id)&&(identical(other.orderNumber, orderNumber) || other.orderNumber == orderNumber)&&(identical(other.customerName, customerName) || other.customerName == customerName)&&(identical(other.customerPhone, customerPhone) || other.customerPhone == customerPhone)&&(identical(other.deliveryAddress, deliveryAddress) || other.deliveryAddress == deliveryAddress)&&(identical(other.orderTime, orderTime) || other.orderTime == orderTime)&&(identical(other.status, status) || other.status == status)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.itemCount, itemCount) || other.itemCount == itemCount)&&const DeepCollectionEquality().equals(other.medicines, medicines)&&(identical(other.prescriptionImageUrl, prescriptionImageUrl) || other.prescriptionImageUrl == prescriptionImageUrl)&&(identical(other.deliveryBoyName, deliveryBoyName) || other.deliveryBoyName == deliveryBoyName)&&(identical(other.deliveryBoyPhone, deliveryBoyPhone) || other.deliveryBoyPhone == deliveryBoyPhone)&&(identical(other.estimatedDeliveryTime, estimatedDeliveryTime) || other.estimatedDeliveryTime == estimatedDeliveryTime)&&(identical(other.specialInstructions, specialInstructions) || other.specialInstructions == specialInstructions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderModel&&(identical(other.id, id) || other.id == id)&&(identical(other.orderId, orderId) || other.orderId == orderId)&&(identical(other.customerName, customerName) || other.customerName == customerName)&&(identical(other.customerPhone, customerPhone) || other.customerPhone == customerPhone)&&(identical(other.deliveryAddress, deliveryAddress) || other.deliveryAddress == deliveryAddress)&&(identical(other.distance, distance) || other.distance == distance)&&(identical(other.orderTime, orderTime) || other.orderTime == orderTime)&&(identical(other.status, status) || other.status == status)&&(identical(other.priority, priority) || other.priority == priority)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.prescriptionUrl, prescriptionUrl) || other.prescriptionUrl == prescriptionUrl)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.rejectionReason, rejectionReason) || other.rejectionReason == rejectionReason)&&(identical(other.invoiceUrl, invoiceUrl) || other.invoiceUrl == invoiceUrl)&&(identical(other.qrCode, qrCode) || other.qrCode == qrCode)&&(identical(other.deliveryPartnerId, deliveryPartnerId) || other.deliveryPartnerId == deliveryPartnerId)&&(identical(other.deliveryPartnerName, deliveryPartnerName) || other.deliveryPartnerName == deliveryPartnerName)&&(identical(other.deliveryPartnerPhone, deliveryPartnerPhone) || other.deliveryPartnerPhone == deliveryPartnerPhone)&&(identical(other.deliveryPartnerLat, deliveryPartnerLat) || other.deliveryPartnerLat == deliveryPartnerLat)&&(identical(other.deliveryPartnerLng, deliveryPartnerLng) || other.deliveryPartnerLng == deliveryPartnerLng)&&(identical(other.acceptedAt, acceptedAt) || other.acceptedAt == acceptedAt)&&(identical(other.readyAt, readyAt) || other.readyAt == readyAt)&&(identical(other.pickedUpAt, pickedUpAt) || other.pickedUpAt == pickedUpAt)&&(identical(other.deliveredAt, deliveredAt) || other.deliveredAt == deliveredAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orderNumber,customerName,customerPhone,deliveryAddress,orderTime,status,priority,totalAmount,itemCount,const DeepCollectionEquality().hash(medicines),prescriptionImageUrl,deliveryBoyName,deliveryBoyPhone,estimatedDeliveryTime,specialInstructions);
+int get hashCode => Object.hashAll([runtimeType,id,orderId,customerName,customerPhone,deliveryAddress,distance,orderTime,status,priority,const DeepCollectionEquality().hash(items),totalAmount,prescriptionUrl,notes,rejectionReason,invoiceUrl,qrCode,deliveryPartnerId,deliveryPartnerName,deliveryPartnerPhone,deliveryPartnerLat,deliveryPartnerLng,acceptedAt,readyAt,pickedUpAt,deliveredAt]);
 
 @override
 String toString() {
-  return 'OrderModel(id: $id, orderNumber: $orderNumber, customerName: $customerName, customerPhone: $customerPhone, deliveryAddress: $deliveryAddress, orderTime: $orderTime, status: $status, priority: $priority, totalAmount: $totalAmount, itemCount: $itemCount, medicines: $medicines, prescriptionImageUrl: $prescriptionImageUrl, deliveryBoyName: $deliveryBoyName, deliveryBoyPhone: $deliveryBoyPhone, estimatedDeliveryTime: $estimatedDeliveryTime, specialInstructions: $specialInstructions)';
+  return 'OrderModel(id: $id, orderId: $orderId, customerName: $customerName, customerPhone: $customerPhone, deliveryAddress: $deliveryAddress, distance: $distance, orderTime: $orderTime, status: $status, priority: $priority, items: $items, totalAmount: $totalAmount, prescriptionUrl: $prescriptionUrl, notes: $notes, rejectionReason: $rejectionReason, invoiceUrl: $invoiceUrl, qrCode: $qrCode, deliveryPartnerId: $deliveryPartnerId, deliveryPartnerName: $deliveryPartnerName, deliveryPartnerPhone: $deliveryPartnerPhone, deliveryPartnerLat: $deliveryPartnerLat, deliveryPartnerLng: $deliveryPartnerLng, acceptedAt: $acceptedAt, readyAt: $readyAt, pickedUpAt: $pickedUpAt, deliveredAt: $deliveredAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $OrderModelCopyWith<$Res>  {
   factory $OrderModelCopyWith(OrderModel value, $Res Function(OrderModel) _then) = _$OrderModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String orderNumber, String customerName, String customerPhone, String deliveryAddress, DateTime orderTime, String status, String priority, double totalAmount, int itemCount, List<MedicineItemModel> medicines, String? prescriptionImageUrl, String? deliveryBoyName, String? deliveryBoyPhone, DateTime? estimatedDeliveryTime, String? specialInstructions
+ String id, String orderId, String customerName, String customerPhone, String deliveryAddress, double distance, DateTime orderTime, String status, String priority, List<OrderItemModel> items, double totalAmount, String? prescriptionUrl, String? notes, String? rejectionReason, String? invoiceUrl, String? qrCode, String? deliveryPartnerId, String? deliveryPartnerName, String? deliveryPartnerPhone, double? deliveryPartnerLat, double? deliveryPartnerLng, DateTime? acceptedAt, DateTime? readyAt, DateTime? pickedUpAt, DateTime? deliveredAt
 });
 
 
@@ -65,25 +65,34 @@ class _$OrderModelCopyWithImpl<$Res>
 
 /// Create a copy of OrderModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? orderNumber = null,Object? customerName = null,Object? customerPhone = null,Object? deliveryAddress = null,Object? orderTime = null,Object? status = null,Object? priority = null,Object? totalAmount = null,Object? itemCount = null,Object? medicines = null,Object? prescriptionImageUrl = freezed,Object? deliveryBoyName = freezed,Object? deliveryBoyPhone = freezed,Object? estimatedDeliveryTime = freezed,Object? specialInstructions = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? orderId = null,Object? customerName = null,Object? customerPhone = null,Object? deliveryAddress = null,Object? distance = null,Object? orderTime = null,Object? status = null,Object? priority = null,Object? items = null,Object? totalAmount = null,Object? prescriptionUrl = freezed,Object? notes = freezed,Object? rejectionReason = freezed,Object? invoiceUrl = freezed,Object? qrCode = freezed,Object? deliveryPartnerId = freezed,Object? deliveryPartnerName = freezed,Object? deliveryPartnerPhone = freezed,Object? deliveryPartnerLat = freezed,Object? deliveryPartnerLng = freezed,Object? acceptedAt = freezed,Object? readyAt = freezed,Object? pickedUpAt = freezed,Object? deliveredAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,orderNumber: null == orderNumber ? _self.orderNumber : orderNumber // ignore: cast_nullable_to_non_nullable
+as String,orderId: null == orderId ? _self.orderId : orderId // ignore: cast_nullable_to_non_nullable
 as String,customerName: null == customerName ? _self.customerName : customerName // ignore: cast_nullable_to_non_nullable
 as String,customerPhone: null == customerPhone ? _self.customerPhone : customerPhone // ignore: cast_nullable_to_non_nullable
 as String,deliveryAddress: null == deliveryAddress ? _self.deliveryAddress : deliveryAddress // ignore: cast_nullable_to_non_nullable
-as String,orderTime: null == orderTime ? _self.orderTime : orderTime // ignore: cast_nullable_to_non_nullable
+as String,distance: null == distance ? _self.distance : distance // ignore: cast_nullable_to_non_nullable
+as double,orderTime: null == orderTime ? _self.orderTime : orderTime // ignore: cast_nullable_to_non_nullable
 as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,priority: null == priority ? _self.priority : priority // ignore: cast_nullable_to_non_nullable
-as String,totalAmount: null == totalAmount ? _self.totalAmount : totalAmount // ignore: cast_nullable_to_non_nullable
-as double,itemCount: null == itemCount ? _self.itemCount : itemCount // ignore: cast_nullable_to_non_nullable
-as int,medicines: null == medicines ? _self.medicines : medicines // ignore: cast_nullable_to_non_nullable
-as List<MedicineItemModel>,prescriptionImageUrl: freezed == prescriptionImageUrl ? _self.prescriptionImageUrl : prescriptionImageUrl // ignore: cast_nullable_to_non_nullable
-as String?,deliveryBoyName: freezed == deliveryBoyName ? _self.deliveryBoyName : deliveryBoyName // ignore: cast_nullable_to_non_nullable
-as String?,deliveryBoyPhone: freezed == deliveryBoyPhone ? _self.deliveryBoyPhone : deliveryBoyPhone // ignore: cast_nullable_to_non_nullable
-as String?,estimatedDeliveryTime: freezed == estimatedDeliveryTime ? _self.estimatedDeliveryTime : estimatedDeliveryTime // ignore: cast_nullable_to_non_nullable
-as DateTime?,specialInstructions: freezed == specialInstructions ? _self.specialInstructions : specialInstructions // ignore: cast_nullable_to_non_nullable
-as String?,
+as String,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
+as List<OrderItemModel>,totalAmount: null == totalAmount ? _self.totalAmount : totalAmount // ignore: cast_nullable_to_non_nullable
+as double,prescriptionUrl: freezed == prescriptionUrl ? _self.prescriptionUrl : prescriptionUrl // ignore: cast_nullable_to_non_nullable
+as String?,notes: freezed == notes ? _self.notes : notes // ignore: cast_nullable_to_non_nullable
+as String?,rejectionReason: freezed == rejectionReason ? _self.rejectionReason : rejectionReason // ignore: cast_nullable_to_non_nullable
+as String?,invoiceUrl: freezed == invoiceUrl ? _self.invoiceUrl : invoiceUrl // ignore: cast_nullable_to_non_nullable
+as String?,qrCode: freezed == qrCode ? _self.qrCode : qrCode // ignore: cast_nullable_to_non_nullable
+as String?,deliveryPartnerId: freezed == deliveryPartnerId ? _self.deliveryPartnerId : deliveryPartnerId // ignore: cast_nullable_to_non_nullable
+as String?,deliveryPartnerName: freezed == deliveryPartnerName ? _self.deliveryPartnerName : deliveryPartnerName // ignore: cast_nullable_to_non_nullable
+as String?,deliveryPartnerPhone: freezed == deliveryPartnerPhone ? _self.deliveryPartnerPhone : deliveryPartnerPhone // ignore: cast_nullable_to_non_nullable
+as String?,deliveryPartnerLat: freezed == deliveryPartnerLat ? _self.deliveryPartnerLat : deliveryPartnerLat // ignore: cast_nullable_to_non_nullable
+as double?,deliveryPartnerLng: freezed == deliveryPartnerLng ? _self.deliveryPartnerLng : deliveryPartnerLng // ignore: cast_nullable_to_non_nullable
+as double?,acceptedAt: freezed == acceptedAt ? _self.acceptedAt : acceptedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,readyAt: freezed == readyAt ? _self.readyAt : readyAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,pickedUpAt: freezed == pickedUpAt ? _self.pickedUpAt : pickedUpAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,deliveredAt: freezed == deliveredAt ? _self.deliveredAt : deliveredAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -168,10 +177,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String orderNumber,  String customerName,  String customerPhone,  String deliveryAddress,  DateTime orderTime,  String status,  String priority,  double totalAmount,  int itemCount,  List<MedicineItemModel> medicines,  String? prescriptionImageUrl,  String? deliveryBoyName,  String? deliveryBoyPhone,  DateTime? estimatedDeliveryTime,  String? specialInstructions)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String orderId,  String customerName,  String customerPhone,  String deliveryAddress,  double distance,  DateTime orderTime,  String status,  String priority,  List<OrderItemModel> items,  double totalAmount,  String? prescriptionUrl,  String? notes,  String? rejectionReason,  String? invoiceUrl,  String? qrCode,  String? deliveryPartnerId,  String? deliveryPartnerName,  String? deliveryPartnerPhone,  double? deliveryPartnerLat,  double? deliveryPartnerLng,  DateTime? acceptedAt,  DateTime? readyAt,  DateTime? pickedUpAt,  DateTime? deliveredAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderModel() when $default != null:
-return $default(_that.id,_that.orderNumber,_that.customerName,_that.customerPhone,_that.deliveryAddress,_that.orderTime,_that.status,_that.priority,_that.totalAmount,_that.itemCount,_that.medicines,_that.prescriptionImageUrl,_that.deliveryBoyName,_that.deliveryBoyPhone,_that.estimatedDeliveryTime,_that.specialInstructions);case _:
+return $default(_that.id,_that.orderId,_that.customerName,_that.customerPhone,_that.deliveryAddress,_that.distance,_that.orderTime,_that.status,_that.priority,_that.items,_that.totalAmount,_that.prescriptionUrl,_that.notes,_that.rejectionReason,_that.invoiceUrl,_that.qrCode,_that.deliveryPartnerId,_that.deliveryPartnerName,_that.deliveryPartnerPhone,_that.deliveryPartnerLat,_that.deliveryPartnerLng,_that.acceptedAt,_that.readyAt,_that.pickedUpAt,_that.deliveredAt);case _:
   return orElse();
 
 }
@@ -189,10 +198,10 @@ return $default(_that.id,_that.orderNumber,_that.customerName,_that.customerPhon
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String orderNumber,  String customerName,  String customerPhone,  String deliveryAddress,  DateTime orderTime,  String status,  String priority,  double totalAmount,  int itemCount,  List<MedicineItemModel> medicines,  String? prescriptionImageUrl,  String? deliveryBoyName,  String? deliveryBoyPhone,  DateTime? estimatedDeliveryTime,  String? specialInstructions)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String orderId,  String customerName,  String customerPhone,  String deliveryAddress,  double distance,  DateTime orderTime,  String status,  String priority,  List<OrderItemModel> items,  double totalAmount,  String? prescriptionUrl,  String? notes,  String? rejectionReason,  String? invoiceUrl,  String? qrCode,  String? deliveryPartnerId,  String? deliveryPartnerName,  String? deliveryPartnerPhone,  double? deliveryPartnerLat,  double? deliveryPartnerLng,  DateTime? acceptedAt,  DateTime? readyAt,  DateTime? pickedUpAt,  DateTime? deliveredAt)  $default,) {final _that = this;
 switch (_that) {
 case _OrderModel():
-return $default(_that.id,_that.orderNumber,_that.customerName,_that.customerPhone,_that.deliveryAddress,_that.orderTime,_that.status,_that.priority,_that.totalAmount,_that.itemCount,_that.medicines,_that.prescriptionImageUrl,_that.deliveryBoyName,_that.deliveryBoyPhone,_that.estimatedDeliveryTime,_that.specialInstructions);case _:
+return $default(_that.id,_that.orderId,_that.customerName,_that.customerPhone,_that.deliveryAddress,_that.distance,_that.orderTime,_that.status,_that.priority,_that.items,_that.totalAmount,_that.prescriptionUrl,_that.notes,_that.rejectionReason,_that.invoiceUrl,_that.qrCode,_that.deliveryPartnerId,_that.deliveryPartnerName,_that.deliveryPartnerPhone,_that.deliveryPartnerLat,_that.deliveryPartnerLng,_that.acceptedAt,_that.readyAt,_that.pickedUpAt,_that.deliveredAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -209,10 +218,10 @@ return $default(_that.id,_that.orderNumber,_that.customerName,_that.customerPhon
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String orderNumber,  String customerName,  String customerPhone,  String deliveryAddress,  DateTime orderTime,  String status,  String priority,  double totalAmount,  int itemCount,  List<MedicineItemModel> medicines,  String? prescriptionImageUrl,  String? deliveryBoyName,  String? deliveryBoyPhone,  DateTime? estimatedDeliveryTime,  String? specialInstructions)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String orderId,  String customerName,  String customerPhone,  String deliveryAddress,  double distance,  DateTime orderTime,  String status,  String priority,  List<OrderItemModel> items,  double totalAmount,  String? prescriptionUrl,  String? notes,  String? rejectionReason,  String? invoiceUrl,  String? qrCode,  String? deliveryPartnerId,  String? deliveryPartnerName,  String? deliveryPartnerPhone,  double? deliveryPartnerLat,  double? deliveryPartnerLng,  DateTime? acceptedAt,  DateTime? readyAt,  DateTime? pickedUpAt,  DateTime? deliveredAt)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderModel() when $default != null:
-return $default(_that.id,_that.orderNumber,_that.customerName,_that.customerPhone,_that.deliveryAddress,_that.orderTime,_that.status,_that.priority,_that.totalAmount,_that.itemCount,_that.medicines,_that.prescriptionImageUrl,_that.deliveryBoyName,_that.deliveryBoyPhone,_that.estimatedDeliveryTime,_that.specialInstructions);case _:
+return $default(_that.id,_that.orderId,_that.customerName,_that.customerPhone,_that.deliveryAddress,_that.distance,_that.orderTime,_that.status,_that.priority,_that.items,_that.totalAmount,_that.prescriptionUrl,_that.notes,_that.rejectionReason,_that.invoiceUrl,_that.qrCode,_that.deliveryPartnerId,_that.deliveryPartnerName,_that.deliveryPartnerPhone,_that.deliveryPartnerLat,_that.deliveryPartnerLng,_that.acceptedAt,_that.readyAt,_that.pickedUpAt,_that.deliveredAt);case _:
   return null;
 
 }
@@ -224,31 +233,40 @@ return $default(_that.id,_that.orderNumber,_that.customerName,_that.customerPhon
 @JsonSerializable()
 
 class _OrderModel extends OrderModel {
-  const _OrderModel({required this.id, required this.orderNumber, required this.customerName, required this.customerPhone, required this.deliveryAddress, required this.orderTime, required this.status, required this.priority, required this.totalAmount, required this.itemCount, required final  List<MedicineItemModel> medicines, this.prescriptionImageUrl, this.deliveryBoyName, this.deliveryBoyPhone, this.estimatedDeliveryTime, this.specialInstructions}): _medicines = medicines,super._();
+  const _OrderModel({required this.id, required this.orderId, required this.customerName, required this.customerPhone, required this.deliveryAddress, required this.distance, required this.orderTime, required this.status, required this.priority, required final  List<OrderItemModel> items, required this.totalAmount, this.prescriptionUrl, this.notes, this.rejectionReason, this.invoiceUrl, this.qrCode, this.deliveryPartnerId, this.deliveryPartnerName, this.deliveryPartnerPhone, this.deliveryPartnerLat, this.deliveryPartnerLng, this.acceptedAt, this.readyAt, this.pickedUpAt, this.deliveredAt}): _items = items,super._();
   factory _OrderModel.fromJson(Map<String, dynamic> json) => _$OrderModelFromJson(json);
 
 @override final  String id;
-@override final  String orderNumber;
+@override final  String orderId;
 @override final  String customerName;
 @override final  String customerPhone;
 @override final  String deliveryAddress;
+@override final  double distance;
 @override final  DateTime orderTime;
 @override final  String status;
 @override final  String priority;
-@override final  double totalAmount;
-@override final  int itemCount;
- final  List<MedicineItemModel> _medicines;
-@override List<MedicineItemModel> get medicines {
-  if (_medicines is EqualUnmodifiableListView) return _medicines;
+ final  List<OrderItemModel> _items;
+@override List<OrderItemModel> get items {
+  if (_items is EqualUnmodifiableListView) return _items;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_medicines);
+  return EqualUnmodifiableListView(_items);
 }
 
-@override final  String? prescriptionImageUrl;
-@override final  String? deliveryBoyName;
-@override final  String? deliveryBoyPhone;
-@override final  DateTime? estimatedDeliveryTime;
-@override final  String? specialInstructions;
+@override final  double totalAmount;
+@override final  String? prescriptionUrl;
+@override final  String? notes;
+@override final  String? rejectionReason;
+@override final  String? invoiceUrl;
+@override final  String? qrCode;
+@override final  String? deliveryPartnerId;
+@override final  String? deliveryPartnerName;
+@override final  String? deliveryPartnerPhone;
+@override final  double? deliveryPartnerLat;
+@override final  double? deliveryPartnerLng;
+@override final  DateTime? acceptedAt;
+@override final  DateTime? readyAt;
+@override final  DateTime? pickedUpAt;
+@override final  DateTime? deliveredAt;
 
 /// Create a copy of OrderModel
 /// with the given fields replaced by the non-null parameter values.
@@ -263,16 +281,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderModel&&(identical(other.id, id) || other.id == id)&&(identical(other.orderNumber, orderNumber) || other.orderNumber == orderNumber)&&(identical(other.customerName, customerName) || other.customerName == customerName)&&(identical(other.customerPhone, customerPhone) || other.customerPhone == customerPhone)&&(identical(other.deliveryAddress, deliveryAddress) || other.deliveryAddress == deliveryAddress)&&(identical(other.orderTime, orderTime) || other.orderTime == orderTime)&&(identical(other.status, status) || other.status == status)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.itemCount, itemCount) || other.itemCount == itemCount)&&const DeepCollectionEquality().equals(other._medicines, _medicines)&&(identical(other.prescriptionImageUrl, prescriptionImageUrl) || other.prescriptionImageUrl == prescriptionImageUrl)&&(identical(other.deliveryBoyName, deliveryBoyName) || other.deliveryBoyName == deliveryBoyName)&&(identical(other.deliveryBoyPhone, deliveryBoyPhone) || other.deliveryBoyPhone == deliveryBoyPhone)&&(identical(other.estimatedDeliveryTime, estimatedDeliveryTime) || other.estimatedDeliveryTime == estimatedDeliveryTime)&&(identical(other.specialInstructions, specialInstructions) || other.specialInstructions == specialInstructions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderModel&&(identical(other.id, id) || other.id == id)&&(identical(other.orderId, orderId) || other.orderId == orderId)&&(identical(other.customerName, customerName) || other.customerName == customerName)&&(identical(other.customerPhone, customerPhone) || other.customerPhone == customerPhone)&&(identical(other.deliveryAddress, deliveryAddress) || other.deliveryAddress == deliveryAddress)&&(identical(other.distance, distance) || other.distance == distance)&&(identical(other.orderTime, orderTime) || other.orderTime == orderTime)&&(identical(other.status, status) || other.status == status)&&(identical(other.priority, priority) || other.priority == priority)&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.prescriptionUrl, prescriptionUrl) || other.prescriptionUrl == prescriptionUrl)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.rejectionReason, rejectionReason) || other.rejectionReason == rejectionReason)&&(identical(other.invoiceUrl, invoiceUrl) || other.invoiceUrl == invoiceUrl)&&(identical(other.qrCode, qrCode) || other.qrCode == qrCode)&&(identical(other.deliveryPartnerId, deliveryPartnerId) || other.deliveryPartnerId == deliveryPartnerId)&&(identical(other.deliveryPartnerName, deliveryPartnerName) || other.deliveryPartnerName == deliveryPartnerName)&&(identical(other.deliveryPartnerPhone, deliveryPartnerPhone) || other.deliveryPartnerPhone == deliveryPartnerPhone)&&(identical(other.deliveryPartnerLat, deliveryPartnerLat) || other.deliveryPartnerLat == deliveryPartnerLat)&&(identical(other.deliveryPartnerLng, deliveryPartnerLng) || other.deliveryPartnerLng == deliveryPartnerLng)&&(identical(other.acceptedAt, acceptedAt) || other.acceptedAt == acceptedAt)&&(identical(other.readyAt, readyAt) || other.readyAt == readyAt)&&(identical(other.pickedUpAt, pickedUpAt) || other.pickedUpAt == pickedUpAt)&&(identical(other.deliveredAt, deliveredAt) || other.deliveredAt == deliveredAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orderNumber,customerName,customerPhone,deliveryAddress,orderTime,status,priority,totalAmount,itemCount,const DeepCollectionEquality().hash(_medicines),prescriptionImageUrl,deliveryBoyName,deliveryBoyPhone,estimatedDeliveryTime,specialInstructions);
+int get hashCode => Object.hashAll([runtimeType,id,orderId,customerName,customerPhone,deliveryAddress,distance,orderTime,status,priority,const DeepCollectionEquality().hash(_items),totalAmount,prescriptionUrl,notes,rejectionReason,invoiceUrl,qrCode,deliveryPartnerId,deliveryPartnerName,deliveryPartnerPhone,deliveryPartnerLat,deliveryPartnerLng,acceptedAt,readyAt,pickedUpAt,deliveredAt]);
 
 @override
 String toString() {
-  return 'OrderModel(id: $id, orderNumber: $orderNumber, customerName: $customerName, customerPhone: $customerPhone, deliveryAddress: $deliveryAddress, orderTime: $orderTime, status: $status, priority: $priority, totalAmount: $totalAmount, itemCount: $itemCount, medicines: $medicines, prescriptionImageUrl: $prescriptionImageUrl, deliveryBoyName: $deliveryBoyName, deliveryBoyPhone: $deliveryBoyPhone, estimatedDeliveryTime: $estimatedDeliveryTime, specialInstructions: $specialInstructions)';
+  return 'OrderModel(id: $id, orderId: $orderId, customerName: $customerName, customerPhone: $customerPhone, deliveryAddress: $deliveryAddress, distance: $distance, orderTime: $orderTime, status: $status, priority: $priority, items: $items, totalAmount: $totalAmount, prescriptionUrl: $prescriptionUrl, notes: $notes, rejectionReason: $rejectionReason, invoiceUrl: $invoiceUrl, qrCode: $qrCode, deliveryPartnerId: $deliveryPartnerId, deliveryPartnerName: $deliveryPartnerName, deliveryPartnerPhone: $deliveryPartnerPhone, deliveryPartnerLat: $deliveryPartnerLat, deliveryPartnerLng: $deliveryPartnerLng, acceptedAt: $acceptedAt, readyAt: $readyAt, pickedUpAt: $pickedUpAt, deliveredAt: $deliveredAt)';
 }
 
 
@@ -283,7 +301,7 @@ abstract mixin class _$OrderModelCopyWith<$Res> implements $OrderModelCopyWith<$
   factory _$OrderModelCopyWith(_OrderModel value, $Res Function(_OrderModel) _then) = __$OrderModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String orderNumber, String customerName, String customerPhone, String deliveryAddress, DateTime orderTime, String status, String priority, double totalAmount, int itemCount, List<MedicineItemModel> medicines, String? prescriptionImageUrl, String? deliveryBoyName, String? deliveryBoyPhone, DateTime? estimatedDeliveryTime, String? specialInstructions
+ String id, String orderId, String customerName, String customerPhone, String deliveryAddress, double distance, DateTime orderTime, String status, String priority, List<OrderItemModel> items, double totalAmount, String? prescriptionUrl, String? notes, String? rejectionReason, String? invoiceUrl, String? qrCode, String? deliveryPartnerId, String? deliveryPartnerName, String? deliveryPartnerPhone, double? deliveryPartnerLat, double? deliveryPartnerLng, DateTime? acceptedAt, DateTime? readyAt, DateTime? pickedUpAt, DateTime? deliveredAt
 });
 
 
@@ -300,25 +318,34 @@ class __$OrderModelCopyWithImpl<$Res>
 
 /// Create a copy of OrderModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? orderNumber = null,Object? customerName = null,Object? customerPhone = null,Object? deliveryAddress = null,Object? orderTime = null,Object? status = null,Object? priority = null,Object? totalAmount = null,Object? itemCount = null,Object? medicines = null,Object? prescriptionImageUrl = freezed,Object? deliveryBoyName = freezed,Object? deliveryBoyPhone = freezed,Object? estimatedDeliveryTime = freezed,Object? specialInstructions = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? orderId = null,Object? customerName = null,Object? customerPhone = null,Object? deliveryAddress = null,Object? distance = null,Object? orderTime = null,Object? status = null,Object? priority = null,Object? items = null,Object? totalAmount = null,Object? prescriptionUrl = freezed,Object? notes = freezed,Object? rejectionReason = freezed,Object? invoiceUrl = freezed,Object? qrCode = freezed,Object? deliveryPartnerId = freezed,Object? deliveryPartnerName = freezed,Object? deliveryPartnerPhone = freezed,Object? deliveryPartnerLat = freezed,Object? deliveryPartnerLng = freezed,Object? acceptedAt = freezed,Object? readyAt = freezed,Object? pickedUpAt = freezed,Object? deliveredAt = freezed,}) {
   return _then(_OrderModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,orderNumber: null == orderNumber ? _self.orderNumber : orderNumber // ignore: cast_nullable_to_non_nullable
+as String,orderId: null == orderId ? _self.orderId : orderId // ignore: cast_nullable_to_non_nullable
 as String,customerName: null == customerName ? _self.customerName : customerName // ignore: cast_nullable_to_non_nullable
 as String,customerPhone: null == customerPhone ? _self.customerPhone : customerPhone // ignore: cast_nullable_to_non_nullable
 as String,deliveryAddress: null == deliveryAddress ? _self.deliveryAddress : deliveryAddress // ignore: cast_nullable_to_non_nullable
-as String,orderTime: null == orderTime ? _self.orderTime : orderTime // ignore: cast_nullable_to_non_nullable
+as String,distance: null == distance ? _self.distance : distance // ignore: cast_nullable_to_non_nullable
+as double,orderTime: null == orderTime ? _self.orderTime : orderTime // ignore: cast_nullable_to_non_nullable
 as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,priority: null == priority ? _self.priority : priority // ignore: cast_nullable_to_non_nullable
-as String,totalAmount: null == totalAmount ? _self.totalAmount : totalAmount // ignore: cast_nullable_to_non_nullable
-as double,itemCount: null == itemCount ? _self.itemCount : itemCount // ignore: cast_nullable_to_non_nullable
-as int,medicines: null == medicines ? _self._medicines : medicines // ignore: cast_nullable_to_non_nullable
-as List<MedicineItemModel>,prescriptionImageUrl: freezed == prescriptionImageUrl ? _self.prescriptionImageUrl : prescriptionImageUrl // ignore: cast_nullable_to_non_nullable
-as String?,deliveryBoyName: freezed == deliveryBoyName ? _self.deliveryBoyName : deliveryBoyName // ignore: cast_nullable_to_non_nullable
-as String?,deliveryBoyPhone: freezed == deliveryBoyPhone ? _self.deliveryBoyPhone : deliveryBoyPhone // ignore: cast_nullable_to_non_nullable
-as String?,estimatedDeliveryTime: freezed == estimatedDeliveryTime ? _self.estimatedDeliveryTime : estimatedDeliveryTime // ignore: cast_nullable_to_non_nullable
-as DateTime?,specialInstructions: freezed == specialInstructions ? _self.specialInstructions : specialInstructions // ignore: cast_nullable_to_non_nullable
-as String?,
+as String,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
+as List<OrderItemModel>,totalAmount: null == totalAmount ? _self.totalAmount : totalAmount // ignore: cast_nullable_to_non_nullable
+as double,prescriptionUrl: freezed == prescriptionUrl ? _self.prescriptionUrl : prescriptionUrl // ignore: cast_nullable_to_non_nullable
+as String?,notes: freezed == notes ? _self.notes : notes // ignore: cast_nullable_to_non_nullable
+as String?,rejectionReason: freezed == rejectionReason ? _self.rejectionReason : rejectionReason // ignore: cast_nullable_to_non_nullable
+as String?,invoiceUrl: freezed == invoiceUrl ? _self.invoiceUrl : invoiceUrl // ignore: cast_nullable_to_non_nullable
+as String?,qrCode: freezed == qrCode ? _self.qrCode : qrCode // ignore: cast_nullable_to_non_nullable
+as String?,deliveryPartnerId: freezed == deliveryPartnerId ? _self.deliveryPartnerId : deliveryPartnerId // ignore: cast_nullable_to_non_nullable
+as String?,deliveryPartnerName: freezed == deliveryPartnerName ? _self.deliveryPartnerName : deliveryPartnerName // ignore: cast_nullable_to_non_nullable
+as String?,deliveryPartnerPhone: freezed == deliveryPartnerPhone ? _self.deliveryPartnerPhone : deliveryPartnerPhone // ignore: cast_nullable_to_non_nullable
+as String?,deliveryPartnerLat: freezed == deliveryPartnerLat ? _self.deliveryPartnerLat : deliveryPartnerLat // ignore: cast_nullable_to_non_nullable
+as double?,deliveryPartnerLng: freezed == deliveryPartnerLng ? _self.deliveryPartnerLng : deliveryPartnerLng // ignore: cast_nullable_to_non_nullable
+as double?,acceptedAt: freezed == acceptedAt ? _self.acceptedAt : acceptedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,readyAt: freezed == readyAt ? _self.readyAt : readyAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,pickedUpAt: freezed == pickedUpAt ? _self.pickedUpAt : pickedUpAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,deliveredAt: freezed == deliveredAt ? _self.deliveredAt : deliveredAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -327,42 +354,42 @@ as String?,
 
 
 /// @nodoc
-mixin _$MedicineItemModel {
+mixin _$OrderItemModel {
 
- String get id; String get name; String get dosage; int get quantity; double get price; String? get brandName; String? get genericName; bool? get isScheduledDrug;
-/// Create a copy of MedicineItemModel
+ String get id; String get medicineName; int get quantity; double get price; String get availability; String? get substituteId; String? get substituteName; double? get substitutePrice; String? get notes;
+/// Create a copy of OrderItemModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$MedicineItemModelCopyWith<MedicineItemModel> get copyWith => _$MedicineItemModelCopyWithImpl<MedicineItemModel>(this as MedicineItemModel, _$identity);
+$OrderItemModelCopyWith<OrderItemModel> get copyWith => _$OrderItemModelCopyWithImpl<OrderItemModel>(this as OrderItemModel, _$identity);
 
-  /// Serializes this MedicineItemModel to a JSON map.
+  /// Serializes this OrderItemModel to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MedicineItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.dosage, dosage) || other.dosage == dosage)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.price, price) || other.price == price)&&(identical(other.brandName, brandName) || other.brandName == brandName)&&(identical(other.genericName, genericName) || other.genericName == genericName)&&(identical(other.isScheduledDrug, isScheduledDrug) || other.isScheduledDrug == isScheduledDrug));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.medicineName, medicineName) || other.medicineName == medicineName)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.price, price) || other.price == price)&&(identical(other.availability, availability) || other.availability == availability)&&(identical(other.substituteId, substituteId) || other.substituteId == substituteId)&&(identical(other.substituteName, substituteName) || other.substituteName == substituteName)&&(identical(other.substitutePrice, substitutePrice) || other.substitutePrice == substitutePrice)&&(identical(other.notes, notes) || other.notes == notes));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,dosage,quantity,price,brandName,genericName,isScheduledDrug);
+int get hashCode => Object.hash(runtimeType,id,medicineName,quantity,price,availability,substituteId,substituteName,substitutePrice,notes);
 
 @override
 String toString() {
-  return 'MedicineItemModel(id: $id, name: $name, dosage: $dosage, quantity: $quantity, price: $price, brandName: $brandName, genericName: $genericName, isScheduledDrug: $isScheduledDrug)';
+  return 'OrderItemModel(id: $id, medicineName: $medicineName, quantity: $quantity, price: $price, availability: $availability, substituteId: $substituteId, substituteName: $substituteName, substitutePrice: $substitutePrice, notes: $notes)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $MedicineItemModelCopyWith<$Res>  {
-  factory $MedicineItemModelCopyWith(MedicineItemModel value, $Res Function(MedicineItemModel) _then) = _$MedicineItemModelCopyWithImpl;
+abstract mixin class $OrderItemModelCopyWith<$Res>  {
+  factory $OrderItemModelCopyWith(OrderItemModel value, $Res Function(OrderItemModel) _then) = _$OrderItemModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String dosage, int quantity, double price, String? brandName, String? genericName, bool? isScheduledDrug
+ String id, String medicineName, int quantity, double price, String availability, String? substituteId, String? substituteName, double? substitutePrice, String? notes
 });
 
 
@@ -370,34 +397,35 @@ $Res call({
 
 }
 /// @nodoc
-class _$MedicineItemModelCopyWithImpl<$Res>
-    implements $MedicineItemModelCopyWith<$Res> {
-  _$MedicineItemModelCopyWithImpl(this._self, this._then);
+class _$OrderItemModelCopyWithImpl<$Res>
+    implements $OrderItemModelCopyWith<$Res> {
+  _$OrderItemModelCopyWithImpl(this._self, this._then);
 
-  final MedicineItemModel _self;
-  final $Res Function(MedicineItemModel) _then;
+  final OrderItemModel _self;
+  final $Res Function(OrderItemModel) _then;
 
-/// Create a copy of MedicineItemModel
+/// Create a copy of OrderItemModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? dosage = null,Object? quantity = null,Object? price = null,Object? brandName = freezed,Object? genericName = freezed,Object? isScheduledDrug = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? medicineName = null,Object? quantity = null,Object? price = null,Object? availability = null,Object? substituteId = freezed,Object? substituteName = freezed,Object? substitutePrice = freezed,Object? notes = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,dosage: null == dosage ? _self.dosage : dosage // ignore: cast_nullable_to_non_nullable
+as String,medicineName: null == medicineName ? _self.medicineName : medicineName // ignore: cast_nullable_to_non_nullable
 as String,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as int,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as double,brandName: freezed == brandName ? _self.brandName : brandName // ignore: cast_nullable_to_non_nullable
-as String?,genericName: freezed == genericName ? _self.genericName : genericName // ignore: cast_nullable_to_non_nullable
-as String?,isScheduledDrug: freezed == isScheduledDrug ? _self.isScheduledDrug : isScheduledDrug // ignore: cast_nullable_to_non_nullable
-as bool?,
+as double,availability: null == availability ? _self.availability : availability // ignore: cast_nullable_to_non_nullable
+as String,substituteId: freezed == substituteId ? _self.substituteId : substituteId // ignore: cast_nullable_to_non_nullable
+as String?,substituteName: freezed == substituteName ? _self.substituteName : substituteName // ignore: cast_nullable_to_non_nullable
+as String?,substitutePrice: freezed == substitutePrice ? _self.substitutePrice : substitutePrice // ignore: cast_nullable_to_non_nullable
+as double?,notes: freezed == notes ? _self.notes : notes // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
 }
 
 
-/// Adds pattern-matching-related methods to [MedicineItemModel].
-extension MedicineItemModelPatterns on MedicineItemModel {
+/// Adds pattern-matching-related methods to [OrderItemModel].
+extension OrderItemModelPatterns on OrderItemModel {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -410,10 +438,10 @@ extension MedicineItemModelPatterns on MedicineItemModel {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _MedicineItemModel value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _OrderItemModel value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _MedicineItemModel() when $default != null:
+case _OrderItemModel() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -432,10 +460,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _MedicineItemModel value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _OrderItemModel value)  $default,){
 final _that = this;
 switch (_that) {
-case _MedicineItemModel():
+case _OrderItemModel():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -453,10 +481,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _MedicineItemModel value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _OrderItemModel value)?  $default,){
 final _that = this;
 switch (_that) {
-case _MedicineItemModel() when $default != null:
+case _OrderItemModel() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -474,10 +502,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String dosage,  int quantity,  double price,  String? brandName,  String? genericName,  bool? isScheduledDrug)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String medicineName,  int quantity,  double price,  String availability,  String? substituteId,  String? substituteName,  double? substitutePrice,  String? notes)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _MedicineItemModel() when $default != null:
-return $default(_that.id,_that.name,_that.dosage,_that.quantity,_that.price,_that.brandName,_that.genericName,_that.isScheduledDrug);case _:
+case _OrderItemModel() when $default != null:
+return $default(_that.id,_that.medicineName,_that.quantity,_that.price,_that.availability,_that.substituteId,_that.substituteName,_that.substitutePrice,_that.notes);case _:
   return orElse();
 
 }
@@ -495,10 +523,10 @@ return $default(_that.id,_that.name,_that.dosage,_that.quantity,_that.price,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String dosage,  int quantity,  double price,  String? brandName,  String? genericName,  bool? isScheduledDrug)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String medicineName,  int quantity,  double price,  String availability,  String? substituteId,  String? substituteName,  double? substitutePrice,  String? notes)  $default,) {final _that = this;
 switch (_that) {
-case _MedicineItemModel():
-return $default(_that.id,_that.name,_that.dosage,_that.quantity,_that.price,_that.brandName,_that.genericName,_that.isScheduledDrug);case _:
+case _OrderItemModel():
+return $default(_that.id,_that.medicineName,_that.quantity,_that.price,_that.availability,_that.substituteId,_that.substituteName,_that.substitutePrice,_that.notes);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -515,10 +543,10 @@ return $default(_that.id,_that.name,_that.dosage,_that.quantity,_that.price,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String dosage,  int quantity,  double price,  String? brandName,  String? genericName,  bool? isScheduledDrug)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String medicineName,  int quantity,  double price,  String availability,  String? substituteId,  String? substituteName,  double? substitutePrice,  String? notes)?  $default,) {final _that = this;
 switch (_that) {
-case _MedicineItemModel() when $default != null:
-return $default(_that.id,_that.name,_that.dosage,_that.quantity,_that.price,_that.brandName,_that.genericName,_that.isScheduledDrug);case _:
+case _OrderItemModel() when $default != null:
+return $default(_that.id,_that.medicineName,_that.quantity,_that.price,_that.availability,_that.substituteId,_that.substituteName,_that.substitutePrice,_that.notes);case _:
   return null;
 
 }
@@ -529,53 +557,54 @@ return $default(_that.id,_that.name,_that.dosage,_that.quantity,_that.price,_tha
 /// @nodoc
 @JsonSerializable()
 
-class _MedicineItemModel extends MedicineItemModel {
-  const _MedicineItemModel({required this.id, required this.name, required this.dosage, required this.quantity, required this.price, this.brandName, this.genericName, this.isScheduledDrug}): super._();
-  factory _MedicineItemModel.fromJson(Map<String, dynamic> json) => _$MedicineItemModelFromJson(json);
+class _OrderItemModel extends OrderItemModel {
+  const _OrderItemModel({required this.id, required this.medicineName, required this.quantity, required this.price, required this.availability, this.substituteId, this.substituteName, this.substitutePrice, this.notes}): super._();
+  factory _OrderItemModel.fromJson(Map<String, dynamic> json) => _$OrderItemModelFromJson(json);
 
 @override final  String id;
-@override final  String name;
-@override final  String dosage;
+@override final  String medicineName;
 @override final  int quantity;
 @override final  double price;
-@override final  String? brandName;
-@override final  String? genericName;
-@override final  bool? isScheduledDrug;
+@override final  String availability;
+@override final  String? substituteId;
+@override final  String? substituteName;
+@override final  double? substitutePrice;
+@override final  String? notes;
 
-/// Create a copy of MedicineItemModel
+/// Create a copy of OrderItemModel
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$MedicineItemModelCopyWith<_MedicineItemModel> get copyWith => __$MedicineItemModelCopyWithImpl<_MedicineItemModel>(this, _$identity);
+_$OrderItemModelCopyWith<_OrderItemModel> get copyWith => __$OrderItemModelCopyWithImpl<_OrderItemModel>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$MedicineItemModelToJson(this, );
+  return _$OrderItemModelToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MedicineItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.dosage, dosage) || other.dosage == dosage)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.price, price) || other.price == price)&&(identical(other.brandName, brandName) || other.brandName == brandName)&&(identical(other.genericName, genericName) || other.genericName == genericName)&&(identical(other.isScheduledDrug, isScheduledDrug) || other.isScheduledDrug == isScheduledDrug));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.medicineName, medicineName) || other.medicineName == medicineName)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.price, price) || other.price == price)&&(identical(other.availability, availability) || other.availability == availability)&&(identical(other.substituteId, substituteId) || other.substituteId == substituteId)&&(identical(other.substituteName, substituteName) || other.substituteName == substituteName)&&(identical(other.substitutePrice, substitutePrice) || other.substitutePrice == substitutePrice)&&(identical(other.notes, notes) || other.notes == notes));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,dosage,quantity,price,brandName,genericName,isScheduledDrug);
+int get hashCode => Object.hash(runtimeType,id,medicineName,quantity,price,availability,substituteId,substituteName,substitutePrice,notes);
 
 @override
 String toString() {
-  return 'MedicineItemModel(id: $id, name: $name, dosage: $dosage, quantity: $quantity, price: $price, brandName: $brandName, genericName: $genericName, isScheduledDrug: $isScheduledDrug)';
+  return 'OrderItemModel(id: $id, medicineName: $medicineName, quantity: $quantity, price: $price, availability: $availability, substituteId: $substituteId, substituteName: $substituteName, substitutePrice: $substitutePrice, notes: $notes)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$MedicineItemModelCopyWith<$Res> implements $MedicineItemModelCopyWith<$Res> {
-  factory _$MedicineItemModelCopyWith(_MedicineItemModel value, $Res Function(_MedicineItemModel) _then) = __$MedicineItemModelCopyWithImpl;
+abstract mixin class _$OrderItemModelCopyWith<$Res> implements $OrderItemModelCopyWith<$Res> {
+  factory _$OrderItemModelCopyWith(_OrderItemModel value, $Res Function(_OrderItemModel) _then) = __$OrderItemModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String dosage, int quantity, double price, String? brandName, String? genericName, bool? isScheduledDrug
+ String id, String medicineName, int quantity, double price, String availability, String? substituteId, String? substituteName, double? substitutePrice, String? notes
 });
 
 
@@ -583,26 +612,27 @@ $Res call({
 
 }
 /// @nodoc
-class __$MedicineItemModelCopyWithImpl<$Res>
-    implements _$MedicineItemModelCopyWith<$Res> {
-  __$MedicineItemModelCopyWithImpl(this._self, this._then);
+class __$OrderItemModelCopyWithImpl<$Res>
+    implements _$OrderItemModelCopyWith<$Res> {
+  __$OrderItemModelCopyWithImpl(this._self, this._then);
 
-  final _MedicineItemModel _self;
-  final $Res Function(_MedicineItemModel) _then;
+  final _OrderItemModel _self;
+  final $Res Function(_OrderItemModel) _then;
 
-/// Create a copy of MedicineItemModel
+/// Create a copy of OrderItemModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? dosage = null,Object? quantity = null,Object? price = null,Object? brandName = freezed,Object? genericName = freezed,Object? isScheduledDrug = freezed,}) {
-  return _then(_MedicineItemModel(
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? medicineName = null,Object? quantity = null,Object? price = null,Object? availability = null,Object? substituteId = freezed,Object? substituteName = freezed,Object? substitutePrice = freezed,Object? notes = freezed,}) {
+  return _then(_OrderItemModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,dosage: null == dosage ? _self.dosage : dosage // ignore: cast_nullable_to_non_nullable
+as String,medicineName: null == medicineName ? _self.medicineName : medicineName // ignore: cast_nullable_to_non_nullable
 as String,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as int,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as double,brandName: freezed == brandName ? _self.brandName : brandName // ignore: cast_nullable_to_non_nullable
-as String?,genericName: freezed == genericName ? _self.genericName : genericName // ignore: cast_nullable_to_non_nullable
-as String?,isScheduledDrug: freezed == isScheduledDrug ? _self.isScheduledDrug : isScheduledDrug // ignore: cast_nullable_to_non_nullable
-as bool?,
+as double,availability: null == availability ? _self.availability : availability // ignore: cast_nullable_to_non_nullable
+as String,substituteId: freezed == substituteId ? _self.substituteId : substituteId // ignore: cast_nullable_to_non_nullable
+as String?,substituteName: freezed == substituteName ? _self.substituteName : substituteName // ignore: cast_nullable_to_non_nullable
+as String?,substitutePrice: freezed == substitutePrice ? _self.substitutePrice : substitutePrice // ignore: cast_nullable_to_non_nullable
+as double?,notes: freezed == notes ? _self.notes : notes // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

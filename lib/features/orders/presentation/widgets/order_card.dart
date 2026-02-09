@@ -13,6 +13,7 @@ class OrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isEmergency = order.priority == OrderPriority.emergency;
 
     return GestureDetector(
       onTap: () {
@@ -21,16 +22,16 @@ class OrderCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         decoration: BoxDecoration(
-          gradient: order.isCritical
-              ? AppColors.amberGradient
+          gradient: isEmergency
+              ? AppColors.errorGradient
               : (isDark
                     ? AppColors.cardGradientDark
                     : AppColors.cardGradientLight),
           borderRadius: BorderRadius.circular(16),
-          boxShadow: order.isCritical
+          boxShadow: isEmergency
               ? [
                   BoxShadow(
-                    color: AppColors.amber.withValues(alpha: 0.2),
+                    color: AppColors.error.withOpacity(0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -39,8 +40,8 @@ class OrderCard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            // Critical Order Pulse Animation (if critical)
-            if (order.isCritical) _buildPulseAnimation(),
+            // Emergency pulse animation
+            if (isEmergency) _buildPulseAnimation(),
 
             // Content
             Padding(
@@ -48,14 +49,14 @@ class OrderCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header: Order Number + Priority Badge
+                  // Header: Order ID + Priority Badge
                   Row(
                     children: [
                       Expanded(
                         child: Text(
-                          order.orderNumber,
+                          order.orderId,
                           style: AppTypography.titleMedium(
-                            order.isCritical
+                            isEmergency
                                 ? Colors.white
                                 : (isDark
                                       ? AppColors.textPrimaryDark
@@ -75,8 +76,8 @@ class OrderCard extends StatelessWidget {
                       Icon(
                         Icons.person_outline,
                         size: 16,
-                        color: order.isCritical
-                            ? Colors.white.withValues(alpha: 0.9)
+                        color: isEmergency
+                            ? Colors.white.withOpacity(0.9)
                             : (isDark
                                   ? AppColors.textSecondaryDark
                                   : AppColors.textSecondaryLight),
@@ -86,8 +87,8 @@ class OrderCard extends StatelessWidget {
                         child: Text(
                           order.customerName,
                           style: AppTypography.bodyMedium(
-                            order.isCritical
-                                ? Colors.white.withValues(alpha: 0.9)
+                            isEmergency
+                                ? Colors.white.withOpacity(0.9)
                                 : (isDark
                                       ? AppColors.textPrimaryDark
                                       : AppColors.textPrimaryLight),
@@ -106,8 +107,8 @@ class OrderCard extends StatelessWidget {
                       Icon(
                         Icons.access_time,
                         size: 16,
-                        color: order.isCritical
-                            ? Colors.white.withValues(alpha: 0.8)
+                        color: isEmergency
+                            ? Colors.white.withOpacity(0.8)
                             : (isDark
                                   ? AppColors.textSecondaryDark
                                   : AppColors.textSecondaryLight),
@@ -116,8 +117,8 @@ class OrderCard extends StatelessWidget {
                       Text(
                         order.orderTime.toRelativeTime(),
                         style: AppTypography.bodySmall(
-                          order.isCritical
-                              ? Colors.white.withValues(alpha: 0.8)
+                          isEmergency
+                              ? Colors.white.withOpacity(0.8)
                               : (isDark
                                     ? AppColors.textSecondaryDark
                                     : AppColors.textSecondaryLight),
@@ -130,8 +131,8 @@ class OrderCard extends StatelessWidget {
 
                   // Divider
                   Divider(
-                    color: order.isCritical
-                        ? Colors.white.withValues(alpha: 0.3)
+                    color: isEmergency
+                        ? Colors.white.withOpacity(0.3)
                         : (isDark
                               ? AppColors.borderDark
                               : AppColors.borderLight),
@@ -149,8 +150,8 @@ class OrderCard extends StatelessWidget {
                             Text(
                               'Items',
                               style: AppTypography.labelSmall(
-                                order.isCritical
-                                    ? Colors.white.withValues(alpha: 0.7)
+                                isEmergency
+                                    ? Colors.white.withOpacity(0.7)
                                     : (isDark
                                           ? AppColors.textTertiaryDark
                                           : AppColors.textTertiaryLight),
@@ -158,9 +159,9 @@ class OrderCard extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              '${order.itemCount}',
+                              '${order.items.length}',
                               style: AppTypography.titleMedium(
-                                order.isCritical
+                                isEmergency
                                     ? Colors.white
                                     : (isDark
                                           ? AppColors.textPrimaryDark
@@ -177,8 +178,8 @@ class OrderCard extends StatelessWidget {
                             Text(
                               'Amount',
                               style: AppTypography.labelSmall(
-                                order.isCritical
-                                    ? Colors.white.withValues(alpha: 0.7)
+                                isEmergency
+                                    ? Colors.white.withOpacity(0.7)
                                     : (isDark
                                           ? AppColors.textTertiaryDark
                                           : AppColors.textTertiaryLight),
@@ -188,7 +189,7 @@ class OrderCard extends StatelessWidget {
                             Text(
                               order.totalAmount.toCurrency(),
                               style: AppTypography.titleMedium(
-                                order.isCritical
+                                isEmergency
                                     ? Colors.white
                                     : AppColors.primaryDark,
                               ),
@@ -202,7 +203,7 @@ class OrderCard extends StatelessWidget {
                   const SizedBox(height: 16),
 
                   // Status Badge
-                  _buildStatusBadge(),
+                  _buildStatusBadge(isEmergency, isDark),
                 ],
               ),
             ),
@@ -219,7 +220,7 @@ class OrderCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: order.priority == OrderPriority.emergency
-            ? AppColors.error
+            ? Colors.white.withOpacity(0.2)
             : AppColors.warning,
         borderRadius: BorderRadius.circular(20),
       ),
@@ -235,7 +236,7 @@ class OrderCard extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           Text(
-            order.priorityDisplayName,
+            order.priorityDisplayText,
             style: AppTypography.labelSmall(Colors.white),
           ),
         ],
@@ -243,42 +244,63 @@ class OrderCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusBadge() {
+  Widget _buildStatusBadge(bool isEmergency, bool isDark) {
     Color backgroundColor;
     Color textColor;
     IconData icon;
 
     switch (order.status) {
-      case OrderStatus.prescriptionVerification:
-        backgroundColor = AppColors.info.withValues(alpha: 0.15);
+      case OrderStatus.pending:
+        backgroundColor = AppColors.info.withOpacity(0.15);
         textColor = AppColors.info;
+        icon = Icons.new_releases;
+        break;
+      case OrderStatus.reviewing:
+        backgroundColor = AppColors.warning.withOpacity(0.15);
+        textColor = AppColors.warningDark;
         icon = Icons.fact_check_outlined;
         break;
-      case OrderStatus.packing:
-        backgroundColor = AppColors.warning.withValues(alpha: 0.15);
-        textColor = AppColors.warningDark;
-        icon = Icons.inventory_2_outlined;
-        break;
-      case OrderStatus.awaitingHandover:
-        backgroundColor = AppColors.primaryDark.withValues(alpha: 0.15);
-        textColor = AppColors.primaryDark;
-        icon = Icons.local_shipping_outlined;
-        break;
-      case OrderStatus.completed:
-        backgroundColor = AppColors.success.withValues(alpha: 0.15);
+      case OrderStatus.accepted:
+        backgroundColor = AppColors.success.withOpacity(0.15);
         textColor = AppColors.success;
         icon = Icons.check_circle_outline;
         break;
+      case OrderStatus.preparingInvoice:
+        backgroundColor = AppColors.primaryDark.withOpacity(0.15);
+        textColor = AppColors.primaryDark;
+        icon = Icons.receipt_long;
+        break;
+      case OrderStatus.readyForPickup:
+        backgroundColor = AppColors.accentDark.withOpacity(0.15);
+        textColor = AppColors.accentDark;
+        icon = Icons.qr_code_2;
+        break;
+      case OrderStatus.pickedUp:
+        backgroundColor = AppColors.warning.withOpacity(0.15);
+        textColor = AppColors.warningDark;
+        icon = Icons.inventory_2_outlined;
+        break;
+      case OrderStatus.outForDelivery:
+        backgroundColor = AppColors.info.withOpacity(0.15);
+        textColor = AppColors.info;
+        icon = Icons.local_shipping_outlined;
+        break;
+      case OrderStatus.delivered:
+        backgroundColor = AppColors.success.withOpacity(0.15);
+        textColor = AppColors.success;
+        icon = Icons.check_circle;
+        break;
+      case OrderStatus.rejected:
       case OrderStatus.cancelled:
-        backgroundColor = AppColors.error.withValues(alpha: 0.15);
+        backgroundColor = AppColors.error.withOpacity(0.15);
         textColor = AppColors.error;
-        icon = Icons.cancel_outlined;
+        icon = Icons.cancel;
         break;
     }
 
-    // Override colors for critical orders
-    if (order.isCritical) {
-      backgroundColor = Colors.white.withValues(alpha: 0.2);
+    // Override colors for emergency orders
+    if (isEmergency) {
+      backgroundColor = Colors.white.withOpacity(0.2);
       textColor = Colors.white;
     }
 
@@ -295,7 +317,7 @@ class OrderCard extends StatelessWidget {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              order.statusDisplayName,
+              order.statusDisplayText,
               style: AppTypography.labelMedium(textColor),
               overflow: TextOverflow.ellipsis,
             ),
@@ -315,14 +337,14 @@ class OrderCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.3 * (1 - value)),
+                color: Colors.white.withOpacity(0.3 * (1 - value)),
                 width: 2 + (4 * value),
               ),
             ),
           );
         },
         onEnd: () {
-          // Restart animation
+          // Animation will restart automatically
         },
       ),
     );

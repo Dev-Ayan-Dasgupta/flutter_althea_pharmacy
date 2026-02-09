@@ -5,24 +5,22 @@ import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/order_entity.dart';
 
 class MedicineListSection extends StatelessWidget {
-  final List<MedicineItemEntity> medicines;
+  final List<OrderItemEntity> items;
 
-  const MedicineListSection({super.key, required this.medicines});
+  const MedicineListSection({super.key, required this.items});
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: medicines
-          .map((medicine) => _MedicineCard(medicine: medicine))
-          .toList(),
+      children: items.map((item) => _MedicineCard(item: item)).toList(),
     );
   }
 }
 
 class _MedicineCard extends StatelessWidget {
-  final MedicineItemEntity medicine;
+  final OrderItemEntity item;
 
-  const _MedicineCard({required this.medicine});
+  const _MedicineCard({required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +34,11 @@ class _MedicineCard extends StatelessWidget {
             ? AppColors.cardGradientDark
             : AppColors.cardGradientLight,
         borderRadius: BorderRadius.circular(12),
+        border: item.availability == ItemAvailability.unavailable
+            ? Border.all(color: AppColors.error, width: 2)
+            : item.availability == ItemAvailability.substituted
+            ? Border.all(color: AppColors.warning, width: 2)
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,141 +50,178 @@ class _MedicineCard extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  gradient: AppColors.primaryGradient.scale(0.2),
+                  gradient: _getIconGradient(),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(
-                  Icons.medication,
-                  color: AppColors.primaryDark,
-                  size: 24,
-                ),
+                child: Icon(_getIcon(), color: Colors.white, size: 24),
               ),
 
               const SizedBox(width: 12),
 
-              // Medicine Name & Brand
+              // Medicine Name
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      medicine.name,
+                      item.medicineName,
                       style: AppTypography.titleMedium(
                         isDark
                             ? AppColors.textPrimaryDark
                             : AppColors.textPrimaryLight,
                       ),
                     ),
-                    if (medicine.brandName != null) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        medicine.brandName!,
-                        style: AppTypography.bodySmall(
-                          isDark
-                              ? AppColors.textSecondaryDark
-                              : AppColors.textSecondaryLight,
-                        ),
-                      ),
-                    ],
+                    const SizedBox(height: 4),
+                    _buildAvailabilityBadge(),
                   ],
                 ),
               ),
 
-              // Scheduled Drug Badge
-              if (medicine.isScheduledDrug == true)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
+              // Price
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    item.price.toCurrency(),
+                    style: AppTypography.titleMedium(
+                      item.availability == ItemAvailability.unavailable
+                          ? AppColors.error
+                          : AppColors.primaryDark,
+                    ),
                   ),
-                  decoration: BoxDecoration(
-                    color: AppColors.warning.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(6),
+                  Text(
+                    'Qty: ${item.quantity}',
+                    style: AppTypography.caption(
+                      isDark
+                          ? AppColors.textSecondaryDark
+                          : AppColors.textSecondaryLight,
+                    ),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.verified_user,
-                        size: 14,
-                        color: AppColors.warningDark,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        'H',
-                        style: AppTypography.labelSmall(AppColors.warningDark),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-
-          const SizedBox(height: 12),
-
-          // Dosage, Quantity, Price
-          Row(
-            children: [
-              _buildInfoChip(
-                context,
-                Icons.science_outlined,
-                medicine.dosage,
-                isDark,
-              ),
-              const SizedBox(width: 8),
-              _buildInfoChip(
-                context,
-                Icons.tag,
-                'Qty: ${medicine.quantity}',
-                isDark,
-              ),
-              const Spacer(),
-              Text(
-                medicine.price.toCurrency(),
-                style: AppTypography.titleMedium(AppColors.primaryDark),
+                ],
               ),
             ],
           ),
+
+          // Substitute Information
+          if (item.availability == ItemAvailability.substituted &&
+              item.substituteName != null) ...[
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.warning.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.sync_alt,
+                    color: AppColors.warning,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Substitute: ${item.substituteName}',
+                          style: AppTypography.bodyMedium(
+                            AppColors.warningDark,
+                          ),
+                        ),
+                        if (item.substitutePrice != null)
+                          Text(
+                            item.substitutePrice!.toCurrency(),
+                            style: AppTypography.labelSmall(
+                              AppColors.warningDark,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+
+          // Notes
+          if (item.notes != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              'Note: ${item.notes}',
+              style: AppTypography.caption(
+                isDark
+                    ? AppColors.textSecondaryDark
+                    : AppColors.textSecondaryLight,
+              ),
+            ),
+          ],
         ],
       ),
     );
   }
 
-  Widget _buildInfoChip(
-    BuildContext context,
-    IconData icon,
-    String label,
-    bool isDark,
-  ) {
+  Widget _buildAvailabilityBadge() {
+    Color color;
+    String text;
+    IconData icon;
+
+    switch (item.availability) {
+      case ItemAvailability.available:
+        color = AppColors.success;
+        text = 'Available';
+        icon = Icons.check_circle;
+        break;
+      case ItemAvailability.unavailable:
+        color = AppColors.error;
+        text = 'Out of Stock';
+        icon = Icons.cancel;
+        break;
+      case ItemAvailability.substituted:
+        color = AppColors.warning;
+        text = 'Substituted';
+        icon = Icons.sync_alt;
+        break;
+    }
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: isDark
-            ? AppColors.surfaceVariantDark
-            : AppColors.surfaceVariantLight,
+        color: color.withOpacity(0.15),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 14,
-            color: isDark
-                ? AppColors.textSecondaryDark
-                : AppColors.textSecondaryLight,
-          ),
+          Icon(icon, size: 12, color: color),
           const SizedBox(width: 4),
-          Text(
-            label,
-            style: AppTypography.labelSmall(
-              isDark
-                  ? AppColors.textSecondaryDark
-                  : AppColors.textSecondaryLight,
-            ),
-          ),
+          Text(text, style: AppTypography.labelSmall(color)),
         ],
       ),
     );
+  }
+
+  Gradient _getIconGradient() {
+    switch (item.availability) {
+      case ItemAvailability.available:
+        return AppColors.successGradient;
+      case ItemAvailability.unavailable:
+        return AppColors.errorGradient;
+      case ItemAvailability.substituted:
+        return AppColors.warningGradient;
+    }
+  }
+
+  IconData _getIcon() {
+    switch (item.availability) {
+      case ItemAvailability.available:
+        return Icons.medication;
+      case ItemAvailability.unavailable:
+        return Icons.block;
+      case ItemAvailability.substituted:
+        return Icons.sync_alt;
+    }
   }
 }

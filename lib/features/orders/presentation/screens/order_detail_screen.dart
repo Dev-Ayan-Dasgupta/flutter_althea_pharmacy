@@ -37,17 +37,38 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: ordersState.maybeWhen(
         loaded: (orders) {
-          final order = orders.firstWhere(
-            (o) => o.id == widget.orderId,
-            orElse: () => throw Exception('Order not found'),
-          );
-
-          return _buildOrderDetail(context, order, isDark);
+          try {
+            final order = orders.firstWhere((o) => o.id == widget.orderId);
+            return _buildOrderDetail(context, order, isDark);
+          } catch (e) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    size: 64,
+                    color: AppColors.error,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Order not found',
+                    style: AppTypography.titleMedium(AppColors.error),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Go Back'),
+                  ),
+                ],
+              ),
+            );
+          }
         },
         orElse: () => const Center(
           child: CircularProgressIndicator(
@@ -88,7 +109,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
               ref
                   .read(ordersProvider.notifier)
                   .updateOrderStatus(order.id, newStatus);
-              context.pop();
+              Navigator.of(context).pop(); // Go back after action
             },
           ),
       ],
@@ -117,7 +138,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
           const SizedBox(height: 24),
 
           // Prescription Viewer (Collapsible)
-          if (order.prescriptionImageUrl != null) ...[
+          if (order.prescriptionUrl != null) ...[
             _buildSectionHeader(
               context,
               'Prescription',
@@ -132,19 +153,19 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
             ),
             const SizedBox(height: 12),
             if (_isPrescriptionExpanded)
-              PrescriptionViewer(imageUrl: order.prescriptionImageUrl!),
+              PrescriptionViewer(imageUrl: order.prescriptionUrl!),
             const SizedBox(height: 24),
           ],
 
           // Medicine List
           _buildSectionHeader(
             context,
-            'Medicines (${order.itemCount})',
+            'Medicines (${order.items.length})',
             Icons.medication,
             isDark,
           ),
           const SizedBox(height: 12),
-          MedicineListSection(medicines: order.medicines),
+          MedicineListSection(items: order.items),
 
           const SizedBox(height: 100), // Space for action buttons
         ],
@@ -173,7 +194,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Left: Prescription Viewer
-          if (order.prescriptionImageUrl != null)
+          if (order.prescriptionUrl != null)
             Expanded(
               flex: 5,
               child: Column(
@@ -187,14 +208,14 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                   ),
                   const SizedBox(height: 16),
                   PrescriptionViewer(
-                    imageUrl: order.prescriptionImageUrl!,
+                    imageUrl: order.prescriptionUrl!,
                     height: 700,
                   ),
                 ],
               ),
             ),
 
-          if (order.prescriptionImageUrl != null) const SizedBox(width: 32),
+          if (order.prescriptionUrl != null) const SizedBox(width: 32),
 
           // Right: Order Details
           Expanded(
@@ -208,12 +229,12 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                 const SizedBox(height: 24),
                 _buildSectionHeader(
                   context,
-                  'Medicines (${order.itemCount})',
+                  'Medicines (${order.items.length})',
                   Icons.medication,
                   isDark,
                 ),
                 const SizedBox(height: 12),
-                MedicineListSection(medicines: order.medicines),
+                MedicineListSection(items: order.items),
                 const SizedBox(height: 100),
               ],
             ),
@@ -228,17 +249,19 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
     OrderEntity order,
     bool isDark,
   ) {
+    final isEmergency = order.priority == OrderPriority.emergency;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: order.isCritical
-            ? AppColors.amberGradient
+        gradient: isEmergency
+            ? AppColors.errorGradient
             : AppColors.primaryGradient,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: (order.isCritical ? AppColors.amber : AppColors.primaryDark)
-                .withValues(alpha: 0.2),
+            color: (isEmergency ? AppColors.error : AppColors.primaryDark)
+                .withOpacity(0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -251,31 +274,33 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
             children: [
               Expanded(
                 child: Text(
-                  order.orderNumber,
+                  order.orderId,
                   style: AppTypography.headlineSmall(Colors.white),
                 ),
               ),
-              if (order.isCritical)
+              if (order.priority != OrderPriority.normal)
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
+                    color: Colors.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
-                        Icons.priority_high,
+                      Icon(
+                        order.priority == OrderPriority.emergency
+                            ? Icons.local_hospital
+                            : Icons.priority_high,
                         size: 16,
                         color: Colors.white,
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        order.priorityDisplayName,
+                        order.priorityDisplayText,
                         style: AppTypography.labelSmall(Colors.white),
                       ),
                     ],
@@ -289,14 +314,12 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
               Icon(
                 Icons.access_time,
                 size: 16,
-                color: Colors.white.withValues(alpha: 0.9),
+                color: Colors.white.withOpacity(0.9),
               ),
               const SizedBox(width: 8),
               Text(
                 'Ordered ${order.orderTime.toRelativeTime()}',
-                style: AppTypography.bodyMedium(
-                  Colors.white.withValues(alpha: 0.9),
-                ),
+                style: AppTypography.bodyMedium(Colors.white.withOpacity(0.9)),
               ),
             ],
           ),
@@ -306,14 +329,12 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
               Icon(
                 Icons.info_outline,
                 size: 16,
-                color: Colors.white.withValues(alpha: 0.9),
+                color: Colors.white.withOpacity(0.9),
               ),
               const SizedBox(width: 8),
               Text(
-                'Status: ${order.statusDisplayName}',
-                style: AppTypography.bodyMedium(
-                  Colors.white.withValues(alpha: 0.9),
-                ),
+                'Status: ${order.statusDisplayText}',
+                style: AppTypography.bodyMedium(Colors.white.withOpacity(0.9)),
               ),
             ],
           ),
@@ -321,7 +342,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: Colors.white.withOpacity(0.2),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -333,7 +354,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                     Text(
                       'Total Amount',
                       style: AppTypography.labelSmall(
-                        Colors.white.withValues(alpha: 0.8),
+                        Colors.white.withOpacity(0.8),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -349,12 +370,12 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                     Text(
                       'Items',
                       style: AppTypography.labelSmall(
-                        Colors.white.withValues(alpha: 0.8),
+                        Colors.white.withOpacity(0.8),
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${order.itemCount}',
+                      '${order.items.length}',
                       style: AppTypography.headlineSmall(Colors.white),
                     ),
                   ],

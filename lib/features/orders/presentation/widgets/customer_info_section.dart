@@ -70,13 +70,24 @@ class CustomerInfoSection extends StatelessWidget {
             maxLines: 3,
           ),
 
-          if (order.specialInstructions != null) ...[
+          const SizedBox(height: 12),
+
+          // Distance
+          _buildInfoRow(
+            context,
+            Icons.directions_car_outlined,
+            'Distance',
+            '${order.distance.toStringAsFixed(1)} km',
+            isDark,
+          ),
+
+          if (order.notes != null) ...[
             const SizedBox(height: 12),
             _buildInfoRow(
               context,
               Icons.info_outline,
               'Special Instructions',
-              order.specialInstructions!,
+              order.notes!,
               isDark,
               maxLines: 3,
               valueColor: AppColors.warning,

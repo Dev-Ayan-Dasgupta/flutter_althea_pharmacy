@@ -10,21 +10,30 @@ abstract class OrderModel with _$OrderModel {
 
   const factory OrderModel({
     required String id,
-    required String orderNumber,
+    required String orderId,
     required String customerName,
     required String customerPhone,
     required String deliveryAddress,
+    required double distance,
     required DateTime orderTime,
     required String status,
     required String priority,
+    required List<OrderItemModel> items,
     required double totalAmount,
-    required int itemCount,
-    required List<MedicineItemModel> medicines,
-    String? prescriptionImageUrl,
-    String? deliveryBoyName,
-    String? deliveryBoyPhone,
-    DateTime? estimatedDeliveryTime,
-    String? specialInstructions,
+    String? prescriptionUrl,
+    String? notes,
+    String? rejectionReason,
+    String? invoiceUrl,
+    String? qrCode,
+    String? deliveryPartnerId,
+    String? deliveryPartnerName,
+    String? deliveryPartnerPhone,
+    double? deliveryPartnerLat,
+    double? deliveryPartnerLng,
+    DateTime? acceptedAt,
+    DateTime? readyAt,
+    DateTime? pickedUpAt,
+    DateTime? deliveredAt,
   }) = _OrderModel;
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
@@ -34,68 +43,96 @@ abstract class OrderModel with _$OrderModel {
   OrderEntity toEntity() {
     return OrderEntity(
       id: id,
-      orderNumber: orderNumber,
+      orderId: orderId,
       customerName: customerName,
       customerPhone: customerPhone,
       deliveryAddress: deliveryAddress,
+      distance: distance,
       orderTime: orderTime,
       status: _statusFromString(status),
       priority: _priorityFromString(priority),
+      items: items.map((item) => item.toEntity()).toList(),
       totalAmount: totalAmount,
-      itemCount: itemCount,
-      medicines: medicines.map((m) => m.toEntity()).toList(),
-      prescriptionImageUrl: prescriptionImageUrl,
-      deliveryBoyName: deliveryBoyName,
-      deliveryBoyPhone: deliveryBoyPhone,
-      estimatedDeliveryTime: estimatedDeliveryTime,
-      specialInstructions: specialInstructions,
+      prescriptionUrl: prescriptionUrl,
+      notes: notes,
+      rejectionReason: rejectionReason,
+      invoiceUrl: invoiceUrl,
+      qrCode: qrCode,
+      deliveryPartnerId: deliveryPartnerId,
+      deliveryPartnerName: deliveryPartnerName,
+      deliveryPartnerPhone: deliveryPartnerPhone,
+      deliveryPartnerLat: deliveryPartnerLat,
+      deliveryPartnerLng: deliveryPartnerLng,
+      acceptedAt: acceptedAt,
+      readyAt: readyAt,
+      pickedUpAt: pickedUpAt,
+      deliveredAt: deliveredAt,
     );
   }
 
   factory OrderModel.fromEntity(OrderEntity entity) {
     return OrderModel(
       id: entity.id,
-      orderNumber: entity.orderNumber,
+      orderId: entity.orderId,
       customerName: entity.customerName,
       customerPhone: entity.customerPhone,
       deliveryAddress: entity.deliveryAddress,
+      distance: entity.distance,
       orderTime: entity.orderTime,
       status: entity.status.name,
       priority: entity.priority.name,
-      totalAmount: entity.totalAmount,
-      itemCount: entity.itemCount,
-      medicines: entity.medicines
-          .map((m) => MedicineItemModel.fromEntity(m))
+      items: entity.items
+          .map((item) => OrderItemModel.fromEntity(item))
           .toList(),
-      prescriptionImageUrl: entity.prescriptionImageUrl,
-      deliveryBoyName: entity.deliveryBoyName,
-      deliveryBoyPhone: entity.deliveryBoyPhone,
-      estimatedDeliveryTime: entity.estimatedDeliveryTime,
-      specialInstructions: entity.specialInstructions,
+      totalAmount: entity.totalAmount,
+      prescriptionUrl: entity.prescriptionUrl,
+      notes: entity.notes,
+      rejectionReason: entity.rejectionReason,
+      invoiceUrl: entity.invoiceUrl,
+      qrCode: entity.qrCode,
+      deliveryPartnerId: entity.deliveryPartnerId,
+      deliveryPartnerName: entity.deliveryPartnerName,
+      deliveryPartnerPhone: entity.deliveryPartnerPhone,
+      deliveryPartnerLat: entity.deliveryPartnerLat,
+      deliveryPartnerLng: entity.deliveryPartnerLng,
+      acceptedAt: entity.acceptedAt,
+      readyAt: entity.readyAt,
+      pickedUpAt: entity.pickedUpAt,
+      deliveredAt: entity.deliveredAt,
     );
   }
 
   static OrderStatus _statusFromString(String status) {
     switch (status) {
-      case 'prescriptionVerification':
-        return OrderStatus.prescriptionVerification;
-      case 'packing':
-        return OrderStatus.packing;
-      case 'awaitingHandover':
-        return OrderStatus.awaitingHandover;
-      case 'completed':
-        return OrderStatus.completed;
+      case 'pending':
+        return OrderStatus.pending;
+      case 'reviewing':
+        return OrderStatus.reviewing;
+      case 'accepted':
+        return OrderStatus.accepted;
+      case 'preparingInvoice':
+        return OrderStatus.preparingInvoice;
+      case 'readyForPickup':
+        return OrderStatus.readyForPickup;
+      case 'pickedUp':
+        return OrderStatus.pickedUp;
+      case 'outForDelivery':
+        return OrderStatus.outForDelivery;
+      case 'delivered':
+        return OrderStatus.delivered;
+      case 'rejected':
+        return OrderStatus.rejected;
       case 'cancelled':
         return OrderStatus.cancelled;
       default:
-        return OrderStatus.prescriptionVerification;
+        return OrderStatus.pending;
     }
   }
 
   static OrderPriority _priorityFromString(String priority) {
     switch (priority) {
-      case 'critical':
-        return OrderPriority.critical;
+      case 'urgent':
+        return OrderPriority.urgent;
       case 'emergency':
         return OrderPriority.emergency;
       default:
@@ -105,46 +142,60 @@ abstract class OrderModel with _$OrderModel {
 }
 
 @freezed
-abstract class MedicineItemModel with _$MedicineItemModel {
-  const MedicineItemModel._();
+abstract class OrderItemModel with _$OrderItemModel {
+  const OrderItemModel._();
 
-  const factory MedicineItemModel({
+  const factory OrderItemModel({
     required String id,
-    required String name,
-    required String dosage,
+    required String medicineName,
     required int quantity,
     required double price,
-    String? brandName,
-    String? genericName,
-    bool? isScheduledDrug,
-  }) = _MedicineItemModel;
+    required String availability,
+    String? substituteId,
+    String? substituteName,
+    double? substitutePrice,
+    String? notes,
+  }) = _OrderItemModel;
 
-  factory MedicineItemModel.fromJson(Map<String, dynamic> json) =>
-      _$MedicineItemModelFromJson(json);
+  factory OrderItemModel.fromJson(Map<String, dynamic> json) =>
+      _$OrderItemModelFromJson(json);
 
-  MedicineItemEntity toEntity() {
-    return MedicineItemEntity(
+  OrderItemEntity toEntity() {
+    return OrderItemEntity(
       id: id,
-      name: name,
-      dosage: dosage,
+      medicineName: medicineName,
       quantity: quantity,
       price: price,
-      brandName: brandName,
-      genericName: genericName,
-      isScheduledDrug: isScheduledDrug,
+      availability: _availabilityFromString(availability),
+      substituteId: substituteId,
+      substituteName: substituteName,
+      substitutePrice: substitutePrice,
+      notes: notes,
     );
   }
 
-  factory MedicineItemModel.fromEntity(MedicineItemEntity entity) {
-    return MedicineItemModel(
+  factory OrderItemModel.fromEntity(OrderItemEntity entity) {
+    return OrderItemModel(
       id: entity.id,
-      name: entity.name,
-      dosage: entity.dosage,
+      medicineName: entity.medicineName,
       quantity: entity.quantity,
       price: entity.price,
-      brandName: entity.brandName,
-      genericName: entity.genericName,
-      isScheduledDrug: entity.isScheduledDrug,
+      availability: entity.availability.name,
+      substituteId: entity.substituteId,
+      substituteName: entity.substituteName,
+      substitutePrice: entity.substitutePrice,
+      notes: entity.notes,
     );
+  }
+
+  static ItemAvailability _availabilityFromString(String availability) {
+    switch (availability) {
+      case 'unavailable':
+        return ItemAvailability.unavailable;
+      case 'substituted':
+        return ItemAvailability.substituted;
+      default:
+        return ItemAvailability.available;
+    }
   }
 }

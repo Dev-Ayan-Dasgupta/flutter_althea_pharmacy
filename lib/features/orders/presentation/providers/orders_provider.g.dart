@@ -14,12 +14,8 @@ const ordersRepositoryProvider = OrdersRepositoryProvider._();
 
 final class OrdersRepositoryProvider
     extends
-        $FunctionalProvider<
-          OrdersRepository,
-          OrdersRepository,
-          OrdersRepository
-        >
-    with $Provider<OrdersRepository> {
+        $FunctionalProvider<OrderRepository, OrderRepository, OrderRepository>
+    with $Provider<OrderRepository> {
   const OrdersRepositoryProvider._()
     : super(
         from: null,
@@ -36,70 +32,24 @@ final class OrdersRepositoryProvider
 
   @$internal
   @override
-  $ProviderElement<OrdersRepository> $createElement($ProviderPointer pointer) =>
+  $ProviderElement<OrderRepository> $createElement($ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
-  OrdersRepository create(Ref ref) {
+  OrderRepository create(Ref ref) {
     return ordersRepository(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(OrdersRepository value) {
+  Override overrideWithValue(OrderRepository value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<OrdersRepository>(value),
+      providerOverride: $SyncValueProvider<OrderRepository>(value),
     );
   }
 }
 
-String _$ordersRepositoryHash() => r'70b4684412242064680b0953e391a3276c5d406d';
-
-@ProviderFor(getOrdersUseCase)
-const getOrdersUseCaseProvider = GetOrdersUseCaseProvider._();
-
-final class GetOrdersUseCaseProvider
-    extends
-        $FunctionalProvider<
-          GetOrdersUseCase,
-          GetOrdersUseCase,
-          GetOrdersUseCase
-        >
-    with $Provider<GetOrdersUseCase> {
-  const GetOrdersUseCaseProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'getOrdersUseCaseProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$getOrdersUseCaseHash();
-
-  @$internal
-  @override
-  $ProviderElement<GetOrdersUseCase> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  GetOrdersUseCase create(Ref ref) {
-    return getOrdersUseCase(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(GetOrdersUseCase value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<GetOrdersUseCase>(value),
-    );
-  }
-}
-
-String _$getOrdersUseCaseHash() => r'567a76361d95eea138484431d529d7c1214dd7b4';
+String _$ordersRepositoryHash() => r'68bd1575089e908d829bc2469aa1b929ba135837';
 
 @ProviderFor(Orders)
 const ordersProvider = OrdersProvider._();
@@ -132,7 +82,7 @@ final class OrdersProvider extends $NotifierProvider<Orders, OrdersState> {
   }
 }
 
-String _$ordersHash() => r'8da750bc5d9542339b5f1ddc6ea79c62291f367f';
+String _$ordersHash() => r'2645b5e4ef2037bc61ed37a107c4f9b03b310f9e';
 
 abstract class _$Orders extends $Notifier<OrdersState> {
   OrdersState build();
