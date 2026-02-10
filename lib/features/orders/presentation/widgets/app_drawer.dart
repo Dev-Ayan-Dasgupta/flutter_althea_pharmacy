@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_altheacare_pharmacy/features/auth/presentation/providers/auth_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -129,27 +130,6 @@ class AppDrawer extends ConsumerWidget {
                         ),
 
                       const Divider(),
-
-                      // QR Code Screen
-                      _buildDrawerItem(
-                        context,
-                        icon: Icons.qr_code_2,
-                        title: 'My QR Code',
-                        onTap: () {
-                          // Navigate to current pharmacy's QR code screen
-                          // For now, show a message or navigate to a general QR screen
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Select an order to view its QR code',
-                              ),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        },
-                        isDark: isDark,
-                      ),
 
                       _buildDrawerItem(
                         context,
@@ -351,19 +331,36 @@ class AppDrawer extends ConsumerWidget {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () async {
+              await ref.read(authProvider.notifier).logout();
+              if (context.mounted) {
+                context.pop();
+                context.go('/login');
+              }
+            },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
-            child: const Text('Logout'),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Logout'),
+
+                /// if logout is happening show a loader until the process is complete
+                if (ref.watch(authProvider).isLoading) ...[
+                  const SizedBox(width: 8),
+                  const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation(Colors.white),
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
         ],
       ),
     );
-
-    if (shouldLogout == true && context.mounted) {
-      await ref.read(authProvider.notifier).logout();
-      if (context.mounted) {
-        context.go('/login');
-      }
-    }
   }
 }
