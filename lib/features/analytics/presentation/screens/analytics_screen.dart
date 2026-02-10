@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../orders/presentation/widgets/app_drawer.dart';
+import '../../data/services/analytics_export_service.dart';
 import '../../domain/entities/analytics_entity.dart';
 import '../providers/analytics_provider.dart';
 import '../providers/analytics_state.dart';
@@ -21,6 +22,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   DateRangeType _selectedRange = DateRangeType.last7Days;
   DateTime? _customStartDate;
   DateTime? _customEndDate;
+  static const _exportService = AnalyticsExportService();
 
   @override
   Widget build(BuildContext context) {
@@ -442,7 +444,9 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     Color color,
     bool isDark,
   ) {
-    final percentage = (amount / total * 100).toStringAsFixed(1);
+    final percentage = total > 0 
+        ? (amount / total * 100).toStringAsFixed(1) 
+        : '0.0';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -470,7 +474,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
         ClipRRect(
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
-            value: amount / total,
+            value: total > 0 ? amount / total : 0,
             backgroundColor: color.withValues(alpha: 0.2),
             valueColor: AlwaysStoppedAnimation(color),
             minHeight: 8,
@@ -539,36 +543,95 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   }
 
   void _showExportDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Export Report'),
-        content: const Text('Choose export format:'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+    final analyticsState = ref.read(analyticsProvider);
+    
+    // Only show dialog if analytics data is loaded
+    analyticsState.maybeWhen(
+      loaded: (analytics) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Export Report'),
+            content: const Text('Choose export format:'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Generating PDF report...')),
+                  );
+                  
+                  try {
+                    await _exportService.exportAsPdf(analytics);
+                    
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('PDF report downloaded successfully!'),
+                          backgroundColor: AppColors.success,
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Error exporting PDF: $e'),
+                          backgroundColor: AppColors.error,
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: const Text('PDF'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Generating Excel report...')),
+                  );
+                  
+                  try {
+                    await _exportService.exportAsCsv(analytics);
+                    
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Excel report downloaded successfully!'),
+                          backgroundColor: AppColors.success,
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Error exporting Excel: $e'),
+                          backgroundColor: AppColors.error,
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: const Text('Excel'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Exporting as PDF...')),
-              );
-            },
-            child: const Text('PDF'),
+        );
+      },
+      orElse: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please wait for analytics data to load'),
+            backgroundColor: AppColors.warning,
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Exporting as Excel...')),
-              );
-            },
-            child: const Text('Excel'),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
