@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data'; // ADDED: Required for Uint8List
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -25,7 +25,10 @@ class InvoiceScreen extends ConsumerStatefulWidget {
 class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
   final _invoiceService = InvoiceService();
   InvoiceEntity? _invoice;
-  File? _pdfFile;
+
+  // CHANGED: Use Uint8List instead of File to support Web
+  Uint8List? _pdfBytes;
+
   bool _isGenerating = false;
   bool _isProcessing = false;
 
@@ -44,27 +47,29 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
         loaded: (orders) async {
           final order = orders.firstWhere((o) => o.id == widget.orderId);
           final invoice = await _invoiceService.generateInvoice(order);
-          final pdfFile = await _invoiceService.generatePDF(invoice);
+          // CHANGED: Now returns bytes directly
+          final pdfBytes = await _invoiceService.generatePDF(invoice);
 
           setState(() {
             _invoice = invoice;
-            _pdfFile = pdfFile;
+            _pdfBytes = pdfBytes;
           });
         },
         orElse: () async {
           // If not loaded yet, load orders first
           await ref.read(ordersProvider.notifier).loadOrders();
-          
+
           final updatedState = ref.read(ordersProvider);
           await updatedState.maybeWhen(
             loaded: (orders) async {
               final order = orders.firstWhere((o) => o.id == widget.orderId);
               final invoice = await _invoiceService.generateInvoice(order);
-              final pdfFile = await _invoiceService.generatePDF(invoice);
+              // CHANGED: Now returns bytes directly
+              final pdfBytes = await _invoiceService.generatePDF(invoice);
 
               setState(() {
                 _invoice = invoice;
-                _pdfFile = pdfFile;
+                _pdfBytes = pdfBytes;
               });
             },
             orElse: () {
@@ -85,7 +90,9 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
         );
       }
     } finally {
-      setState(() => _isGenerating = false);
+      if (mounted) {
+        setState(() => _isGenerating = false);
+      }
     }
   }
 
@@ -154,7 +161,7 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
       );
     }
 
-    if (_invoice == null || _pdfFile == null) {
+    if (_invoice == null || _pdfBytes == null) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -194,7 +201,8 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: PdfPreview(
-                build: (format) => _pdfFile!.readAsBytes(),
+                // CHANGED: Use bytes directly
+                build: (format) => _pdfBytes!,
                 allowPrinting: false,
                 allowSharing: false,
                 canChangePageFormat: false,
@@ -376,7 +384,9 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
         );
       }
     } finally {
-      setState(() => _isProcessing = false);
+      if (mounted) {
+        setState(() => _isProcessing = false);
+      }
     }
   }
 
@@ -404,7 +414,9 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
         );
       }
     } finally {
-      setState(() => _isProcessing = false);
+      if (mounted) {
+        setState(() => _isProcessing = false);
+      }
     }
   }
 
@@ -424,38 +436,50 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
         );
       }
     } finally {
-      setState(() => _isProcessing = false);
+      if (mounted) {
+        setState(() => _isProcessing = false);
+      }
     }
   }
 
   Future<void> _handleConfirm() async {
     setState(() => _isProcessing = true);
 
-    // Update order status to preparingInvoice
-    await ref
-        .read(ordersProvider.notifier)
-        .updateOrderStatus(widget.orderId, OrderStatus.preparingInvoice);
+    try {
+      // Update order status to preparingInvoice
+      await ref
+          .read(ordersProvider.notifier)
+          .updateOrderStatus(widget.orderId, OrderStatus.preparingInvoice);
 
-    // Generate invoice URL (store in order)
-    final invoiceUrl = _pdfFile!.path;
+      // Generate QR code next
+      final qrCode = await ref
+          .read(ordersProvider.notifier)
+          .generateQRCode(widget.orderId);
 
-    // Generate QR code next
-    final qrCode = await ref
-        .read(ordersProvider.notifier)
-        .generateQRCode(widget.orderId);
+      if (qrCode != null && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Invoice confirmed! QR code generated.'),
+            backgroundColor: AppColors.success,
+          ),
+        );
 
-    setState(() => _isProcessing = false);
-
-    if (qrCode != null && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invoice confirmed! QR code generated.'),
-          backgroundColor: AppColors.success,
-        ),
-      );
-
-      // Navigate to QR code screen
-      context.go('/home/order/${widget.orderId}/qr-code');
+        // Navigate to QR code screen
+        context.go('/home/order/${widget.orderId}/qr-code');
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error confirming invoice: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isProcessing = false);
+      }
     }
   }
 

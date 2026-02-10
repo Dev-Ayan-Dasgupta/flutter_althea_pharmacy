@@ -1,12 +1,12 @@
-import 'dart:io';
-import 'package:flutter/foundation.dart';
+import 'dart:typed_data';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:path_provider/path_provider.dart';
 import '../../domain/entities/invoice_entity.dart';
 import '../../domain/entities/order_entity.dart';
-import '../../../../core/utils/download_utils.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+// Note: You might need to import your specific DownloadUtils if you have a custom implementation for web downloading
+// import '../../../../core/utils/download_utils.dart';
 
 class InvoiceService {
   Future<InvoiceEntity> generateInvoice(OrderEntity order) async {
@@ -57,36 +57,11 @@ class InvoiceService {
     );
   }
 
-  Future<File> generatePDF(InvoiceEntity invoice) async {
-    final pdf = pw.Document();
-
-    pdf.addPage(
-      pw.MultiPage(
-        pageFormat: PdfPageFormat.a4,
-        margin: const pw.EdgeInsets.all(32),
-        build: (pw.Context context) {
-          return [
-            _buildHeader(invoice),
-            pw.SizedBox(height: 20),
-            _buildPharmacyInfo(invoice),
-            pw.SizedBox(height: 20),
-            _buildCustomerInfo(invoice),
-            pw.SizedBox(height: 20),
-            _buildItemsTable(invoice),
-            pw.SizedBox(height: 20),
-            _buildTotals(invoice),
-            pw.SizedBox(height: 30),
-            _buildFooter(invoice),
-          ];
-        },
-      ),
-    );
-
-    // Save to temporary directory
-    final output = await getTemporaryDirectory();
-    final file = File('${output.path}/invoice_${invoice.invoiceNumber}.pdf');
-    await file.writeAsBytes(await pdf.save());
-    return file;
+  /// Generates the PDF and returns the bytes (Uint8List) instead of a File object.
+  /// This ensures compatibility with Flutter Web.
+  Future<Uint8List> generatePDF(InvoiceEntity invoice) async {
+    final pdf = await _generatePDFDocument(invoice);
+    return await pdf.save();
   }
 
   pw.Widget _buildHeader(InvoiceEntity invoice) {
@@ -365,19 +340,13 @@ class InvoiceService {
     );
   }
 
-  /// Download invoice PDF - works on all platforms including web
   Future<void> downloadInvoice(InvoiceEntity invoice) async {
     final pdf = await _generatePDFDocument(invoice);
     final bytes = await pdf.save();
     final filename = 'invoice_${invoice.invoiceNumber}.pdf';
 
-    if (kIsWeb) {
-      // Use web-specific download
-      DownloadUtils.downloadFileWeb(bytes, filename);
-    } else {
-      // Use share/save functionality for mobile/desktop
-      await Printing.sharePdf(bytes: bytes, filename: filename);
-    }
+    // This method handles both web (download) and mobile (share/save)
+    await Printing.sharePdf(bytes: bytes, filename: filename);
   }
 
   Future<pw.Document> _generatePDFDocument(InvoiceEntity invoice) async {

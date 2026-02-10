@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_altheacare_pharmacy/features/auth/presentation/providers/auth_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -320,46 +319,64 @@ class AppDrawer extends ConsumerWidget {
   }
 
   Future<void> _showLogoutDialog(BuildContext context, WidgetRef ref) async {
-    final shouldLogout = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              await ref.read(authProvider.notifier).logout();
-              if (context.mounted) {
-                context.pop();
-                context.go('/login');
-              }
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('Logout'),
+    // Read the auth notifier ONCE before showing the dialog
+    final authNotifier = ref.read(authProvider.notifier);
 
-                /// if logout is happening show a loader until the process is complete
-                if (ref.watch(authProvider).isLoading) ...[
-                  const SizedBox(width: 8),
-                  const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation(Colors.white),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ],
+    await showDialog<bool>(
+      context: context,
+      barrierDismissible: false, // Prevent dismissing during logout
+      builder: (dialogContext) => Consumer(
+        builder: (context, ref, child) {
+          final isLoading = ref.watch(authProvider).isLoading;
+
+          return AlertDialog(
+            title: const Text('Logout'),
+            content: const Text('Are you sure you want to logout?'),
+            actions: [
+              TextButton(
+                onPressed: isLoading
+                    ? null
+                    : () => Navigator.pop(dialogContext, false),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        // Use the authNotifier we captured before the dialog
+                        await authNotifier.logout();
+                        if (dialogContext.mounted) {
+                          Navigator.pop(dialogContext, true);
+                          // Navigate immediately after closing dialog
+                          if (context.mounted) {
+                            context.go('/login');
+                          }
+                        }
+                      },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.error,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Logout'),
+                    if (isLoading) ...[
+                      const SizedBox(width: 8),
+                      const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation(Colors.white),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
