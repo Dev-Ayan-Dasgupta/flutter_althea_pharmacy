@@ -458,7 +458,9 @@ class ProfileScreen extends ConsumerWidget {
         // 1. Upload the image file to your backend/cloud storage (e.g., AWS S3, Firebase Storage)
         // 2. Get the uploaded image URL from the backend
         // 3. Update the profile with the real URL
-        // For now, we'll use a placeholder URL to demonstrate the functionality
+        // 
+        // IMPORTANT: The current placeholder URL uses an external service (picsum.photos)
+        // which is NOT suitable for production. Replace with your own backend/storage.
         final updatedProfile = profile.copyWith(
           logoUrl: 'https://picsum.photos/512?random=${DateTime.now().millisecondsSinceEpoch}',
         );

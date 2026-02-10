@@ -36,26 +36,29 @@ This document describes the fixes implemented for the 5 bugs in the Flutter Alth
 **Problem:** When accepting an order, invoice generation would fail because the order state wasn't updated in time.
 
 **Solution:**
-- Added 500ms delay after order acceptance before navigation to allow state update
-- Implemented retry logic in invoice generation:
-  - If order not found initially, reloads orders and retries once
-  - Handles both loaded and non-loaded states
-  - Better error messages for debugging
+- Fixed state synchronization by properly awaiting `loadOrders()` in the orders provider
+- Both `acceptOrder()` and `partialAcceptOrder()` now wait for state updates to complete
+- Implemented fallback order loading in invoice screen if state is not loaded
+- Better error messages for debugging
 - Added mounted checks to prevent navigation errors
 
 **Files Modified:**
-- `lib/features/orders/presentation/screens/item_checkers_screen.dart` - Added delay before navigation
-- `lib/features/orders/presentation/screens/invoice_screen.dart` - Added retry logic and better error handling
+- `lib/features/orders/presentation/providers/orders_provider.dart` - Fixed async state updates
+- `lib/features/orders/presentation/screens/item_checkers_screen.dart` - Removed delay, relies on proper state sync
+- `lib/features/orders/presentation/screens/invoice_screen.dart` - Added fallback loading and better error handling
 
 **Technical Details:**
 The issue occurred because:
 1. User accepts order
-2. `acceptOrder()` called and returns success
-3. Navigation happens immediately to invoice screen
-4. Invoice screen tries to find order from cached state
-5. State hasn't updated yet, so order not found
+2. `acceptOrder()` called and returned success immediately
+3. `loadOrders()` was called but not awaited, causing state update to happen asynchronously
+4. Navigation happened before state update completed
+5. Invoice screen tried to find order from stale state
 
-Fixed by ensuring state update completes before navigation and adding fallback reload in invoice screen.
+Fixed by:
+1. Changed `loadOrders()` calls to `await loadOrders()` in provider methods
+2. Ensured state is fully updated before returning success
+3. Added fallback loading in invoice screen for edge cases
 
 ---
 
