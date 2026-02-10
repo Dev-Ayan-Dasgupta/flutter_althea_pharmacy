@@ -22,7 +22,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   DateRangeType _selectedRange = DateRangeType.last7Days;
   DateTime? _customStartDate;
   DateTime? _customEndDate;
-  final _exportService = AnalyticsExportService();
+  static const _exportService = AnalyticsExportService();
 
   @override
   Widget build(BuildContext context) {

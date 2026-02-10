@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +9,8 @@ import '../../domain/entities/analytics_entity.dart';
 import '../../../../core/utils/download_utils.dart';
 
 class AnalyticsExportService {
+  const AnalyticsExportService();
+
   /// Export analytics report as PDF
   Future<void> exportAsPdf(AnalyticsEntity analytics) async {
     final pdf = await _generatePDFDocument(analytics);
@@ -32,8 +35,9 @@ class AnalyticsExportService {
       // Use web-specific download
       DownloadUtils.downloadCsvWeb(csvContent, filename);
     } else {
-      // For mobile/desktop, we need to convert to bytes and use share
-      final bytes = Uint8List.fromList(csvContent.codeUnits);
+      // For mobile/desktop, convert CSV to bytes with proper UTF-8 encoding
+      // and use the printing package's share functionality (works for any file type)
+      final bytes = Uint8List.fromList(utf8.encode(csvContent));
       await Printing.sharePdf(
         bytes: bytes,
         filename: filename,
