@@ -33,7 +33,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      drawer: Responsive.isMobile(context) ? const AppDrawer() : null,
+      drawer: const AppDrawer(),
       appBar: AppBar(
         title: _isSearchVisible
             ? TextField(
@@ -243,8 +243,6 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
 
   Widget _buildMobileList(List items) {
     return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
       itemCount: items.length,
       separatorBuilder: (context, index) => const SizedBox(height: 12),
       itemBuilder: (context, index) {

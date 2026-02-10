@@ -28,7 +28,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      drawer: Responsive.isMobile(context) ? const AppDrawer() : null,
+      drawer: const AppDrawer(),
       appBar: AppBar(
         title: Text(
           'Notifications',
