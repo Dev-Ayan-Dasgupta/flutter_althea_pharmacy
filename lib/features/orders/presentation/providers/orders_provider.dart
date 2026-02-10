@@ -64,16 +64,16 @@ class Orders extends _$Orders {
 
     final result = await repository.acceptOrder(action);
 
-    return result.fold(
-      (error) {
-        // Handle error
-        return false;
-      },
-      (_) async {
-        await loadOrders();
-        return true;
-      },
+    final success = result.fold(
+      (error) => false,
+      (_) => true,
     );
+
+    if (success) {
+      await loadOrders();
+    }
+
+    return success;
   }
 
   // Reject order
@@ -106,13 +106,16 @@ class Orders extends _$Orders {
 
     final result = await repository.partialAcceptOrder(action);
 
-    return result.fold(
+    final success = result.fold(
       (error) => false,
-      (_) async {
-        await loadOrders();
-        return true;
-      },
+      (_) => true,
     );
+
+    if (success) {
+      await loadOrders();
+    }
+
+    return success;
   }
 
   // Generate invoice

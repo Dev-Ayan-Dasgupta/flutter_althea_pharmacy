@@ -68,7 +68,9 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
               });
             },
             orElse: () {
-              throw Exception('Failed to load orders');
+              throw Exception(
+                'Unable to load order data. Please check your connection and try again.',
+              );
             },
           );
         },
