@@ -482,7 +482,12 @@ class SettingsScreen extends ConsumerWidget {
           isSelected: settings.language == Language.hindi,
           onTap: () {
             ref.read(settingsProvider.notifier).updateLanguage(Language.hindi);
-            _showComingSoonSnackbar(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Language changed to Hindi. Full translation coming soon!'),
+                duration: Duration(seconds: 2),
+              ),
+            );
           },
           isDark: isDark,
         ),
@@ -496,7 +501,12 @@ class SettingsScreen extends ConsumerWidget {
             ref
                 .read(settingsProvider.notifier)
                 .updateLanguage(Language.bengali);
-            _showComingSoonSnackbar(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Language changed to Bengali. Full translation coming soon!'),
+                duration: Duration(seconds: 2),
+              ),
+            );
           },
           isDark: isDark,
         ),
@@ -667,15 +677,6 @@ class SettingsScreen extends ConsumerWidget {
             child: const Text('Download'),
           ),
         ],
-      ),
-    );
-  }
-
-  void _showComingSoonSnackbar(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Multi-language support coming soon!'),
-        duration: Duration(seconds: 2),
       ),
     );
   }

@@ -51,13 +51,35 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
             _pdfFile = pdfFile;
           });
         },
-        orElse: () {},
+        orElse: () async {
+          // If not loaded yet, load orders first
+          await ref.read(ordersProvider.notifier).loadOrders();
+          
+          final updatedState = ref.read(ordersProvider);
+          await updatedState.maybeWhen(
+            loaded: (orders) async {
+              final order = orders.firstWhere((o) => o.id == widget.orderId);
+              final invoice = await _invoiceService.generateInvoice(order);
+              final pdfFile = await _invoiceService.generatePDF(invoice);
+
+              setState(() {
+                _invoice = invoice;
+                _pdfFile = pdfFile;
+              });
+            },
+            orElse: () {
+              throw Exception(
+                'Unable to load order data. Please check your connection and try again.',
+              );
+            },
+          );
+        },
       );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error generating invoice: $e'),
+            content: Text('Failed to generate invoice: $e'),
             backgroundColor: AppColors.error,
           ),
         );
@@ -86,6 +108,11 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
         ),
         actions: [
           if (_invoice != null && !_isGenerating) ...[
+            IconButton(
+              icon: const Icon(Icons.download),
+              onPressed: _isProcessing ? null : _handleDownload,
+              tooltip: 'Download Invoice',
+            ),
             IconButton(
               icon: const Icon(Icons.share),
               onPressed: _isProcessing ? null : _handleShare,
@@ -344,6 +371,34 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error printing: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    } finally {
+      setState(() => _isProcessing = false);
+    }
+  }
+
+  Future<void> _handleDownload() async {
+    if (_invoice == null) return;
+
+    setState(() => _isProcessing = true);
+    try {
+      await _invoiceService.downloadInvoice(_invoice!);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Invoice downloaded successfully!'),
+            backgroundColor: AppColors.success,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error downloading: $e'),
             backgroundColor: AppColors.error,
           ),
         );

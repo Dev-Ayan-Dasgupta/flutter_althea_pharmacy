@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../domain/entities/invoice_entity.dart';
 import '../../domain/entities/order_entity.dart';
+import '../../../../core/utils/download_utils.dart';
 
 class InvoiceService {
   Future<InvoiceEntity> generateInvoice(OrderEntity order) async {
@@ -361,6 +363,21 @@ class InvoiceService {
       bytes: await pdf.save(),
       filename: 'invoice_${invoice.invoiceNumber}.pdf',
     );
+  }
+
+  /// Download invoice PDF - works on all platforms including web
+  Future<void> downloadInvoice(InvoiceEntity invoice) async {
+    final pdf = await _generatePDFDocument(invoice);
+    final bytes = await pdf.save();
+    final filename = 'invoice_${invoice.invoiceNumber}.pdf';
+
+    if (kIsWeb) {
+      // Use web-specific download
+      DownloadUtils.downloadFileWeb(bytes, filename);
+    } else {
+      // Use share/save functionality for mobile/desktop
+      await Printing.sharePdf(bytes: bytes, filename: filename);
+    }
   }
 
   Future<pw.Document> _generatePDFDocument(InvoiceEntity invoice) async {
