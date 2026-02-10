@@ -412,7 +412,7 @@ class ProfileScreen extends ConsumerWidget {
               title: const Text('Choose from Gallery'),
               onTap: () {
                 Navigator.pop(context);
-                _pickImage(ImageSource.gallery, ref, profile);
+                _pickImage(ImageSource.gallery, ref, profile, context);
               },
             ),
             ListTile(
@@ -420,7 +420,7 @@ class ProfileScreen extends ConsumerWidget {
               title: const Text('Take a Photo'),
               onTap: () {
                 Navigator.pop(context);
-                _pickImage(ImageSource.camera, ref, profile);
+                _pickImage(ImageSource.camera, ref, profile, context);
               },
             ),
             if (profile.logoUrl != null)
@@ -429,7 +429,7 @@ class ProfileScreen extends ConsumerWidget {
                 title: const Text('Remove Photo'),
                 onTap: () {
                   Navigator.pop(context);
-                  _removePhoto(ref, profile);
+                  _removePhoto(ref, profile, context);
                 },
               ),
           ],
@@ -442,6 +442,7 @@ class ProfileScreen extends ConsumerWidget {
     ImageSource source,
     WidgetRef ref,
     ProfileEntity profile,
+    BuildContext context,
   ) async {
     try {
       final picker = ImagePicker();
@@ -452,17 +453,18 @@ class ProfileScreen extends ConsumerWidget {
         imageQuality: 85,
       );
 
-      if (image != null && mounted) {
+      if (image != null && context.mounted) {
         // TODO: Replace this with actual backend image upload
         // In a production app, you would:
         // 1. Upload the image file to your backend/cloud storage (e.g., AWS S3, Firebase Storage)
         // 2. Get the uploaded image URL from the backend
         // 3. Update the profile with the real URL
-        // 
+        //
         // IMPORTANT: The current placeholder URL uses an external service (picsum.photos)
         // which is NOT suitable for production. Replace with your own backend/storage.
         final updatedProfile = profile.copyWith(
-          logoUrl: 'https://picsum.photos/512?random=${DateTime.now().millisecondsSinceEpoch}',
+          logoUrl:
+              'https://picsum.photos/512?random=${DateTime.now().millisecondsSinceEpoch}',
         );
 
         ref.read(profileProvider.notifier).updateProfile(updatedProfile);
@@ -475,7 +477,7 @@ class ProfileScreen extends ConsumerWidget {
         );
       }
     } catch (e) {
-      if (mounted) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to pick image: $e'),
@@ -486,7 +488,11 @@ class ProfileScreen extends ConsumerWidget {
     }
   }
 
-  void _removePhoto(WidgetRef ref, ProfileEntity profile) {
+  void _removePhoto(
+    WidgetRef ref,
+    ProfileEntity profile,
+    BuildContext context,
+  ) {
     final updatedProfile = profile.copyWith(logoUrl: null);
     ref.read(profileProvider.notifier).updateProfile(updatedProfile);
 
