@@ -153,7 +153,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
       body: Stack(
         children: [
           if (!_hasError && _controller != null)
-            WebViewWidget(controller: _controller!),
+            WebViewWidget(controller: _controller),
 
           if (_isLoading && !_hasError)
             const Center(
@@ -204,7 +204,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
                   _hasError = false;
                   _isLoading = true;
                 });
-                _controller.reload();
+                _controller?.reload();
               },
               icon: const Icon(Icons.refresh),
               label: const Text('Retry'),

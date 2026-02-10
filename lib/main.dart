@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart' hide ThemeMode;
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/settings/presentation/providers/settings_provider.dart';
-import 'features/settings/domain/entities/settings_entity.dart' as settings_entity;
+import 'features/settings/domain/entities/settings_entity.dart'
+    as settings_entity;
+import 'features/settings/presentation/providers/settings_state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

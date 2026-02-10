@@ -5,8 +5,8 @@ class AppUrls {
   static const String baseUrl = 'https://altheacare.in';
 
   // Legal Pages
-  static const String termsAndConditions = '$baseUrl/pharmacy-terms';
-  static const String privacyPolicy = '$baseUrl/pharmacy-privacy';
+  static const String termsAndConditions = '$baseUrl/#/pharmacy-partner-terms';
+  static const String privacyPolicy = '$baseUrl/#/privacy-policy';
 
   // Support
   static const String website = baseUrl;
