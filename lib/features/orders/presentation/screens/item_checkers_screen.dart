@@ -579,8 +579,13 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
           backgroundColor: AppColors.success,
         ),
       );
-      // Navigate to invoice screen
-      context.go('/home/order/${widget.orderId}/invoice');
+      // Wait a moment to ensure state is updated before navigating
+      await Future.delayed(const Duration(milliseconds: 500));
+      
+      if (mounted) {
+        // Navigate to invoice screen
+        context.go('/home/order/${widget.orderId}/invoice');
+      }
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

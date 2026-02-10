@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../../core/providers/permission_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -166,16 +167,57 @@ class ProfileScreen extends ConsumerWidget {
       ),
       child: Column(
         children: [
-          // Avatar
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 3),
-            ),
-            child: const Icon(Icons.store, size: 50, color: Colors.white),
+          // Avatar with edit button
+          Stack(
+            children: [
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 3),
+                  image: profile.logoUrl != null
+                      ? DecorationImage(
+                          image: NetworkImage(profile.logoUrl!),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                ),
+                child: profile.logoUrl == null
+                    ? const Icon(Icons.store, size: 50, color: Colors.white)
+                    : null,
+              ),
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    final canEdit = ref.watch(
+                      hasPermissionProvider(Permission.editProfile),
+                    );
+                    if (!canEdit) return const SizedBox.shrink();
+
+                    return GestureDetector(
+                      onTap: () => _showPhotoOptions(context, ref, profile),
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryDark,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: const Icon(
+                          Icons.camera_alt,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
 
           const SizedBox(height: 16),
@@ -353,6 +395,101 @@ class ProfileScreen extends ConsumerWidget {
         }
       }
     });
+  }
+
+  void _showPhotoOptions(
+    BuildContext context,
+    WidgetRef ref,
+    ProfileEntity profile,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Choose from Gallery'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.gallery, ref, profile);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Take a Photo'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.camera, ref, profile);
+              },
+            ),
+            if (profile.logoUrl != null)
+              ListTile(
+                leading: const Icon(Icons.delete, color: AppColors.error),
+                title: const Text('Remove Photo'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _removePhoto(ref, profile);
+                },
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickImage(
+    ImageSource source,
+    WidgetRef ref,
+    ProfileEntity profile,
+  ) async {
+    try {
+      final picker = ImagePicker();
+      final XFile? image = await picker.pickImage(
+        source: source,
+        maxWidth: 512,
+        maxHeight: 512,
+        imageQuality: 85,
+      );
+
+      if (image != null && mounted) {
+        // In a real app, you would upload the image to a server
+        // For now, we'll use a placeholder URL
+        final updatedProfile = profile.copyWith(
+          logoUrl: 'https://picsum.photos/512?random=${DateTime.now().millisecondsSinceEpoch}',
+        );
+
+        ref.read(profileProvider.notifier).updateProfile(updatedProfile);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Photo updated successfully!'),
+            backgroundColor: AppColors.success,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to pick image: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
+  }
+
+  void _removePhoto(WidgetRef ref, ProfileEntity profile) {
+    final updatedProfile = profile.copyWith(logoUrl: null);
+    ref.read(profileProvider.notifier).updateProfile(updatedProfile);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Photo removed successfully!'),
+        backgroundColor: AppColors.success,
+      ),
+    );
   }
 }
 

@@ -42,22 +42,66 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
       final ordersState = ref.read(ordersProvider);
       await ordersState.maybeWhen(
         loaded: (orders) async {
-          final order = orders.firstWhere((o) => o.id == widget.orderId);
-          final invoice = await _invoiceService.generateInvoice(order);
-          final pdfFile = await _invoiceService.generatePDF(invoice);
+          try {
+            final order = orders.firstWhere((o) => o.id == widget.orderId);
+            final invoice = await _invoiceService.generateInvoice(order);
+            final pdfFile = await _invoiceService.generatePDF(invoice);
 
-          setState(() {
-            _invoice = invoice;
-            _pdfFile = pdfFile;
-          });
+            setState(() {
+              _invoice = invoice;
+              _pdfFile = pdfFile;
+            });
+          } catch (e) {
+            // If order not found, reload orders and retry once
+            await ref.read(ordersProvider.notifier).loadOrders();
+            await Future.delayed(const Duration(milliseconds: 500));
+            
+            final updatedState = ref.read(ordersProvider);
+            await updatedState.maybeWhen(
+              loaded: (orders) async {
+                final order = orders.firstWhere((o) => o.id == widget.orderId);
+                final invoice = await _invoiceService.generateInvoice(order);
+                final pdfFile = await _invoiceService.generatePDF(invoice);
+
+                setState(() {
+                  _invoice = invoice;
+                  _pdfFile = pdfFile;
+                });
+              },
+              orElse: () {
+                throw Exception('Order not found after reload');
+              },
+            );
+          }
         },
-        orElse: () {},
+        orElse: () async {
+          // If not loaded, try loading orders first
+          await ref.read(ordersProvider.notifier).loadOrders();
+          await Future.delayed(const Duration(milliseconds: 500));
+          
+          final updatedState = ref.read(ordersProvider);
+          await updatedState.maybeWhen(
+            loaded: (orders) async {
+              final order = orders.firstWhere((o) => o.id == widget.orderId);
+              final invoice = await _invoiceService.generateInvoice(order);
+              final pdfFile = await _invoiceService.generatePDF(invoice);
+
+              setState(() {
+                _invoice = invoice;
+                _pdfFile = pdfFile;
+              });
+            },
+            orElse: () {
+              throw Exception('Failed to load orders');
+            },
+          );
+        },
       );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error generating invoice: $e'),
+            content: Text('Failed to generate invoice: $e'),
             backgroundColor: AppColors.error,
           ),
         );
@@ -86,6 +130,11 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
         ),
         actions: [
           if (_invoice != null && !_isGenerating) ...[
+            IconButton(
+              icon: const Icon(Icons.download),
+              onPressed: _isProcessing ? null : _handleDownload,
+              tooltip: 'Download Invoice',
+            ),
             IconButton(
               icon: const Icon(Icons.share),
               onPressed: _isProcessing ? null : _handleShare,
@@ -344,6 +393,34 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error printing: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    } finally {
+      setState(() => _isProcessing = false);
+    }
+  }
+
+  Future<void> _handleDownload() async {
+    if (_invoice == null) return;
+
+    setState(() => _isProcessing = true);
+    try {
+      await _invoiceService.downloadInvoice(_invoice!);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Invoice downloaded successfully!'),
+            backgroundColor: AppColors.success,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error downloading: $e'),
             backgroundColor: AppColors.error,
           ),
         );
