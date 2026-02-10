@@ -244,7 +244,9 @@ class AnalyticsExportService {
     double amount,
     double total,
   ) {
-    final percentage = (amount / total * 100).toStringAsFixed(1);
+    final percentage = total > 0 
+        ? (amount / total * 100).toStringAsFixed(1) 
+        : '0.0';
     return pw.Row(
       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
       children: [

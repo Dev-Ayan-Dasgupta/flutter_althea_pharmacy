@@ -22,6 +22,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   DateRangeType _selectedRange = DateRangeType.last7Days;
   DateTime? _customStartDate;
   DateTime? _customEndDate;
+  final _exportService = AnalyticsExportService();
 
   @override
   Widget build(BuildContext context) {
@@ -443,7 +444,9 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     Color color,
     bool isDark,
   ) {
-    final percentage = (amount / total * 100).toStringAsFixed(1);
+    final percentage = total > 0 
+        ? (amount / total * 100).toStringAsFixed(1) 
+        : '0.0';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -471,7 +474,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
         ClipRRect(
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
-            value: amount / total,
+            value: total > 0 ? amount / total : 0,
             backgroundColor: color.withValues(alpha: 0.2),
             valueColor: AlwaysStoppedAnimation(color),
             minHeight: 8,
@@ -563,8 +566,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   );
                   
                   try {
-                    final exportService = AnalyticsExportService();
-                    await exportService.exportAsPdf(analytics);
+                    await _exportService.exportAsPdf(analytics);
                     
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -595,8 +597,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   );
                   
                   try {
-                    final exportService = AnalyticsExportService();
-                    await exportService.exportAsCsv(analytics);
+                    await _exportService.exportAsCsv(analytics);
                     
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
