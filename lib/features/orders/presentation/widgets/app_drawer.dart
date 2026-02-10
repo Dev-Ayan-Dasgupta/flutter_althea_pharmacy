@@ -130,6 +130,27 @@ class AppDrawer extends ConsumerWidget {
 
                       const Divider(),
 
+                      // QR Code Screen
+                      _buildDrawerItem(
+                        context,
+                        icon: Icons.qr_code_2,
+                        title: 'My QR Code',
+                        onTap: () {
+                          // Navigate to current pharmacy's QR code screen
+                          // For now, show a message or navigate to a general QR screen
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Select an order to view its QR code',
+                              ),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                        isDark: isDark,
+                      ),
+
                       _buildDrawerItem(
                         context,
                         icon: Icons.help_outline,
@@ -232,9 +253,9 @@ class AppDrawer extends ConsumerWidget {
                           'Logout',
                           style: AppTypography.bodyMedium(AppColors.error),
                         ),
-                        onTap: () {
+                        onTap: () async {
                           Navigator.pop(context);
-                          _showLogoutDialog(context, ref);
+                          await _showLogoutDialog(context, ref);
                         },
                       ),
                     ],
@@ -318,30 +339,31 @@ class AppDrawer extends ConsumerWidget {
     );
   }
 
-  void _showLogoutDialog(BuildContext context, WidgetRef ref) {
-    showDialog(
+  Future<void> _showLogoutDialog(BuildContext context, WidgetRef ref) async {
+    final shouldLogout = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Logout'),
         content: const Text('Are you sure you want to logout?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(context, false),
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              await ref.read(authProvider.notifier).logout();
-              if (context.mounted) {
-                context.go('/login');
-              }
-            },
+            onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
             child: const Text('Logout'),
           ),
         ],
       ),
     );
+
+    if (shouldLogout == true && context.mounted) {
+      await ref.read(authProvider.notifier).logout();
+      if (context.mounted) {
+        context.go('/login');
+      }
+    }
   }
 }

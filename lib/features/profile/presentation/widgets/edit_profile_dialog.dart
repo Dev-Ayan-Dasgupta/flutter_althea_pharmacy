@@ -24,6 +24,14 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
   late TextEditingController _cityController;
   late TextEditingController _stateController;
   late TextEditingController _pincodeController;
+  late TextEditingController _licenseNumberController;
+  late TextEditingController _gstinController;
+  late TextEditingController _pharmacistNameController;
+  late TextEditingController _pharmacistRegNumberController;
+  late TextEditingController _bankNameController;
+  late TextEditingController _accountNumberController;
+  late TextEditingController _ifscCodeController;
+  late TextEditingController _upiIdController;
 
   bool _isProcessing = false;
   int _currentStep = 0;
@@ -47,6 +55,28 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
     _cityController = TextEditingController(text: widget.profile.city);
     _stateController = TextEditingController(text: widget.profile.state);
     _pincodeController = TextEditingController(text: widget.profile.pincode);
+    _licenseNumberController = TextEditingController(
+      text: widget.profile.licenseNumber,
+    );
+    _gstinController = TextEditingController(text: widget.profile.gstin);
+    _pharmacistNameController = TextEditingController(
+      text: widget.profile.pharmacistName,
+    );
+    _pharmacistRegNumberController = TextEditingController(
+      text: widget.profile.pharmacistRegNumber,
+    );
+    _bankNameController = TextEditingController(
+      text: widget.profile.bankName ?? '',
+    );
+    _accountNumberController = TextEditingController(
+      text: widget.profile.accountNumber ?? '',
+    );
+    _ifscCodeController = TextEditingController(
+      text: widget.profile.ifscCode ?? '',
+    );
+    _upiIdController = TextEditingController(
+      text: widget.profile.upiId ?? '',
+    );
   }
 
   @override
@@ -60,6 +90,14 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
     _cityController.dispose();
     _stateController.dispose();
     _pincodeController.dispose();
+    _licenseNumberController.dispose();
+    _gstinController.dispose();
+    _pharmacistNameController.dispose();
+    _pharmacistRegNumberController.dispose();
+    _bankNameController.dispose();
+    _accountNumberController.dispose();
+    _ifscCodeController.dispose();
+    _upiIdController.dispose();
     super.dispose();
   }
 
@@ -135,7 +173,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                           onPressed: _isProcessing
                               ? null
                               : details.onStepContinue,
-                          child: Text(_currentStep == 1 ? 'Save' : 'Next'),
+                          child: Text(_currentStep == 3 ? 'Save' : 'Next'),
                         ),
                       ],
                     ),
@@ -274,6 +312,99 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                       ],
                     ),
                   ),
+                  Step(
+                    title: const Text('License Information'),
+                    isActive: _currentStep >= 2,
+                    state: _currentStep > 2
+                        ? StepState.complete
+                        : StepState.indexed,
+                    content: Column(
+                      children: [
+                        TextFormField(
+                          controller: _licenseNumberController,
+                          decoration: const InputDecoration(
+                            labelText: 'Drug License Number *',
+                            prefixIcon: Icon(Icons.badge),
+                          ),
+                          validator: (value) =>
+                              value?.isEmpty ?? true ? 'Required' : null,
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _gstinController,
+                          decoration: const InputDecoration(
+                            labelText: 'GSTIN *',
+                            prefixIcon: Icon(Icons.business),
+                          ),
+                          validator: (value) =>
+                              value?.isEmpty ?? true ? 'Required' : null,
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _pharmacistNameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Pharmacist Name *',
+                            prefixIcon: Icon(Icons.person_outline),
+                          ),
+                          validator: (value) =>
+                              value?.isEmpty ?? true ? 'Required' : null,
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _pharmacistRegNumberController,
+                          decoration: const InputDecoration(
+                            labelText: 'Pharmacist Reg. No. *',
+                            prefixIcon: Icon(Icons.credit_card),
+                          ),
+                          validator: (value) =>
+                              value?.isEmpty ?? true ? 'Required' : null,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Step(
+                    title: const Text('Bank Details'),
+                    isActive: _currentStep >= 3,
+                    state: _currentStep > 3
+                        ? StepState.complete
+                        : StepState.indexed,
+                    content: Column(
+                      children: [
+                        TextFormField(
+                          controller: _bankNameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Bank Name',
+                            prefixIcon: Icon(Icons.account_balance),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _accountNumberController,
+                          decoration: const InputDecoration(
+                            labelText: 'Account Number',
+                            prefixIcon: Icon(Icons.numbers),
+                          ),
+                          keyboardType: TextInputType.number,
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _ifscCodeController,
+                          decoration: const InputDecoration(
+                            labelText: 'IFSC Code',
+                            prefixIcon: Icon(Icons.code),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _upiIdController,
+                          decoration: const InputDecoration(
+                            labelText: 'UPI ID',
+                            prefixIcon: Icon(Icons.payment),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -284,7 +415,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
   }
 
   void _onStepContinue() {
-    if (_currentStep < 1) {
+    if (_currentStep < 3) {
       if (_formKey.currentState!.validate()) {
         setState(() => _currentStep++);
       }
@@ -315,6 +446,22 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
         city: _cityController.text.trim(),
         state: _stateController.text.trim(),
         pincode: _pincodeController.text.trim(),
+        licenseNumber: _licenseNumberController.text.trim(),
+        gstin: _gstinController.text.trim(),
+        pharmacistName: _pharmacistNameController.text.trim(),
+        pharmacistRegNumber: _pharmacistRegNumberController.text.trim(),
+        bankName: _bankNameController.text.trim().isEmpty
+            ? null
+            : _bankNameController.text.trim(),
+        accountNumber: _accountNumberController.text.trim().isEmpty
+            ? null
+            : _accountNumberController.text.trim(),
+        ifscCode: _ifscCodeController.text.trim().isEmpty
+            ? null
+            : _ifscCodeController.text.trim(),
+        upiId: _upiIdController.text.trim().isEmpty
+            ? null
+            : _upiIdController.text.trim(),
       );
 
       Navigator.pop(context, updatedProfile);
