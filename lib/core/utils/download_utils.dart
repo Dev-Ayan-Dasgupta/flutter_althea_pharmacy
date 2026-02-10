@@ -5,9 +5,7 @@ import 'package:universal_html/html.dart' as html;
 class DownloadUtils {
   /// Download a file on web platform
   static void downloadFileWeb(Uint8List bytes, String fileName) {
-    if (!kIsWeb) {
-      throw UnsupportedError('This function is only supported on web');
-    }
+    assert(kIsWeb, 'This function should only be called on web platform');
 
     // Create a blob from the bytes
     final blob = html.Blob([bytes]);
@@ -24,9 +22,7 @@ class DownloadUtils {
 
   /// Download CSV file on web platform
   static void downloadCsvWeb(String csvContent, String fileName) {
-    if (!kIsWeb) {
-      throw UnsupportedError('This function is only supported on web');
-    }
+    assert(kIsWeb, 'This function should only be called on web platform');
 
     // Create a blob with CSV content
     final blob = html.Blob([csvContent], 'text/csv');

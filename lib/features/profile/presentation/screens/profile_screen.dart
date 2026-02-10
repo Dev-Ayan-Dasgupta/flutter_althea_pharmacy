@@ -453,8 +453,12 @@ class ProfileScreen extends ConsumerWidget {
       );
 
       if (image != null && mounted) {
-        // In a real app, you would upload the image to a server
-        // For now, we'll use a placeholder URL
+        // TODO: Replace this with actual backend image upload
+        // In a production app, you would:
+        // 1. Upload the image file to your backend/cloud storage (e.g., AWS S3, Firebase Storage)
+        // 2. Get the uploaded image URL from the backend
+        // 3. Update the profile with the real URL
+        // For now, we'll use a placeholder URL to demonstrate the functionality
         final updatedProfile = profile.copyWith(
           logoUrl: 'https://picsum.photos/512?random=${DateTime.now().millisecondsSinceEpoch}',
         );

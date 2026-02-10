@@ -69,8 +69,8 @@ class Orders extends _$Orders {
         // Handle error
         return false;
       },
-      (_) {
-        loadOrders();
+      (_) async {
+        await loadOrders();
         return true;
       },
     );
@@ -106,10 +106,13 @@ class Orders extends _$Orders {
 
     final result = await repository.partialAcceptOrder(action);
 
-    return result.fold((error) => false, (_) {
-      loadOrders();
-      return true;
-    });
+    return result.fold(
+      (error) => false,
+      (_) async {
+        await loadOrders();
+        return true;
+      },
+    );
   }
 
   // Generate invoice

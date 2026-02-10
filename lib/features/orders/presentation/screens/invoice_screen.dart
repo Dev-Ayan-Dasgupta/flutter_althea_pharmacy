@@ -42,42 +42,18 @@ class _InvoiceScreenState extends ConsumerState<InvoiceScreen> {
       final ordersState = ref.read(ordersProvider);
       await ordersState.maybeWhen(
         loaded: (orders) async {
-          try {
-            final order = orders.firstWhere((o) => o.id == widget.orderId);
-            final invoice = await _invoiceService.generateInvoice(order);
-            final pdfFile = await _invoiceService.generatePDF(invoice);
+          final order = orders.firstWhere((o) => o.id == widget.orderId);
+          final invoice = await _invoiceService.generateInvoice(order);
+          final pdfFile = await _invoiceService.generatePDF(invoice);
 
-            setState(() {
-              _invoice = invoice;
-              _pdfFile = pdfFile;
-            });
-          } catch (e) {
-            // If order not found, reload orders and retry once
-            await ref.read(ordersProvider.notifier).loadOrders();
-            await Future.delayed(const Duration(milliseconds: 500));
-            
-            final updatedState = ref.read(ordersProvider);
-            await updatedState.maybeWhen(
-              loaded: (orders) async {
-                final order = orders.firstWhere((o) => o.id == widget.orderId);
-                final invoice = await _invoiceService.generateInvoice(order);
-                final pdfFile = await _invoiceService.generatePDF(invoice);
-
-                setState(() {
-                  _invoice = invoice;
-                  _pdfFile = pdfFile;
-                });
-              },
-              orElse: () {
-                throw Exception('Order not found after reload');
-              },
-            );
-          }
+          setState(() {
+            _invoice = invoice;
+            _pdfFile = pdfFile;
+          });
         },
         orElse: () async {
-          // If not loaded, try loading orders first
+          // If not loaded yet, load orders first
           await ref.read(ordersProvider.notifier).loadOrders();
-          await Future.delayed(const Duration(milliseconds: 500));
           
           final updatedState = ref.read(ordersProvider);
           await updatedState.maybeWhen(
