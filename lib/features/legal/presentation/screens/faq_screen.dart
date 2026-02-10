@@ -12,7 +12,7 @@ class FAQScreen extends StatefulWidget {
 
 class _FAQScreenState extends State<FAQScreen> {
   String _searchQuery = '';
-  int? _expandedIndex;
+  Set<int> _expandedIndices = {};
 
   final List<FAQItem> _faqs = [
     FAQItem(
@@ -242,7 +242,7 @@ class _FAQScreenState extends State<FAQScreen> {
     int index,
     bool isDark,
   ) {
-    final isExpanded = _expandedIndex == index;
+    final isExpanded = _expandedIndices.contains(index);
 
     return Container(
       decoration: BoxDecoration(
@@ -255,10 +255,15 @@ class _FAQScreenState extends State<FAQScreen> {
         ),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           InkWell(
             onTap: () => setState(() {
-              _expandedIndex = isExpanded ? null : index;
+              if (isExpanded) {
+                _expandedIndices.remove(index);
+              } else {
+                _expandedIndices.add(index);
+              }
             }),
             borderRadius: BorderRadius.circular(12),
             child: Padding(
@@ -300,29 +305,34 @@ class _FAQScreenState extends State<FAQScreen> {
               ),
             ),
           ),
-          if (isExpanded)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Divider(
-                    color: isDark
-                        ? AppColors.borderDark
-                        : AppColors.borderLight,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    faq.answer,
-                    style: AppTypography.bodyMedium(
-                      isDark
-                          ? AppColors.textSecondaryDark
-                          : AppColors.textSecondaryLight,
+          AnimatedSize(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            child: isExpanded
+                ? Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Divider(
+                          color: isDark
+                              ? AppColors.borderDark
+                              : AppColors.borderLight,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          faq.answer,
+                          style: AppTypography.bodyMedium(
+                            isDark
+                                ? AppColors.textSecondaryDark
+                                : AppColors.textSecondaryLight,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            ),
+                  )
+                : const SizedBox.shrink(),
+          ),
         ],
       ),
     );

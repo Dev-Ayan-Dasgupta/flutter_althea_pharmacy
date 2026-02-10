@@ -29,7 +29,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      drawer: Responsive.isMobile(context) ? const AppDrawer() : null,
+      drawer: const AppDrawer(),
       appBar: AppBar(
         title: Text(
           'Earnings Analytics',

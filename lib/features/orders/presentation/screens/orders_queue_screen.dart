@@ -60,7 +60,7 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      drawer: Responsive.isMobile(context) ? const AppDrawer() : null,
+      drawer: const AppDrawer(),
       body: Stack(
         children: [
           // Existing content
