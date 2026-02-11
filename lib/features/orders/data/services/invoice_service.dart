@@ -195,11 +195,11 @@ class InvoiceService {
               ),
               _buildTableCell('${item.quantity}', align: pw.TextAlign.center),
               _buildTableCell(
-                'Rs. ${item.unitPrice.toStringAsFixed(2)}',
+                'INR ${item.unitPrice.toStringAsFixed(2)}',
                 align: pw.TextAlign.right,
               ),
               _buildTableCell(
-                'Rs. ${item.total.toStringAsFixed(2)}',
+                'INR ${item.total.toStringAsFixed(2)}',
                 align: pw.TextAlign.right,
               ),
             ],
@@ -248,7 +248,7 @@ class InvoiceService {
             ),
           ),
           pw.Text(
-            'Rs. ${amount.toStringAsFixed(2)}',
+            'INR ${amount.toStringAsFixed(2)}',
             style: pw.TextStyle(
               fontSize: isTotal ? 14 : 12,
               fontWeight: isTotal ? pw.FontWeight.bold : pw.FontWeight.normal,
