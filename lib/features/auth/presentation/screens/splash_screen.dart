@@ -56,7 +56,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
+        decoration: BoxDecoration(gradient: AppColors.primaryGradient),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

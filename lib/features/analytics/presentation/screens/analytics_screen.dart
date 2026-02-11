@@ -215,10 +215,14 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   Widget _buildDateRangeDisplay(AnalyticsEntity analytics, bool isDark) {
     final formatter = DateFormat('MMM dd, yyyy');
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: AppColors.primaryGradientSubtle,
+        gradient: isDark
+            ? AppColors.primaryGradientSubtleDark
+            : AppColors.primaryGradientSubtle,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

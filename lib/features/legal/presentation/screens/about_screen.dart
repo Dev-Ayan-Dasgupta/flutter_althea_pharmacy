@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/responsive.dart';
@@ -106,17 +107,25 @@ class AboutScreen extends StatelessWidget {
 
               // Social Links
               _buildInfoCard(context, 'Connect With Us', [
-                _InfoItem(Icons.language, 'www.altheacare.com', isLink: true),
-                _InfoItem(Icons.facebook, 'Facebook', isLink: true),
-                _InfoItem(Icons.info, 'Twitter', isLink: true),
-                _InfoItem(Icons.camera_alt, 'Instagram', isLink: true),
+                _InfoItem(Icons.language, 'altheacare.in', isLink: true),
+                _InfoItem(
+                  Icons.facebook,
+                  'facebook.com/altheacare',
+                  isLink: true,
+                ),
+                _InfoItem(
+                  Icons.camera_alt,
+                  'instagram.com/altheacare_ai/',
+                  isLink: true,
+                ),
+                _InfoItem(Icons.info, 'x.com/althea_care', isLink: true),
               ], isDark),
 
               const SizedBox(height: 24),
 
               // Credits
               Text(
-                'Made with ❤️ in India',
+                'Made with ❤️ in Kolkata',
                 style: AppTypography.bodySmall(
                   isDark
                       ? AppColors.textTertiaryDark
@@ -124,10 +133,8 @@ class AboutScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 8),
-
               Text(
-                '© 2026 AltheaCare. All rights reserved.',
+                '© 2026 Ayanmit Careworks Private Limited. All rights reserved.',
                 style: AppTypography.caption(
                   isDark
                       ? AppColors.textTertiaryDark
@@ -212,10 +219,10 @@ class AboutScreen extends StatelessWidget {
 
   Future<void> _launchURL(String url) async {
     // This is a placeholder - implement actual URL launching
-    // final uri = Uri.parse(url);
-    // if (await canLaunchUrl(uri)) {
-    //   await launchUrl(uri);
-    // }
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
   }
 }
 

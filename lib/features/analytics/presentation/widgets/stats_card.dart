@@ -21,6 +21,7 @@ class StatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.all(isCompact ? 16 : 20),
       decoration: BoxDecoration(
@@ -53,24 +54,24 @@ class StatsCard extends StatelessWidget {
               ),
               if (!isCompact) ...[
                 const Spacer(),
-                Icon(
-                  Icons.trending_up,
-                  color: Colors.white.withValues(alpha: 0.7),
-                  size: 20,
-                ),
+                Icon(Icons.trending_up, size: 20),
               ],
             ],
           ),
           SizedBox(height: isCompact ? 12 : 16),
           Text(
             title,
-            style: AppTypography.bodySmall(Colors.white.withValues(alpha: 0.9)),
+            style: AppTypography.bodySmall(
+              isDark
+                  ? Colors.white.withValues(alpha: 0.9)
+                  : Colors.black.withValues(alpha: 0.9),
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
             style: TextStyle(
-              color: Colors.white,
+              color: isDark ? Colors.white : Colors.black,
               fontSize: isCompact ? 20 : 24,
               fontWeight: FontWeight.bold,
             ),
@@ -79,7 +80,11 @@ class StatsCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               subtitle!,
-              style: AppTypography.caption(Colors.white.withValues(alpha: 0.8)),
+              style: AppTypography.caption(
+                isDark
+                    ? Colors.white.withValues(alpha: 0.8)
+                    : Colors.black.withValues(alpha: 0.8),
+              ),
             ),
           ],
         ],

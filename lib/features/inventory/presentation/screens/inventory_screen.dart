@@ -91,6 +91,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
         child: ResponsiveContainer(
           child: Column(
             children: [
+              const SizedBox(height: 16),
               // Stats Cards
               inventoryState.maybeWhen(
                 loaded: (items) => InventoryStatsCards(items: items),
