@@ -22,10 +22,18 @@ class _AboutScreenState extends State<AboutScreen> {
   }
 
   Future<void> _loadPackageInfo() async {
-    final info = await PackageInfo.fromPlatform();
-    setState(() {
-      _packageInfo = info;
-    });
+    try {
+      final info = await PackageInfo.fromPlatform();
+      if (mounted) {
+        setState(() {
+          _packageInfo = info;
+        });
+      }
+    } catch (e) {
+      // If package info cannot be loaded, we'll continue to show the fallback version
+      // This ensures the app doesn't crash and users still see version information
+      debugPrint('Failed to load package info: $e');
+    }
   }
 
   @override
