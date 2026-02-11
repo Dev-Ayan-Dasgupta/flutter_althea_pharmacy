@@ -144,11 +144,11 @@ class AnalyticsExportService {
             children: [
               _buildSummaryItem(
                 'Total Earnings',
-                '₹${analytics.totalEarnings.toStringAsFixed(2)}',
+                'Rs. ${analytics.totalEarnings.toStringAsFixed(2)}',
               ),
               _buildSummaryItem(
                 'Your Share',
-                '₹${analytics.pharmacyShare.toStringAsFixed(2)}',
+                'Rs. ${analytics.pharmacyShare.toStringAsFixed(2)}',
               ),
             ],
           ),
@@ -159,7 +159,7 @@ class AnalyticsExportService {
               _buildSummaryItem('Total Orders', '${analytics.totalOrders}'),
               _buildSummaryItem(
                 'Avg Order Value',
-                '₹${analytics.averageOrderValue.toStringAsFixed(2)}',
+                'Rs. ${analytics.averageOrderValue.toStringAsFixed(2)}',
               ),
             ],
           ),
@@ -242,7 +242,7 @@ class AnalyticsExportService {
       children: [
         pw.Text(label, style: const pw.TextStyle(fontSize: 10)),
         pw.Text(
-          '₹${amount.toStringAsFixed(2)} ($percentage%)',
+          'Rs. ${amount.toStringAsFixed(2)} ($percentage%)',
           style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold),
         ),
       ],
@@ -288,7 +288,7 @@ class AnalyticsExportService {
                     align: pw.TextAlign.center,
                   ),
                   _buildTableCell(
-                    '₹${daily.amount.toStringAsFixed(2)}',
+                    'Rs. ${daily.amount.toStringAsFixed(2)}',
                     align: pw.TextAlign.right,
                   ),
                 ],
@@ -334,7 +334,7 @@ class AnalyticsExportService {
                 children: [
                   _buildTableCell(category.category),
                   _buildTableCell(
-                    '₹${category.amount.toStringAsFixed(2)}',
+                    'Rs. ${category.amount.toStringAsFixed(2)}',
                     align: pw.TextAlign.right,
                   ),
                   _buildTableCell(
@@ -399,16 +399,16 @@ class AnalyticsExportService {
     buffer.writeln('SUMMARY STATISTICS');
     buffer.writeln('Metric,Value');
     buffer.writeln(
-      'Total Earnings,₹${analytics.totalEarnings.toStringAsFixed(2)}',
+      'Total Earnings,Rs. ${analytics.totalEarnings.toStringAsFixed(2)}',
     );
-    buffer.writeln('Your Share,₹${analytics.pharmacyShare.toStringAsFixed(2)}');
-    buffer.writeln('Delivery Fee,₹${analytics.deliveryFee.toStringAsFixed(2)}');
-    buffer.writeln('Platform Fee,₹${analytics.platformFee.toStringAsFixed(2)}');
+    buffer.writeln('Your Share,Rs. ${analytics.pharmacyShare.toStringAsFixed(2)}');
+    buffer.writeln('Delivery Fee,Rs. ${analytics.deliveryFee.toStringAsFixed(2)}');
+    buffer.writeln('Platform Fee,Rs. ${analytics.platformFee.toStringAsFixed(2)}');
     buffer.writeln('Total Orders,${analytics.totalOrders}');
     buffer.writeln('Completed Orders,${analytics.completedOrders}');
     buffer.writeln('Cancelled Orders,${analytics.cancelledOrders}');
     buffer.writeln(
-      'Average Order Value,₹${analytics.averageOrderValue.toStringAsFixed(2)}',
+      'Average Order Value,Rs. ${analytics.averageOrderValue.toStringAsFixed(2)}',
     );
     buffer.writeln();
 
@@ -417,7 +417,7 @@ class AnalyticsExportService {
     buffer.writeln('Date,Orders,Earnings');
     for (final daily in analytics.dailyEarnings) {
       buffer.writeln(
-        '${formatter.format(daily.date)},${daily.orderCount},₹${daily.amount.toStringAsFixed(2)}',
+        '${formatter.format(daily.date)},${daily.orderCount},Rs. ${daily.amount.toStringAsFixed(2)}',
       );
     }
     buffer.writeln();
@@ -427,7 +427,7 @@ class AnalyticsExportService {
     buffer.writeln('Category,Amount,Percentage');
     for (final category in analytics.categoryEarnings) {
       buffer.writeln(
-        '${category.category},₹${category.amount.toStringAsFixed(2)},${category.percentage.toStringAsFixed(1)}%',
+        '${category.category},Rs. ${category.amount.toStringAsFixed(2)},${category.percentage.toStringAsFixed(1)}%',
       );
     }
 

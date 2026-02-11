@@ -63,18 +63,20 @@ class OrdersHeader extends ConsumerWidget {
               ),
             )
           else
-            // Desktop/Tablet: Show Avatar
+            // Desktop/Tablet: Show Menu button
             Container(
-              width: 56,
-              height: 56,
+              margin: const EdgeInsets.only(right: 12),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.15),
+                color: Colors.white.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.person, color: Colors.white, size: 28),
+              child: IconButton(
+                icon: const Icon(Icons.menu),
+                color: Colors.white,
+                tooltip: 'Menu',
+                onPressed: () => Scaffold.of(context).openEndDrawer(),
+              ),
             ),
-
-          if (!isMobile) const SizedBox(width: 16),
 
           // User Info
           Expanded(
@@ -97,6 +99,22 @@ class OrdersHeader extends ConsumerWidget {
               ],
             ),
           ),
+
+          // Search Icon for mobile
+          if (isMobile)
+            Container(
+              margin: const EdgeInsets.only(left: 8),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.search),
+                color: Colors.white,
+                tooltip: 'Search',
+                onPressed: onSearchPressed,
+              ),
+            ),
 
           // Desktop/Tablet: Show icon buttons
           if (!isMobile) ...[

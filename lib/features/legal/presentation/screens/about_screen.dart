@@ -1,11 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/responsive.dart';
 
-class AboutScreen extends StatelessWidget {
+class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
+
+  @override
+  State<AboutScreen> createState() => _AboutScreenState();
+}
+
+class _AboutScreenState extends State<AboutScreen> {
+  PackageInfo? _packageInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPackageInfo();
+  }
+
+  Future<void> _loadPackageInfo() async {
+    try {
+      final info = await PackageInfo.fromPlatform();
+      if (mounted) {
+        setState(() {
+          _packageInfo = info;
+        });
+      }
+    } catch (e) {
+      // If package info cannot be loaded, we'll continue to show the fallback version
+      // This ensures the app doesn't crash and users still see version information
+      debugPrint('Failed to load package info: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +90,9 @@ class AboutScreen extends StatelessWidget {
 
               // Version
               Text(
-                'Version 1.0.0 (Build 100)',
+                _packageInfo != null
+                    ? 'Version ${_packageInfo!.version} (Build ${_packageInfo!.buildNumber})'
+                    : 'Version 1.0.0 (Build 100)',
                 style: AppTypography.bodyMedium(
                   isDark
                       ? AppColors.textSecondaryDark
@@ -218,10 +249,32 @@ class AboutScreen extends StatelessWidget {
   }
 
   Future<void> _launchURL(String url) async {
-    // This is a placeholder - implement actual URL launching
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+    try {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(
+          uri,
+          mode: LaunchMode.externalApplication,
+        );
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Could not open $url'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error opening link: ${e.toString()}'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
     }
   }
 }
