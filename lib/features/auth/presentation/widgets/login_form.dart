@@ -36,6 +36,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   Widget build(BuildContext context) {
     final authAsync = ref.watch(authProvider);
     final isLoading = authAsync.isLoading;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Form(
       key: _formKey,
@@ -46,11 +47,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             controller: _emailController,
             enabled: !isLoading,
             keyboardType: TextInputType.emailAddress,
-            style: AppTypography.bodyLarge(AppColors.textPrimaryLight),
-            decoration: const InputDecoration(
+            style: AppTypography.bodyLarge(
+              isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+            ),
+            decoration: InputDecoration(
               labelText: 'Email',
               hintText: 'Enter your email',
-              prefixIcon: Icon(Icons.email_outlined),
+              prefixIcon: const Icon(Icons.email_outlined),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -72,7 +75,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             controller: _passwordController,
             enabled: !isLoading,
             obscureText: _obscurePassword,
-            style: AppTypography.bodyLarge(AppColors.textPrimaryLight),
+            style: AppTypography.bodyLarge(
+              isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+            ),
             decoration: InputDecoration(
               labelText: 'Password',
               hintText: 'Enter your password',

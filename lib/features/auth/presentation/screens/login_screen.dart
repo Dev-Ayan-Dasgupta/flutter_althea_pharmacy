@@ -12,8 +12,6 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authAsync = ref.watch(authProvider);
-
     // Listen to auth state changes
     ref.listen<AsyncValue>(authProvider, (previous, next) {
       next.when(

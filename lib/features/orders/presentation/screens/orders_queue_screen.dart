@@ -157,6 +157,7 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
                             ),
                           ),
 
+                        const SizedBox(height: 16),
                         // Tab Bar
                         _buildTabBar(context),
 
@@ -169,6 +170,8 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
                             child: _buildOrdersList(context, ordersState),
                           ),
                         ),
+
+                        const SizedBox(height: 16),
                       ],
                     ),
                   ),
