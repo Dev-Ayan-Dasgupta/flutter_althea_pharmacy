@@ -57,10 +57,12 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
     final authAsync = ref.watch(authProvider);
     final newOrder = ref.watch(newOrderProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isMobile = Responsive.isMobile(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      drawer: const AppDrawer(),
+      drawer: isMobile ? const AppDrawer() : null,
+      endDrawer: !isMobile ? const AppDrawer() : null,
       body: Stack(
         children: [
           // Existing content
