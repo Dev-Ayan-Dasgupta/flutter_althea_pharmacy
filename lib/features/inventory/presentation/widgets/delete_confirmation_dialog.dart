@@ -52,9 +52,6 @@ class DeleteConfirmationDialog extends StatelessWidget {
                   ? AppColors.cardGradientDark
                   : AppColors.cardGradientLight,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: isDark ? AppColors.borderDark : AppColors.borderLight,
-              ),
             ),
             child: Column(
               children: [

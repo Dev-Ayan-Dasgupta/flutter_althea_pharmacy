@@ -388,13 +388,6 @@ class _AddInventoryDialogState extends State<AddInventoryDialog> {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
-                border: Border(
-                  top: BorderSide(
-                    color: isDark
-                        ? AppColors.borderDark
-                        : AppColors.borderLight,
-                  ),
-                ),
               ),
               child: Row(
                 children: [

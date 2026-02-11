@@ -38,10 +38,7 @@ class AnalyticsExportService {
       // For mobile/desktop, convert CSV to bytes with proper UTF-8 encoding
       // and use the printing package's share functionality (works for any file type)
       final bytes = Uint8List.fromList(utf8.encode(csvContent));
-      await Printing.sharePdf(
-        bytes: bytes,
-        filename: filename,
-      );
+      await Printing.sharePdf(bytes: bytes, filename: filename);
     }
   }
 
@@ -113,7 +110,6 @@ class AnalyticsExportService {
               width: 80,
               height: 80,
               decoration: pw.BoxDecoration(
-                border: pw.Border.all(color: PdfColors.grey300),
                 borderRadius: pw.BorderRadius.circular(8),
               ),
               child: pw.Center(
@@ -160,10 +156,7 @@ class AnalyticsExportService {
           pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
             children: [
-              _buildSummaryItem(
-                'Total Orders',
-                '${analytics.totalOrders}',
-              ),
+              _buildSummaryItem('Total Orders', '${analytics.totalOrders}'),
               _buildSummaryItem(
                 'Avg Order Value',
                 '₹${analytics.averageOrderValue.toStringAsFixed(2)}',
@@ -209,10 +202,7 @@ class AnalyticsExportService {
   pw.Widget _buildRevenueDistribution(AnalyticsEntity analytics) {
     return pw.Container(
       padding: const pw.EdgeInsets.all(16),
-      decoration: pw.BoxDecoration(
-        border: pw.Border.all(color: PdfColors.grey300),
-        borderRadius: pw.BorderRadius.circular(8),
-      ),
+      decoration: pw.BoxDecoration(borderRadius: pw.BorderRadius.circular(8)),
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
@@ -243,13 +233,9 @@ class AnalyticsExportService {
     );
   }
 
-  pw.Widget _buildDistributionRow(
-    String label,
-    double amount,
-    double total,
-  ) {
-    final percentage = total > 0 
-        ? (amount / total * 100).toStringAsFixed(1) 
+  pw.Widget _buildDistributionRow(String label, double amount, double total) {
+    final percentage = total > 0
+        ? (amount / total * 100).toStringAsFixed(1)
         : '0.0';
     return pw.Row(
       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -274,15 +260,22 @@ class AnalyticsExportService {
         ),
         pw.SizedBox(height: 8),
         pw.Table(
-          border: pw.TableBorder.all(color: PdfColors.grey300),
           children: [
             // Header
             pw.TableRow(
               decoration: const pw.BoxDecoration(color: PdfColors.grey200),
               children: [
                 _buildTableCell('Date', isHeader: true),
-                _buildTableCell('Orders', isHeader: true, align: pw.TextAlign.center),
-                _buildTableCell('Earnings', isHeader: true, align: pw.TextAlign.right),
+                _buildTableCell(
+                  'Orders',
+                  isHeader: true,
+                  align: pw.TextAlign.center,
+                ),
+                _buildTableCell(
+                  'Earnings',
+                  isHeader: true,
+                  align: pw.TextAlign.right,
+                ),
               ],
             ),
             // Rows
@@ -290,7 +283,10 @@ class AnalyticsExportService {
               return pw.TableRow(
                 children: [
                   _buildTableCell(formatter.format(daily.date)),
-                  _buildTableCell('${daily.orderCount}', align: pw.TextAlign.center),
+                  _buildTableCell(
+                    '${daily.orderCount}',
+                    align: pw.TextAlign.center,
+                  ),
                   _buildTableCell(
                     '₹${daily.amount.toStringAsFixed(2)}',
                     align: pw.TextAlign.right,
@@ -314,15 +310,22 @@ class AnalyticsExportService {
         ),
         pw.SizedBox(height: 8),
         pw.Table(
-          border: pw.TableBorder.all(color: PdfColors.grey300),
           children: [
             // Header
             pw.TableRow(
               decoration: const pw.BoxDecoration(color: PdfColors.grey200),
               children: [
                 _buildTableCell('Category', isHeader: true),
-                _buildTableCell('Amount', isHeader: true, align: pw.TextAlign.right),
-                _buildTableCell('Percentage', isHeader: true, align: pw.TextAlign.right),
+                _buildTableCell(
+                  'Amount',
+                  isHeader: true,
+                  align: pw.TextAlign.right,
+                ),
+                _buildTableCell(
+                  'Percentage',
+                  isHeader: true,
+                  align: pw.TextAlign.right,
+                ),
               ],
             ),
             // Rows
@@ -381,24 +384,32 @@ class AnalyticsExportService {
   String _generateCsvContent(AnalyticsEntity analytics) {
     final buffer = StringBuffer();
     final formatter = DateFormat('yyyy-MM-dd');
-    
+
     // Header
     buffer.writeln('Analytics Report');
-    buffer.writeln('Period,${formatter.format(analytics.startDate)} to ${formatter.format(analytics.endDate)}');
-    buffer.writeln('Generated,${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now())}');
+    buffer.writeln(
+      'Period,${formatter.format(analytics.startDate)} to ${formatter.format(analytics.endDate)}',
+    );
+    buffer.writeln(
+      'Generated,${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now())}',
+    );
     buffer.writeln();
 
     // Summary Statistics
     buffer.writeln('SUMMARY STATISTICS');
     buffer.writeln('Metric,Value');
-    buffer.writeln('Total Earnings,₹${analytics.totalEarnings.toStringAsFixed(2)}');
+    buffer.writeln(
+      'Total Earnings,₹${analytics.totalEarnings.toStringAsFixed(2)}',
+    );
     buffer.writeln('Your Share,₹${analytics.pharmacyShare.toStringAsFixed(2)}');
     buffer.writeln('Delivery Fee,₹${analytics.deliveryFee.toStringAsFixed(2)}');
     buffer.writeln('Platform Fee,₹${analytics.platformFee.toStringAsFixed(2)}');
     buffer.writeln('Total Orders,${analytics.totalOrders}');
     buffer.writeln('Completed Orders,${analytics.completedOrders}');
     buffer.writeln('Cancelled Orders,${analytics.cancelledOrders}');
-    buffer.writeln('Average Order Value,₹${analytics.averageOrderValue.toStringAsFixed(2)}');
+    buffer.writeln(
+      'Average Order Value,₹${analytics.averageOrderValue.toStringAsFixed(2)}',
+    );
     buffer.writeln();
 
     // Daily Earnings

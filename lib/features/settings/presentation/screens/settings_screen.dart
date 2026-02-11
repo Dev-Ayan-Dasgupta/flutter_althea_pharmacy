@@ -398,9 +398,6 @@ class SettingsScreen extends ConsumerWidget {
             ? AppColors.cardGradientDark
             : AppColors.cardGradientLight,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark ? AppColors.borderDark : AppColors.borderLight,
-        ),
       ),
       child: Column(children: children),
     );
@@ -484,7 +481,9 @@ class SettingsScreen extends ConsumerWidget {
             ref.read(settingsProvider.notifier).updateLanguage(Language.hindi);
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Language changed to Hindi. Full translation coming soon!'),
+                content: Text(
+                  'Language changed to Hindi. Full translation coming soon!',
+                ),
                 duration: Duration(seconds: 2),
               ),
             );
@@ -503,7 +502,9 @@ class SettingsScreen extends ConsumerWidget {
                 .updateLanguage(Language.bengali);
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Language changed to Bengali. Full translation coming soon!'),
+                content: Text(
+                  'Language changed to Bengali. Full translation coming soon!',
+                ),
                 duration: Duration(seconds: 2),
               ),
             );

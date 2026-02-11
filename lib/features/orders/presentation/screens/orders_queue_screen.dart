@@ -108,11 +108,6 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
                                     ? AppColors.surfaceDark
                                     : AppColors.surfaceLight,
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: isDark
-                                      ? AppColors.borderDark
-                                      : AppColors.borderLight,
-                                ),
                               ),
                               child: Row(
                                 children: [
@@ -286,9 +281,6 @@ class _OrdersQueueScreenState extends ConsumerState<OrdersQueueScreen>
       decoration: BoxDecoration(
         color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isDark ? AppColors.borderDark : AppColors.borderLight,
-        ),
       ),
       child: TabBar(
         controller: _tabController,

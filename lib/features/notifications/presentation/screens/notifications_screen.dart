@@ -241,12 +241,6 @@ class _NotificationCard extends StatelessWidget {
                       ? AppColors.primaryGradientSubtleDark
                       : AppColors.primaryGradientSubtle),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: notification.isRead
-                  ? (isDark ? AppColors.borderDark : AppColors.borderLight)
-                  : AppColors.primaryDark.withValues(alpha: 0.3),
-              width: notification.isRead ? 1 : 2,
-            ),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,

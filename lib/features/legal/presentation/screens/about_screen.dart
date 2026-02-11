@@ -78,11 +78,6 @@ class AboutScreen extends StatelessWidget {
                       ? AppColors.cardGradientDark
                       : AppColors.cardGradientLight,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isDark
-                        ? AppColors.borderDark
-                        : AppColors.borderLight,
-                  ),
                 ),
                 child: Text(
                   'AltheaCare Pharmacy Partner App is your complete solution for managing '
@@ -161,9 +156,6 @@ class AboutScreen extends StatelessWidget {
             ? AppColors.cardGradientDark
             : AppColors.cardGradientLight,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark ? AppColors.borderDark : AppColors.borderLight,
-        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

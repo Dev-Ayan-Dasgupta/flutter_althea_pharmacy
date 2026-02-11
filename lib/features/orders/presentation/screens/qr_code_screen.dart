@@ -180,7 +180,6 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen>
             ? AppColors.cardGradientDark
             : AppColors.cardGradientLight,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.primaryDark, width: 3),
         boxShadow: [
           BoxShadow(
             color: AppColors.primaryDark.withValues(alpha: 0.2),
@@ -225,9 +224,6 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen>
             decoration: BoxDecoration(
               color: AppColors.primaryDark.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: AppColors.primaryDark.withValues(alpha: 0.3),
-              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -382,7 +378,6 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen>
       decoration: BoxDecoration(
         color: AppColors.info.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -431,11 +426,6 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen>
         gradient: isDark
             ? AppColors.cardGradientDark
             : AppColors.cardGradientLight,
-        border: Border(
-          top: BorderSide(
-            color: isDark ? AppColors.borderDark : AppColors.borderLight,
-          ),
-        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -456,9 +446,6 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen>
                 decoration: BoxDecoration(
                   color: AppColors.warning.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: AppColors.warning.withValues(alpha: 0.3),
-                  ),
                 ),
                 child: Row(
                   children: [

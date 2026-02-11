@@ -152,9 +152,6 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
             ? AppColors.cardGradientDark
             : AppColors.cardGradientLight,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark ? AppColors.borderDark : AppColors.borderLight,
-        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,7 +220,6 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       decoration: BoxDecoration(
         gradient: AppColors.primaryGradientSubtle,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primaryDark.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -395,9 +391,6 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
             ? AppColors.cardGradientDark
             : AppColors.cardGradientLight,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark ? AppColors.borderDark : AppColors.borderLight,
-        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -444,8 +437,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     Color color,
     bool isDark,
   ) {
-    final percentage = total > 0 
-        ? (amount / total * 100).toStringAsFixed(1) 
+    final percentage = total > 0
+        ? (amount / total * 100).toStringAsFixed(1)
         : '0.0';
 
     return Column(
@@ -544,7 +537,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 
   void _showExportDialog(BuildContext context) {
     final analyticsState = ref.read(analyticsProvider);
-    
+
     // Only show dialog if analytics data is loaded
     analyticsState.maybeWhen(
       loaded: (analytics) {
@@ -564,10 +557,10 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Generating PDF report...')),
                   );
-                  
+
                   try {
                     await _exportService.exportAsPdf(analytics);
-                    
+
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -595,14 +588,16 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Generating Excel report...')),
                   );
-                  
+
                   try {
                     await _exportService.exportAsCsv(analytics);
-                    
+
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Excel report downloaded successfully!'),
+                          content: Text(
+                            'Excel report downloaded successfully!',
+                          ),
                           backgroundColor: AppColors.success,
                         ),
                       );

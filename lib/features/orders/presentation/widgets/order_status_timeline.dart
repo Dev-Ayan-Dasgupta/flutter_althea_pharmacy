@@ -113,12 +113,6 @@ class OrderStatusTimeline extends StatelessWidget {
                     ? AppColors.success
                     : (isDark ? AppColors.surfaceDark : AppColors.surfaceLight),
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: isCompleted
-                      ? AppColors.success
-                      : (isDark ? AppColors.borderDark : AppColors.borderLight),
-                  width: 2,
-                ),
               ),
               child: Icon(
                 icon,

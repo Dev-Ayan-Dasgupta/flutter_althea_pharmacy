@@ -111,9 +111,6 @@ class _MedicineCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.warning.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: AppColors.warning.withValues(alpha: 0.3),
-                ),
               ),
               child: Row(
                 children: [

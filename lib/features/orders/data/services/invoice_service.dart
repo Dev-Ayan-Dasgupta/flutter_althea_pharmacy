@@ -94,7 +94,6 @@ class InvoiceService {
           width: 100,
           height: 100,
           decoration: pw.BoxDecoration(
-            border: pw.Border.all(color: PdfColors.grey300),
             borderRadius: pw.BorderRadius.circular(8),
           ),
           child: pw.Center(
@@ -144,10 +143,7 @@ class InvoiceService {
   pw.Widget _buildCustomerInfo(InvoiceEntity invoice) {
     return pw.Container(
       padding: const pw.EdgeInsets.all(16),
-      decoration: pw.BoxDecoration(
-        border: pw.Border.all(color: PdfColors.grey300),
-        borderRadius: pw.BorderRadius.circular(8),
-      ),
+      decoration: pw.BoxDecoration(borderRadius: pw.BorderRadius.circular(8)),
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
@@ -175,7 +171,6 @@ class InvoiceService {
 
   pw.Widget _buildItemsTable(InvoiceEntity invoice) {
     return pw.Table(
-      border: pw.TableBorder.all(color: PdfColors.grey300),
       children: [
         // Header
         pw.TableRow(

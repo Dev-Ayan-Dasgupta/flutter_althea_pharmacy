@@ -144,7 +144,6 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
             ? AppColors.cardGradientDark
             : AppColors.cardGradientLight,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _getBorderColor(item.availability), width: 2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,9 +248,6 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
               decoration: BoxDecoration(
                 color: AppColors.warning.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: AppColors.warning.withValues(alpha: 0.3),
-                ),
               ),
               child: Row(
                 children: [
@@ -307,7 +303,6 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
         decoration: BoxDecoration(
           color: isSelected ? color : color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: color, width: isSelected ? 2 : 1),
         ),
         child: Column(
           children: [
@@ -343,11 +338,6 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
         gradient: isDark
             ? AppColors.cardGradientDark
             : AppColors.cardGradientLight,
-        border: Border(
-          top: BorderSide(
-            color: isDark ? AppColors.borderDark : AppColors.borderLight,
-          ),
-        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -426,7 +416,6 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: color),
           ),
           child: Text('$count', style: AppTypography.titleMedium(color)),
         ),
@@ -579,7 +568,7 @@ class _ItemCheckerScreenState extends ConsumerState<ItemCheckerScreen> {
           backgroundColor: AppColors.success,
         ),
       );
-      
+
       // Navigate to invoice screen (state is now updated)
       context.go('/home/order/${widget.orderId}/invoice');
     } else if (mounted) {

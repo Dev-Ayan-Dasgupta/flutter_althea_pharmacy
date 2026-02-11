@@ -250,9 +250,6 @@ class _FAQScreenState extends State<FAQScreen> {
             ? AppColors.cardGradientDark
             : AppColors.cardGradientLight,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isDark ? AppColors.borderDark : AppColors.borderLight,
-        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

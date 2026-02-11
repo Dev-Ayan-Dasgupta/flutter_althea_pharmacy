@@ -70,7 +70,6 @@ class OrdersHeader extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
               ),
               child: const Icon(Icons.person, color: Colors.white, size: 28),
             ),

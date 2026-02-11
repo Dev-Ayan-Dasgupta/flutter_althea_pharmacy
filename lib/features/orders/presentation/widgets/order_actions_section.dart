@@ -24,11 +24,6 @@ class OrderActionsSection extends StatelessWidget {
         gradient: isDark
             ? AppColors.cardGradientDark
             : AppColors.cardGradientLight,
-        border: Border(
-          top: BorderSide(
-            color: isDark ? AppColors.borderDark : AppColors.borderLight,
-          ),
-        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
