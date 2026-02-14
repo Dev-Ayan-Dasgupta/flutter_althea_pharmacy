@@ -10,6 +10,14 @@ class MockAuthRepository implements AuthRepository {
   static const String _keyUserName = 'user_name';
   static const String _keyUserEmail = 'user_email';
   static const String _keyPharmacyName = 'pharmacy_name';
+  
+  // Mock password storage (in a real app, this would be handled securely on backend)
+  final Map<String, String> _userPasswords = {
+    'user_123': 'password123',
+  };
+  
+  // Mock password reset tokens
+  final Map<String, String> _resetTokens = {};
 
   @override
   Future<Either<String, UserEntity>> login(
@@ -93,6 +101,107 @@ class MockAuthRepository implements AuthRepository {
       return right(user);
     } catch (e) {
       return left('Failed to get current user: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<Either<String, void>> changePassword({
+    required String userId,
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    try {
+      // Simulate network delay
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      // Validate current password
+      final storedPassword = _userPasswords[userId];
+      if (storedPassword == null) {
+        return left('User not found');
+      }
+
+      if (storedPassword != currentPassword) {
+        return left('Current password is incorrect');
+      }
+
+      // Validate new password
+      if (newPassword.length < 6) {
+        return left('New password must be at least 6 characters');
+      }
+
+      if (newPassword == currentPassword) {
+        return left('New password must be different from current password');
+      }
+
+      // Update password
+      _userPasswords[userId] = newPassword;
+
+      return right(null);
+    } catch (e) {
+      return left('Failed to change password: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<Either<String, void>> forgotPassword({
+    required String email,
+  }) async {
+    try {
+      // Simulate network delay
+      await Future.delayed(const Duration(milliseconds: 800));
+
+      // Validate email
+      if (email.isEmpty) {
+        return left('Email is required');
+      }
+
+      // In a real app, we would send an email with a reset link
+      // For mock, we'll generate a token and store it
+      final token = 'reset_token_${DateTime.now().millisecondsSinceEpoch}';
+      _resetTokens[email] = token;
+
+      // Mock: Simulate email sent
+      return right(null);
+    } catch (e) {
+      return left('Failed to send reset email: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<Either<String, void>> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    try {
+      // Simulate network delay
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      // Validate token
+      final email = _resetTokens.entries
+          .firstWhere(
+            (entry) => entry.value == token,
+            orElse: () => const MapEntry('', ''),
+          )
+          .key;
+
+      if (email.isEmpty) {
+        return left('Invalid or expired reset token');
+      }
+
+      // Validate new password
+      if (newPassword.length < 6) {
+        return left('Password must be at least 6 characters');
+      }
+
+      // For mock purposes, we'll update a default user's password
+      _userPasswords['user_123'] = newPassword;
+
+      // Remove used token
+      _resetTokens.remove(email);
+
+      return right(null);
+    } catch (e) {
+      return left('Failed to reset password: ${e.toString()}');
     }
   }
 }
