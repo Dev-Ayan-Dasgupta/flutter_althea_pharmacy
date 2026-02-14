@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/utils/responsive.dart';
-import '../../../orders/presentation/widgets/export.dart';
+import '../../../../orders/presentation/widgets/export.dart';
 import '../../providers/auth_provider.dart';
 
 class ChangePasswordScreen extends ConsumerStatefulWidget {
@@ -53,7 +53,9 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
 
     setState(() => _isProcessing = true);
 
-    final result = await ref.read(authProvider.notifier).changePassword(
+    final result = await ref
+        .read(authProvider.notifier)
+        .changePassword(
           userId: user.id,
           currentPassword: _currentPasswordController.text,
           newPassword: _newPasswordController.text,
@@ -80,7 +82,9 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Failed to change password. Please check your current password.'),
+            content: Text(
+              'Failed to change password. Please check your current password.',
+            ),
             backgroundColor: Colors.red,
           ),
         );
@@ -116,16 +120,15 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.primaryDark.withOpacity(0.1),
+                  color: AppColors.primaryDark.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppColors.primaryDark.withOpacity(0.3)),
+                  border: Border.all(
+                    color: AppColors.primaryDark.withValues(alpha: 0.3),
+                  ),
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.info_outline,
-                      color: AppColors.primaryDark,
-                    ),
+                    Icon(Icons.info_outline, color: AppColors.primaryDark),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
@@ -154,7 +157,8 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                     ),
                     onPressed: () {
                       setState(
-                        () => _obscureCurrentPassword = !_obscureCurrentPassword,
+                        () =>
+                            _obscureCurrentPassword = !_obscureCurrentPassword,
                       );
                     },
                   ),
@@ -181,10 +185,14 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                   prefixIcon: const Icon(Icons.lock),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscureNewPassword ? Icons.visibility : Icons.visibility_off,
+                      _obscureNewPassword
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                     ),
                     onPressed: () {
-                      setState(() => _obscureNewPassword = !_obscureNewPassword);
+                      setState(
+                        () => _obscureNewPassword = !_obscureNewPassword,
+                      );
                     },
                   ),
                   border: OutlineInputBorder(
@@ -222,7 +230,8 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                     ),
                     onPressed: () {
                       setState(
-                        () => _obscureConfirmPassword = !_obscureConfirmPassword,
+                        () =>
+                            _obscureConfirmPassword = !_obscureConfirmPassword,
                       );
                     },
                   ),

@@ -9,274 +9,308 @@ part of 'staff_entity.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$StaffEntity {
-  String get id => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
-  String get pharmacyId => throw _privateConstructorUsedError;
-  RoleEntity get role => throw _privateConstructorUsedError;
-  String? get phoneNumber => throw _privateConstructorUsedError;
-  String? get photoUrl => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime? get lastLoginAt => throw _privateConstructorUsedError;
-  bool get isActive => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
-  $StaffEntityCopyWith<StaffEntity> get copyWith =>
-      throw _privateConstructorUsedError;
+ String get id; String get name; String get email; String get pharmacyId; RoleEntity get role; String? get phoneNumber; String? get photoUrl; DateTime get createdAt; DateTime? get lastLoginAt; bool get isActive;
+/// Create a copy of StaffEntity
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$StaffEntityCopyWith<StaffEntity> get copyWith => _$StaffEntityCopyWithImpl<StaffEntity>(this as StaffEntity, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is StaffEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.pharmacyId, pharmacyId) || other.pharmacyId == pharmacyId)&&(identical(other.role, role) || other.role == role)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastLoginAt, lastLoginAt) || other.lastLoginAt == lastLoginAt)&&(identical(other.isActive, isActive) || other.isActive == isActive));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,name,email,pharmacyId,role,phoneNumber,photoUrl,createdAt,lastLoginAt,isActive);
+
+@override
+String toString() {
+  return 'StaffEntity(id: $id, name: $name, email: $email, pharmacyId: $pharmacyId, role: $role, phoneNumber: $phoneNumber, photoUrl: $photoUrl, createdAt: $createdAt, lastLoginAt: $lastLoginAt, isActive: $isActive)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $StaffEntityCopyWith<$Res> {
-  factory $StaffEntityCopyWith(
-          StaffEntity value, $Res Function(StaffEntity) then) =
-      _$StaffEntityCopyWithImpl<$Res, StaffEntity>;
-  @useResult
-  $Res call(
-      {String id,
-      String name,
-      String email,
-      String pharmacyId,
-      RoleEntity role,
-      String? phoneNumber,
-      String? photoUrl,
-      DateTime createdAt,
-      DateTime? lastLoginAt,
-      bool isActive});
-}
+abstract mixin class $StaffEntityCopyWith<$Res>  {
+  factory $StaffEntityCopyWith(StaffEntity value, $Res Function(StaffEntity) _then) = _$StaffEntityCopyWithImpl;
+@useResult
+$Res call({
+ String id, String name, String email, String pharmacyId, RoleEntity role, String? phoneNumber, String? photoUrl, DateTime createdAt, DateTime? lastLoginAt, bool isActive
+});
 
+
+$RoleEntityCopyWith<$Res> get role;
+
+}
 /// @nodoc
-class _$StaffEntityCopyWithImpl<$Res, $Val extends StaffEntity>
+class _$StaffEntityCopyWithImpl<$Res>
     implements $StaffEntityCopyWith<$Res> {
-  _$StaffEntityCopyWithImpl(this._value, this._then);
+  _$StaffEntityCopyWithImpl(this._self, this._then);
 
-  final $Val _value;
-  final $Res Function($Val) _then;
+  final StaffEntity _self;
+  final $Res Function(StaffEntity) _then;
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? name = null,
-    Object? email = null,
-    Object? pharmacyId = null,
-    Object? role = null,
-    Object? phoneNumber = freezed,
-    Object? photoUrl = freezed,
-    Object? createdAt = null,
-    Object? lastLoginAt = freezed,
-    Object? isActive = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id,
-      name: null == name
-          ? _value.name
-          : name,
-      email: null == email
-          ? _value.email
-          : email,
-      pharmacyId: null == pharmacyId
-          ? _value.pharmacyId
-          : pharmacyId,
-      role: null == role
-          ? _value.role
-          : role,
-      phoneNumber: freezed == phoneNumber
-          ? _value.phoneNumber
-          : phoneNumber,
-      photoUrl: freezed == photoUrl
-          ? _value.photoUrl
-          : photoUrl,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt,
-      lastLoginAt: freezed == lastLoginAt
-          ? _value.lastLoginAt
-          : lastLoginAt,
-      isActive: null == isActive
-          ? _value.isActive
-          : isActive,
-    ) as $Val);
-  }
+/// Create a copy of StaffEntity
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? email = null,Object? pharmacyId = null,Object? role = null,Object? phoneNumber = freezed,Object? photoUrl = freezed,Object? createdAt = null,Object? lastLoginAt = freezed,Object? isActive = null,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String,pharmacyId: null == pharmacyId ? _self.pharmacyId : pharmacyId // ignore: cast_nullable_to_non_nullable
+as String,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
+as RoleEntity,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String?,photoUrl: freezed == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,lastLoginAt: freezed == lastLoginAt ? _self.lastLoginAt : lastLoginAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+/// Create a copy of StaffEntity
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RoleEntityCopyWith<$Res> get role {
+  
+  return $RoleEntityCopyWith<$Res>(_self.role, (value) {
+    return _then(_self.copyWith(role: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [StaffEntity].
+extension StaffEntityPatterns on StaffEntity {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _StaffEntity value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _StaffEntity() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _StaffEntity value)  $default,){
+final _that = this;
+switch (_that) {
+case _StaffEntity():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _StaffEntity value)?  $default,){
+final _that = this;
+switch (_that) {
+case _StaffEntity() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String email,  String pharmacyId,  RoleEntity role,  String? phoneNumber,  String? photoUrl,  DateTime createdAt,  DateTime? lastLoginAt,  bool isActive)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _StaffEntity() when $default != null:
+return $default(_that.id,_that.name,_that.email,_that.pharmacyId,_that.role,_that.phoneNumber,_that.photoUrl,_that.createdAt,_that.lastLoginAt,_that.isActive);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String email,  String pharmacyId,  RoleEntity role,  String? phoneNumber,  String? photoUrl,  DateTime createdAt,  DateTime? lastLoginAt,  bool isActive)  $default,) {final _that = this;
+switch (_that) {
+case _StaffEntity():
+return $default(_that.id,_that.name,_that.email,_that.pharmacyId,_that.role,_that.phoneNumber,_that.photoUrl,_that.createdAt,_that.lastLoginAt,_that.isActive);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String email,  String pharmacyId,  RoleEntity role,  String? phoneNumber,  String? photoUrl,  DateTime createdAt,  DateTime? lastLoginAt,  bool isActive)?  $default,) {final _that = this;
+switch (_that) {
+case _StaffEntity() when $default != null:
+return $default(_that.id,_that.name,_that.email,_that.pharmacyId,_that.role,_that.phoneNumber,_that.photoUrl,_that.createdAt,_that.lastLoginAt,_that.isActive);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
-abstract class _$$StaffEntityImplCopyWith<$Res>
-    implements $StaffEntityCopyWith<$Res> {
-  factory _$$StaffEntityImplCopyWith(
-          _$StaffEntityImpl value, $Res Function(_$StaffEntityImpl) then) =
-      __$$StaffEntityImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String id,
-      String name,
-      String email,
-      String pharmacyId,
-      RoleEntity role,
-      String? phoneNumber,
-      String? photoUrl,
-      DateTime createdAt,
-      DateTime? lastLoginAt,
-      bool isActive});
+
+
+class _StaffEntity implements StaffEntity {
+  const _StaffEntity({required this.id, required this.name, required this.email, required this.pharmacyId, required this.role, this.phoneNumber, this.photoUrl, required this.createdAt, this.lastLoginAt, this.isActive = true});
+  
+
+@override final  String id;
+@override final  String name;
+@override final  String email;
+@override final  String pharmacyId;
+@override final  RoleEntity role;
+@override final  String? phoneNumber;
+@override final  String? photoUrl;
+@override final  DateTime createdAt;
+@override final  DateTime? lastLoginAt;
+@override@JsonKey() final  bool isActive;
+
+/// Create a copy of StaffEntity
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$StaffEntityCopyWith<_StaffEntity> get copyWith => __$StaffEntityCopyWithImpl<_StaffEntity>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StaffEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.pharmacyId, pharmacyId) || other.pharmacyId == pharmacyId)&&(identical(other.role, role) || other.role == role)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastLoginAt, lastLoginAt) || other.lastLoginAt == lastLoginAt)&&(identical(other.isActive, isActive) || other.isActive == isActive));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,name,email,pharmacyId,role,phoneNumber,photoUrl,createdAt,lastLoginAt,isActive);
+
+@override
+String toString() {
+  return 'StaffEntity(id: $id, name: $name, email: $email, pharmacyId: $pharmacyId, role: $role, phoneNumber: $phoneNumber, photoUrl: $photoUrl, createdAt: $createdAt, lastLoginAt: $lastLoginAt, isActive: $isActive)';
+}
+
+
 }
 
 /// @nodoc
-class __$$StaffEntityImplCopyWithImpl<$Res>
-    extends _$StaffEntityCopyWithImpl<$Res, _$StaffEntityImpl>
-    implements _$$StaffEntityImplCopyWith<$Res> {
-  __$$StaffEntityImplCopyWithImpl(
-      _$StaffEntityImpl _value, $Res Function(_$StaffEntityImpl) _then)
-      : super(_value, _then);
+abstract mixin class _$StaffEntityCopyWith<$Res> implements $StaffEntityCopyWith<$Res> {
+  factory _$StaffEntityCopyWith(_StaffEntity value, $Res Function(_StaffEntity) _then) = __$StaffEntityCopyWithImpl;
+@override @useResult
+$Res call({
+ String id, String name, String email, String pharmacyId, RoleEntity role, String? phoneNumber, String? photoUrl, DateTime createdAt, DateTime? lastLoginAt, bool isActive
+});
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? name = null,
-    Object? email = null,
-    Object? pharmacyId = null,
-    Object? role = null,
-    Object? phoneNumber = freezed,
-    Object? photoUrl = freezed,
-    Object? createdAt = null,
-    Object? lastLoginAt = freezed,
-    Object? isActive = null,
-  }) {
-    return _then(_$StaffEntityImpl(
-      id: null == id ? _value.id : id as String,
-      name: null == name ? _value.name : name as String,
-      email: null == email ? _value.email : email as String,
-      pharmacyId: null == pharmacyId ? _value.pharmacyId : pharmacyId as String,
-      role: null == role ? _value.role : role as RoleEntity,
-      phoneNumber: freezed == phoneNumber ? _value.phoneNumber : phoneNumber as String?,
-      photoUrl: freezed == photoUrl ? _value.photoUrl : photoUrl as String?,
-      createdAt: null == createdAt ? _value.createdAt : createdAt as DateTime,
-      lastLoginAt: freezed == lastLoginAt ? _value.lastLoginAt : lastLoginAt as DateTime?,
-      isActive: null == isActive ? _value.isActive : isActive as bool,
-    ));
-  }
+
+@override $RoleEntityCopyWith<$Res> get role;
+
 }
-
 /// @nodoc
-class _$StaffEntityImpl implements _StaffEntity {
-  const _$StaffEntityImpl(
-      {required this.id,
-      required this.name,
-      required this.email,
-      required this.pharmacyId,
-      required this.role,
-      this.phoneNumber,
-      this.photoUrl,
-      required this.createdAt,
-      this.lastLoginAt,
-      this.isActive = true});
+class __$StaffEntityCopyWithImpl<$Res>
+    implements _$StaffEntityCopyWith<$Res> {
+  __$StaffEntityCopyWithImpl(this._self, this._then);
 
-  @override
-  final String id;
-  @override
-  final String name;
-  @override
-  final String email;
-  @override
-  final String pharmacyId;
-  @override
-  final RoleEntity role;
-  @override
-  final String? phoneNumber;
-  @override
-  final String? photoUrl;
-  @override
-  final DateTime createdAt;
-  @override
-  final DateTime? lastLoginAt;
-  @override
-  @JsonKey()
-  final bool isActive;
+  final _StaffEntity _self;
+  final $Res Function(_StaffEntity) _then;
 
-  @override
-  String toString() {
-    return 'StaffEntity(id: $id, name: $name, email: $email, pharmacyId: $pharmacyId, role: $role, phoneNumber: $phoneNumber, photoUrl: $photoUrl, createdAt: $createdAt, lastLoginAt: $lastLoginAt, isActive: $isActive)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$StaffEntityImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.email, email) || other.email == email) &&
-            (identical(other.pharmacyId, pharmacyId) ||
-                other.pharmacyId == pharmacyId) &&
-            (identical(other.role, role) || other.role == role) &&
-            (identical(other.phoneNumber, phoneNumber) ||
-                other.phoneNumber == phoneNumber) &&
-            (identical(other.photoUrl, photoUrl) ||
-                other.photoUrl == photoUrl) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.lastLoginAt, lastLoginAt) ||
-                other.lastLoginAt == lastLoginAt) &&
-            (identical(other.isActive, isActive) ||
-                other.isActive == isActive));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, id, name, email, pharmacyId,
-      role, phoneNumber, photoUrl, createdAt, lastLoginAt, isActive);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$StaffEntityImplCopyWith<_$StaffEntityImpl> get copyWith =>
-      __$$StaffEntityImplCopyWithImpl<_$StaffEntityImpl>(this, _$identity);
+/// Create a copy of StaffEntity
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? email = null,Object? pharmacyId = null,Object? role = null,Object? phoneNumber = freezed,Object? photoUrl = freezed,Object? createdAt = null,Object? lastLoginAt = freezed,Object? isActive = null,}) {
+  return _then(_StaffEntity(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String,pharmacyId: null == pharmacyId ? _self.pharmacyId : pharmacyId // ignore: cast_nullable_to_non_nullable
+as String,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
+as RoleEntity,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String?,photoUrl: freezed == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,lastLoginAt: freezed == lastLoginAt ? _self.lastLoginAt : lastLoginAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
 }
 
-abstract class _StaffEntity implements StaffEntity {
-  const factory _StaffEntity(
-      {required final String id,
-      required final String name,
-      required final String email,
-      required final String pharmacyId,
-      required final RoleEntity role,
-      final String? phoneNumber,
-      final String? photoUrl,
-      required final DateTime createdAt,
-      final DateTime? lastLoginAt,
-      final bool isActive}) = _$StaffEntityImpl;
-
-  @override
-  String get id;
-  @override
-  String get name;
-  @override
-  String get email;
-  @override
-  String get pharmacyId;
-  @override
-  RoleEntity get role;
-  @override
-  String? get phoneNumber;
-  @override
-  String? get photoUrl;
-  @override
-  DateTime get createdAt;
-  @override
-  DateTime? get lastLoginAt;
-  @override
-  bool get isActive;
-  @override
-  @JsonKey(ignore: true)
-  _$$StaffEntityImplCopyWith<_$StaffEntityImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+/// Create a copy of StaffEntity
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RoleEntityCopyWith<$Res> get role {
+  
+  return $RoleEntityCopyWith<$Res>(_self.role, (value) {
+    return _then(_self.copyWith(role: value));
+  });
+}
 }
 
-/// @nodoc
-const _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+// dart format on
