@@ -218,16 +218,18 @@ class _DeliveryTrackingScreenState
           // Top Bar
           Positioned(top: 0, left: 0, right: 0, child: _buildTopBar(isDark)),
 
-          // Bottom Sheet
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: _buildBottomSheet(_order!, isDark),
+          // Draggable Bottom Sheet
+          DraggableScrollableSheet(
+            initialChildSize: 0.15,
+            minChildSize: 0.1,
+            maxChildSize: 0.5,
+            builder: (BuildContext context, ScrollController scrollController) {
+              return _buildBottomSheet(_order!, isDark, scrollController);
+            },
           ),
 
           // Floating Action Buttons
-          Positioned(right: 16, bottom: 320, child: _buildFABs()),
+          Positioned(right: 16, bottom: 120, child: _buildFABs()),
         ],
       ),
     );
@@ -302,7 +304,7 @@ class _DeliveryTrackingScreenState
     );
   }
 
-  Widget _buildBottomSheet(OrderEntity order, bool isDark) {
+  Widget _buildBottomSheet(OrderEntity order, bool isDark, ScrollController scrollController) {
     final distance = _deliveryLocation != null && _customerLocation != null
         ? _calculateDistance(_deliveryLocation!, _customerLocation!)
         : 0.0;
@@ -322,17 +324,20 @@ class _DeliveryTrackingScreenState
           ),
         ],
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: ListView(
+        controller: scrollController,
+        padding: EdgeInsets.zero,
         children: [
           // Handle
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: isDark ? AppColors.borderDark : AppColors.borderLight,
-              borderRadius: BorderRadius.circular(2),
+          Center(
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ),
 
