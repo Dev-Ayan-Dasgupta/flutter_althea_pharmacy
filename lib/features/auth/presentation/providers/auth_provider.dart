@@ -61,4 +61,60 @@ class Auth extends _$Auth {
       return null;
     });
   }
+
+  Future<bool> changePassword({
+    required String userId,
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    try {
+      final repository = ref.read(authRepositoryProvider);
+      final result = await repository.changePassword(
+        userId: userId,
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      );
+
+      return result.fold(
+        (error) => false, // Failed
+        (_) => true, // Success
+      );
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> forgotPassword({required String email}) async {
+    try {
+      final repository = ref.read(authRepositoryProvider);
+      final result = await repository.forgotPassword(email: email);
+
+      return result.fold(
+        (error) => false, // Failed
+        (_) => true, // Success
+      );
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    try {
+      final repository = ref.read(authRepositoryProvider);
+      final result = await repository.resetPassword(
+        token: token,
+        newPassword: newPassword,
+      );
+
+      return result.fold(
+        (error) => false, // Failed
+        (_) => true, // Success
+      );
+    } catch (e) {
+      return false;
+    }
+  }
 }

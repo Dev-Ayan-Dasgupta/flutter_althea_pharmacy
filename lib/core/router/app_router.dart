@@ -4,12 +4,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/analytics/presentation/screens/analytics_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/auth/presentation/screens/password/change_password_screen.dart';
+import '../../features/auth/presentation/screens/password/forgot_password_screen.dart';
 import '../../features/legal/presentation/screens/export.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/orders/presentation/screens/export.dart';
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/staff_management/presentation/screens/staff_management_screen.dart';
 import '../../features/wallet/presentation/screens/wallet_screen.dart';
 
 part 'app_router.g.dart';
@@ -32,6 +35,20 @@ GoRouter appRouter(Ref ref) {
         path: '/login',
         name: 'login',
         builder: (context, state) => const LoginScreen(),
+      ),
+
+      // Forgot Password
+      GoRoute(
+        path: '/forgot-password',
+        name: 'forgot-password',
+        builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+
+      // Change Password (outside home, accessible from settings)
+      GoRoute(
+        path: '/change-password',
+        name: 'change-password',
+        builder: (context, state) => const ChangePasswordScreen(),
       ),
 
       // Home (Orders Queue)
@@ -181,6 +198,13 @@ GoRouter appRouter(Ref ref) {
             path: 'settings',
             name: 'settings',
             builder: (context, state) => const SettingsScreen(),
+          ),
+
+          // Staff Management
+          GoRoute(
+            path: 'staff-management',
+            name: 'staff-management',
+            builder: (context, state) => const StaffManagementScreen(),
           ),
         ],
       ),
