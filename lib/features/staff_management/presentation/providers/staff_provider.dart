@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../auth/domain/entities/role_entity.dart';
-import '../../domain/entities/staff_entity.dart';
 import '../../domain/repositories/staff_repository.dart';
 import '../../data/repositories/mock_staff_repository.dart';
 import 'staff_state.dart';
@@ -104,10 +103,7 @@ class StaffManagement extends _$StaffManagement {
     required RoleEntity role,
   }) async {
     final repository = ref.read(staffRepositoryProvider);
-    final result = await repository.updateStaffPermissions(
-      id: id,
-      role: role,
-    );
+    final result = await repository.updateStaffPermissions(id: id, role: role);
 
     return result.fold(
       (error) {
