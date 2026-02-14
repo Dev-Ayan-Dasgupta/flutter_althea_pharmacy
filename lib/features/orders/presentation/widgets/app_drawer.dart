@@ -128,6 +128,21 @@ class AppDrawer extends ConsumerWidget {
                           isDark: isDark,
                         ),
 
+                      // Staff Management - Only for admins with manageUsers permission
+                      if (ref.watch(
+                        hasPermissionProvider(Permission.manageUsers),
+                      ))
+                        _buildDrawerItem(
+                          context,
+                          icon: Icons.people_outline,
+                          title: 'Staff Management',
+                          onTap: () {
+                            context.go('/home/staff-management');
+                            Navigator.pop(context);
+                          },
+                          isDark: isDark,
+                        ),
+
                       const Divider(),
 
                       _buildDrawerItem(

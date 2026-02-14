@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../providers/auth_provider.dart';
@@ -106,7 +107,21 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             },
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 8),
+
+          // Forgot Password Link
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: isLoading ? null : () => context.go('/forgot-password'),
+              child: Text(
+                'Forgot Password?',
+                style: AppTypography.bodySmall(AppColors.primaryDark),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
 
           // Login Button
           SizedBox(

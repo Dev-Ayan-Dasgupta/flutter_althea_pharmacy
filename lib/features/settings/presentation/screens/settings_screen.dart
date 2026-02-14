@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide ThemeMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/responsive.dart';
@@ -238,6 +239,37 @@ class SettingsScreen extends ConsumerWidget {
                 ref
                     .read(settingsProvider.notifier)
                     .updateSettings(settings.copyWith(vibrationEnabled: value));
+              },
+            ),
+          ], isDark),
+
+          const SizedBox(height: 24),
+
+          // Account & Security Section
+          _buildSectionHeader('Account & Security', Icons.security, isDark),
+          const SizedBox(height: 12),
+          _buildSettingsCard(context, [
+            ListTile(
+              leading: const Icon(Icons.lock, size: 24),
+              title: Text(
+                'Change Password',
+                style: AppTypography.bodyMedium(
+                  isDark
+                      ? AppColors.textPrimaryDark
+                      : AppColors.textPrimaryLight,
+                ),
+              ),
+              subtitle: Text(
+                'Update your account password',
+                style: AppTypography.caption(
+                  isDark
+                      ? AppColors.textSecondaryDark
+                      : AppColors.textSecondaryLight,
+                ),
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                context.go('/change-password');
               },
             ),
           ], isDark),
