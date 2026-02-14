@@ -4,7 +4,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import '../../domain/entities/invoice_entity.dart';
 import '../../domain/entities/order_entity.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+// import 'package:flutter/foundation.dart' show kIsWeb;
 // Note: You might need to import your specific DownloadUtils if you have a custom implementation for web downloading
 // import '../../../../core/utils/download_utils.dart';
 
