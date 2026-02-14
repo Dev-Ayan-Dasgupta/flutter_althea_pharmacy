@@ -32,9 +32,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
     setState(() => _isProcessing = true);
 
-    final result = await ref.read(authProvider.notifier).forgotPassword(
-          email: _emailController.text.trim(),
-        );
+    final result = await ref
+        .read(authProvider.notifier)
+        .forgotPassword(email: _emailController.text.trim());
 
     if (mounted) {
       setState(() => _isProcessing = false);
@@ -57,14 +57,18 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+      backgroundColor: isDark
+          ? AppColors.backgroundDark
+          : AppColors.backgroundLight,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+            color: isDark
+                ? AppColors.textPrimaryDark
+                : AppColors.textPrimaryLight,
           ),
           onPressed: () => context.go('/login'),
         ),
@@ -74,7 +78,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           padding: const EdgeInsets.all(24),
           child: Container(
             constraints: const BoxConstraints(maxWidth: 400),
-            child: _emailSent ? _buildSuccessView(isDark) : _buildFormView(isDark),
+            child: _emailSent
+                ? _buildSuccessView(isDark)
+                : _buildFormView(isDark),
           ),
         ),
       ),
@@ -89,11 +95,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Icon
-          Icon(
-            Icons.lock_reset,
-            size: 80,
-            color: AppColors.primaryDark,
-          ),
+          Icon(Icons.lock_reset, size: 80, color: AppColors.primaryDark),
           const SizedBox(height: 24),
 
           // Title
@@ -111,7 +113,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             'Enter your email address and we\'ll send you instructions to reset your password.',
             textAlign: TextAlign.center,
             style: AppTypography.bodyMedium(
-              isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+              isDark
+                  ? AppColors.textSecondaryDark
+                  : AppColors.textSecondaryLight,
             ),
           ),
           const SizedBox(height: 32),
@@ -128,7 +132,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
               filled: true,
-              fillColor: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+              fillColor: isDark
+                  ? AppColors.surfaceDark
+                  : AppColors.surfaceLight,
             ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
@@ -193,14 +199,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.green.withOpacity(0.1),
+            color: Colors.green.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            Icons.check_circle,
-            size: 80,
-            color: Colors.green,
-          ),
+          child: Icon(Icons.check_circle, size: 80, color: Colors.green),
         ),
         const SizedBox(height: 24),
 
@@ -236,9 +238,11 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.primaryDark.withOpacity(0.1),
+            color: AppColors.primaryDark.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.primaryDark.withOpacity(0.3)),
+            border: Border.all(
+              color: AppColors.primaryDark.withValues(alpha: 0.3),
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

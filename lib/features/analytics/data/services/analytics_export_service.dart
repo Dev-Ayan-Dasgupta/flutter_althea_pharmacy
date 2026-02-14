@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
@@ -46,7 +45,7 @@ class AnalyticsExportService {
     final formatter = DateFormat('yyyy-MM-dd');
     final startStr = formatter.format(analytics.startDate);
     final endStr = formatter.format(analytics.endDate);
-    return 'analytics_report_${startStr}_to_${endStr}.$extension';
+    return 'analytics_report_${startStr}_to_$endStr.$extension';
   }
 
   Future<pw.Document> _generatePDFDocument(AnalyticsEntity analytics) async {

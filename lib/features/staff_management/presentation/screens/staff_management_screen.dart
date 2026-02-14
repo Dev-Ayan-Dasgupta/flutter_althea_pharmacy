@@ -48,8 +48,9 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
   Widget build(BuildContext context) {
     final staffState = ref.watch(staffManagementProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final hasManageUsersPermission =
-        ref.watch(hasPermissionProvider(Permission.manageUsers));
+    final hasManageUsersPermission = ref.watch(
+      hasPermissionProvider(Permission.manageUsers),
+    );
 
     // Check if user has permission to manage users
     if (!hasManageUsersPermission) {
@@ -180,7 +181,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                       onChanged: (value) {
                         setState(() => _showInactiveStaff = value);
                       },
-                      activeColor: AppColors.primaryDark,
+                      activeThumbColor: AppColors.primaryDark,
                     ),
                   ],
                 ),
@@ -189,9 +190,8 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
               // Staff List
               Expanded(
                 child: staffState.when(
-                  initial: () => const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  initial: () =>
+                      const Center(child: CircularProgressIndicator()),
                   loading: () => const Center(
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation(AppColors.primaryDark),
@@ -199,7 +199,8 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                   ),
                   loaded: (staffList) =>
                       _buildStaffList(context, staffList, isDark),
-                  error: (message) => _buildErrorState(context, message, isDark),
+                  error: (message) =>
+                      _buildErrorState(context, message, isDark),
                 ),
               ),
             ],
@@ -216,9 +217,8 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
   ) {
     // Filter staff based on search query and active status
     final filteredStaff = staffList.where((staff) {
-      final matchesSearch = staff.name
-              .toLowerCase()
-              .contains(_searchQuery.toLowerCase()) ||
+      final matchesSearch =
+          staff.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
           staff.email.toLowerCase().contains(_searchQuery.toLowerCase());
 
       final matchesActiveFilter = _showInactiveStaff || staff.isActive;
@@ -271,11 +271,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
     );
   }
 
-  Widget _buildStaffCard(
-    BuildContext context,
-    StaffEntity staff,
-    bool isDark,
-  ) {
+  Widget _buildStaffCard(BuildContext context, StaffEntity staff, bool isDark) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
@@ -285,10 +281,11 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
         leading: CircleAvatar(
           radius: 28,
           backgroundColor: staff.isActive
-              ? AppColors.primaryDark.withOpacity(0.2)
-              : Colors.grey.withOpacity(0.2),
-          backgroundImage:
-              staff.photoUrl != null ? NetworkImage(staff.photoUrl!) : null,
+              ? AppColors.primaryDark.withValues(alpha: 0.2)
+              : Colors.grey.withValues(alpha: 0.2),
+          backgroundImage: staff.photoUrl != null
+              ? NetworkImage(staff.photoUrl!)
+              : null,
           child: staff.photoUrl == null
               ? Text(
                   staff.name.substring(0, 1).toUpperCase(),
@@ -316,8 +313,8 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 color: staff.role.role == UserRole.admin
-                    ? AppColors.primaryDark.withOpacity(0.2)
-                    : AppColors.accentDark.withOpacity(0.2),
+                    ? AppColors.primaryDark.withValues(alpha: 0.2)
+                    : AppColors.accentDark.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
@@ -334,7 +331,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Colors.grey.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -432,7 +429,11 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
     );
   }
 
-  void _handleMenuAction(BuildContext context, String action, StaffEntity staff) {
+  void _handleMenuAction(
+    BuildContext context,
+    String action,
+    StaffEntity staff,
+  ) {
     switch (action) {
       case 'edit':
         _showEditStaffDialog(context, staff);
@@ -455,9 +456,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
 
     showDialog(
       context: context,
-      builder: (context) => AddStaffDialog(
-        pharmacyId: user.pharmacyId,
-      ),
+      builder: (context) => AddStaffDialog(pharmacyId: user.pharmacyId),
     );
   }
 
@@ -529,7 +528,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
         .read(staffManagementProvider.notifier)
         .reactivateStaff(staff.id, user.pharmacyId);
 
-    if (context.mounted) {
+    if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -551,8 +550,9 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
           Icon(
             Icons.error_outline,
             size: 64,
-            color:
-                isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+            color: isDark
+                ? AppColors.textSecondaryDark
+                : AppColors.textSecondaryLight,
           ),
           const SizedBox(height: 16),
           Text(
@@ -566,14 +566,13 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
             message,
             textAlign: TextAlign.center,
             style: AppTypography.bodyMedium(
-              isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+              isDark
+                  ? AppColors.textSecondaryDark
+                  : AppColors.textSecondaryLight,
             ),
           ),
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: _loadStaff,
-            child: const Text('Retry'),
-          ),
+          ElevatedButton(onPressed: _loadStaff, child: const Text('Retry')),
         ],
       ),
     );
