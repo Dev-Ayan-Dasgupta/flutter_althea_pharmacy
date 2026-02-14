@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -222,7 +221,7 @@ class _DeliveryTrackingScreenState
           DraggableScrollableSheet(
             initialChildSize: 0.15,
             minChildSize: 0.1,
-            maxChildSize: 0.5,
+            maxChildSize: 0.52,
             builder: (BuildContext context, ScrollController scrollController) {
               return _buildBottomSheet(_order!, isDark, scrollController);
             },
@@ -241,12 +240,7 @@ class _DeliveryTrackingScreenState
         margin: const EdgeInsets.all(16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          gradient: AppColors.primaryGradient.withOpacity(1),
-          // LinearGradient(
-          //   colors: [Color(0xFF6EE7B7), Color(0xFF3B82F6)], // Mint to soft blue
-          //   begin: Alignment.topLeft,
-          //   end: Alignment.bottomRight,
-          // ),
+          gradient: AppColors.primaryGradient,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -309,7 +303,11 @@ class _DeliveryTrackingScreenState
     );
   }
 
-  Widget _buildBottomSheet(OrderEntity order, bool isDark, ScrollController scrollController) {
+  Widget _buildBottomSheet(
+    OrderEntity order,
+    bool isDark,
+    ScrollController scrollController,
+  ) {
     final distance = _deliveryLocation != null && _customerLocation != null
         ? _calculateDistance(_deliveryLocation!, _customerLocation!)
         : 0.0;

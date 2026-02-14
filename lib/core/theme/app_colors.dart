@@ -9,10 +9,7 @@ class AppColors {
   static const Color primaryGlow = Color(0xFF86EFAC);
 
   static LinearGradient primaryGradient = LinearGradient(
-    colors: [
-      Color(0xFF6EE7B7).withValues(alpha: 0.2),
-      Color(0xFF3B82F6).withValues(alpha: 0.2),
-    ], // Mint to soft blue
+    colors: [Color(0xFF6EE7B7), Color(0xFF3B82F6)], // Mint to soft blue
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -20,18 +17,15 @@ class AppColors {
   // Subtle variant for cards
   static LinearGradient primaryGradientSubtle = LinearGradient(
     colors: [
-      Color(0xFFE0F2FE).withValues(alpha: 0.2),
-      Color(0xFFDCFCE7).withValues(alpha: 0.2),
+      Color(0xFFE0F2FE),
+      Color(0xFFDCFCE7),
     ], // Very light blue to light green
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static LinearGradient primaryGradientSubtleDark = LinearGradient(
-    colors: [
-      Color(0xFF1E3A5F).withValues(alpha: 0.2),
-      Color(0xFF1E4D3F).withValues(alpha: 0.2),
-    ], // Dark blue to dark green
+    colors: [Color(0xFF1E3A5F), Color(0xFF1E4D3F)], // Dark blue to dark green
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -41,19 +35,13 @@ class AppColors {
   static const Color accentDark = Color(0xFF3B82F6);
 
   static LinearGradient accentGradient = LinearGradient(
-    colors: [
-      Color(0xFF93C5FD).withValues(alpha: 0.2),
-      Color(0xFF7DD3FC)..withValues(alpha: 0.2),
-    ], // Light blue to sky
+    colors: [Color(0xFF93C5FD), Color(0xFF7DD3FC)], // Light blue to sky
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static LinearGradient accentGradientSubtle = LinearGradient(
-    colors: [
-      Color(0xFFDCEEFF).withValues(alpha: 0.2),
-      Color(0xFFE0F2FE).withValues(alpha: 0.2),
-    ], // Very light blue shades
+    colors: [Color(0xFFDCEEFF), Color(0xFFE0F2FE)], // Very light blue shades
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -63,10 +51,7 @@ class AppColors {
   static const Color successLight = Color(0xFFBBF7D0);
 
   static LinearGradient successGradient = LinearGradient(
-    colors: [
-      Color(0xFF86EFAC).withValues(alpha: 0.2),
-      Color(0xFF6EE7B7).withValues(alpha: 0.2),
-    ],
+    colors: [Color(0xFF86EFAC), Color(0xFF6EE7B7)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -75,10 +60,7 @@ class AppColors {
   static const Color warningDark = Color(0xFFF59E0B);
 
   static LinearGradient warningGradient = LinearGradient(
-    colors: [
-      Color(0xFFFDE68A).withValues(alpha: 0.2),
-      Color(0xFFFBBF24).withValues(alpha: 0.2),
-    ],
+    colors: [Color(0xFFFDE68A), Color(0xFFFBBF24)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -87,10 +69,7 @@ class AppColors {
   static const Color errorDark = Color(0xFFDC2626);
 
   static LinearGradient errorGradient = LinearGradient(
-    colors: [
-      Color(0xFFFCA5A5).withValues(alpha: 0.2),
-      Color(0xFFEF4444).withValues(alpha: 0.2),
-    ],
+    colors: [Color(0xFFFCA5A5), Color(0xFFEF4444)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -103,10 +82,7 @@ class AppColors {
   static const Color amberDark = Color(0xFFF59E0B);
 
   static LinearGradient amberGradient = LinearGradient(
-    colors: [
-      Color(0xFFFDE68A).withValues(alpha: 0.2),
-      Color(0xFFFBBF24).withValues(alpha: 0.2),
-    ],
+    colors: [Color(0xFFFDE68A), Color(0xFFFBBF24)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
