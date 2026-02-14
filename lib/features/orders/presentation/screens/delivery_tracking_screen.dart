@@ -220,7 +220,7 @@ class _DeliveryTrackingScreenState
 
           // Draggable Bottom Sheet
           DraggableScrollableSheet(
-            initialChildSize: 0.1,
+            initialChildSize: 0.15,
             minChildSize: 0.1,
             maxChildSize: 0.5,
             builder: (BuildContext context, ScrollController scrollController) {
