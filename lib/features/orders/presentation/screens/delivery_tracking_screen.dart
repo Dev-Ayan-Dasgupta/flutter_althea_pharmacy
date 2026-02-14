@@ -241,7 +241,12 @@ class _DeliveryTrackingScreenState
         margin: const EdgeInsets.all(16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          gradient: AppColors.primaryGradient,
+          gradient: AppColors.primaryGradient.withOpacity(1),
+          // LinearGradient(
+          //   colors: [Color(0xFF6EE7B7), Color(0xFF3B82F6)], // Mint to soft blue
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          // ),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
