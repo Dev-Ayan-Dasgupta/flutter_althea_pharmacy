@@ -583,12 +583,16 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
     final now = DateTime.now();
     final difference = now.difference(date);
 
-    if (difference.inMinutes < 60) {
+    if (difference.inMinutes < 1) {
+      return 'Just now';
+    } else if (difference.inMinutes < 60) {
       return '${difference.inMinutes} min ago';
     } else if (difference.inHours < 24) {
-      return '${difference.inHours} hours ago';
+      final hours = difference.inHours;
+      return '$hours ${hours == 1 ? 'hour' : 'hours'} ago';
     } else if (difference.inDays < 7) {
-      return '${difference.inDays} days ago';
+      final days = difference.inDays;
+      return '$days ${days == 1 ? 'day' : 'days'} ago';
     } else {
       return '${date.day}/${date.month}/${date.year}';
     }

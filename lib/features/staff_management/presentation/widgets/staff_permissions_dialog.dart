@@ -340,9 +340,12 @@ class _StaffPermissionsDialogState
   String _formatPermissionName(Permission permission) {
     final name = permission.toString().split('.').last;
     // Convert camelCase to Title Case with spaces
-    return name.replaceAllMapped(
+    final spacedName = name.replaceAllMapped(
       RegExp(r'([A-Z])'),
       (match) => ' ${match.group(0)}',
     ).trim();
+    // Capitalize first letter
+    if (spacedName.isEmpty) return name;
+    return spacedName[0].toUpperCase() + spacedName.substring(1);
   }
 }

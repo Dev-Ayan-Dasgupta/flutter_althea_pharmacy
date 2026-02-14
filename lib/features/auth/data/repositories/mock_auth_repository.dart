@@ -11,9 +11,12 @@ class MockAuthRepository implements AuthRepository {
   static const String _keyUserEmail = 'user_email';
   static const String _keyPharmacyName = 'pharmacy_name';
   
-  // Mock password storage (in a real app, this would be handled securely on backend)
+  // Mock password storage (DEMO ONLY - NOT FOR PRODUCTION)
+  // In a real app, passwords should NEVER be stored in plain text.
+  // This is for demonstration purposes only. Use secure password hashing
+  // (e.g., bcrypt, argon2) and store on backend server.
   final Map<String, String> _userPasswords = {
-    'user_123': 'password123',
+    'user_123': 'password123', // Demo password - DO NOT USE IN PRODUCTION
   };
   
   // Mock password reset tokens
